@@ -14,5 +14,7 @@ for pack in `cat /tmp/upgradePackageList.txt` ; do
 	echo 
 done
 
+	if [ -a $continueFlag ] ; then sudo apt-get autoremove ;  fi
+
 echo 
 rm -v $continueFlag;
