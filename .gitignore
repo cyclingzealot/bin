@@ -1,0 +1,6 @@
+backup.bash
+installNewMachine.bash
+sshConfig
+timesheet.bash
+totalRowCount.bash
+*.sw?
