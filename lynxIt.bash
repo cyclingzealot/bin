@@ -1,3 +1,6 @@
 #!/bin/bash
 
-cat $1 | lynx --stdin
+while(true); do
+    read file
+    cat $file | lynx --stdin
+done
