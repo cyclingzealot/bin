@@ -12,3 +12,5 @@ if [ -x /usr/bin/keychain -a -f $HOME/.keychain/${HOSTNAME}-sh ] ; then
 /usr/bin/keychain --quiet --nogui $HOME/.ssh/id_cityOttawaGitHub
 source $HOME/.keychain/${HOSTNAME}-sh
 fi
+
+alias parseMultiLineInsert='sed \'s$),($),\n($g\''
