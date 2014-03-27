@@ -13,4 +13,4 @@ if [ -x /usr/bin/keychain -a -f $HOME/.keychain/${HOSTNAME}-sh ] ; then
 source $HOME/.keychain/${HOSTNAME}-sh
 fi
 
-alias parseMultiLineInsert='sed \'s$),($),\n($g\''
+#alias parseMultiLineInsert='sed \'s$),($),\n($g\''
