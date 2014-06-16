@@ -1,0 +1,6 @@
+#!/bin/bash
+
+
+for dir in /media/3413-180E /media/d; do
+	sudo umount -v $dir
+done
