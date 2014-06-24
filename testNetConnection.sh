@@ -13,7 +13,7 @@ echo
 echo
 
 echo Attempting to reach flora via numeric IP ---------------------------
-ping -c 3 69.196.181.213
+ping -c 3 69.165.168.66
 echo
 echo
 echo
