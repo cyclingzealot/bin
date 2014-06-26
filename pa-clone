@@ -1,0 +1,23 @@
+#!/bin/bash
+# Copyright 2008-2009, Kees Cook <kees@outflux.net>
+#
+# Records the PulseAudio monitor channel.
+# http://www.outflux.net/blog/archives/2009/04/19/recording-from-pulseaudio/
+#
+set -x
+WAV="$1"
+if [ -z "$WAV" ]; then
+    echo "Usage: $0 OUTPUT.WAV" >&2
+    exit 1
+fi
+rm -f "$WAV"
+
+# Get sink monitor:
+MONITOR=$(pactl list | grep -A2 '^Source #' | \
+    grep 'Nom.*\.monitor$' | awk '{print $NF}' | tail -n1)
+
+# Record it raw, and convert to a wav
+echo "Recording to $WAV ..."
+echo "Ctrl-C or Close this window to stop"
+parec -d "$MONITOR" | sox -t raw -r 44100 -sLb 16 -c 2 - "$WAV"
+set +x
