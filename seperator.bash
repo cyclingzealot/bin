@@ -1,5 +1,6 @@
 #!/bin/bash
 
-char=${1:-'#'}
+char=${2:-'#'}
+length=${1:-`tput cols`}
 
-yes "$char" |  head -n `tput cols` | tr -d "\n" | xargs echo
+yes "$char" |  head -n $length | tr -d "\n" | xargs echo
