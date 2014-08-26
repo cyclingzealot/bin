@@ -2,4 +2,19 @@
 
 cb=`git branch | grep '*' | cut -d ' ' -f 2`
 
-phpunit && push.bash $1 && [[ `git status` =~ "working directory clean" ]] && git checkout master && git merge $cb && phpunit && push.bash && echo && echo "Done!!!!   " `date`  && echo
+### Run test then git commit
+phpunit --stop-on-failure --configuration /home/jlam/code/ArtsandCultureCalendar/Symfony/app/phpunit.xml && 
+push.bash $1 && 
+
+## Merge with master
+[[ `git status` =~ "working directory clean" ]] && 
+git checkout master && 
+git merge $cb && 
+
+### Run tests and push to master
+phpunit --stop-on-failure --configuration /home/jlam/code/ArtsandCultureCalendar/Symfony/app/phpunit.xml  && 
+push.bash && 
+
+echo && 
+echo "Done!!!!   " `date`  && 
+echo
