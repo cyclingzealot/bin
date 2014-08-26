@@ -1,4 +1,5 @@
 backup.bash
+scrapper.php
 installNewMachine.bash
 sshConfig
 timesheet.bash
