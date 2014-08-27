@@ -9,6 +9,7 @@ push.bash $1 &&
 ## Merge with master
 [[ `git status` =~ "working directory clean" ]] && 
 git checkout master && 
+git pull &&
 git merge $cb && 
 
 ### Run tests and push to master
