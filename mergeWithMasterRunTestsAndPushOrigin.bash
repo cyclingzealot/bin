@@ -4,7 +4,7 @@ cb=`git branch | grep '*' | cut -d ' ' -f 2`
 
 ### Run test then git commit
 phpunit --stop-on-failure --configuration /home/jlam/code/ArtsandCultureCalendar/Symfony/app/phpunit.xml && 
-push.bash $1 && 
+push.bash "$1" && 
 
 ## Merge with master
 [[ `git status` =~ "working directory clean" ]] && 
