@@ -14,3 +14,5 @@ source $HOME/.keychain/${HOSTNAME}-sh
 fi
 
 #alias parseMultiLineInsert='sed \'s$),($),\n($g\''
+
+export BC_ENV_ARGS=~/.bcrc
