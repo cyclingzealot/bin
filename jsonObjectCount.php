@@ -22,15 +22,16 @@ printIndexObjCount($contentArray);
 function printIndexObjCount($array, $depth=0) {
 
 #str_repeat("  ", $depth);
-printf("\ncount: %d\n", count($array));
+printf("count: %d\n", count($array));
 
 $depth++;
 foreach($array as $index => $element) {
-    str_repeat("  ", $depth);
-    printf("\n%s: ", $index);
+    echo str_repeat("  ", $depth);
+    printf("%s: ", $index);
 
     if(is_scalar($element))  {
-        echo $element;
+        #echo $element;
+        printf("%s", $element);
     }
 
     else if(is_array($element))  {
@@ -40,6 +41,8 @@ foreach($array as $index => $element) {
     else {
         printf("%s", gettype($element));
     }
+
+    echo "\n";
 
 }
 
