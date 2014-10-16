@@ -7,9 +7,9 @@ use strict;
 use warnings;
 
 
-$num_args = $#ARGV + 1;
+my $num_args = $#ARGV + 1;
 if ($num_args != 1) {
-    print "\nUsage: extractTags.pl $fileName\n";
+    print "\nUsage: extractTags.pl \$fileName\n";
     exit;
 }
 
