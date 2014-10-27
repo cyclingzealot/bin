@@ -1,7 +1,18 @@
 #!/usr/bin/perl
 #From http://www.unix.com/shell-programming-and-scripting/159513-how-get-all-xml-tags-perl.html#post302521394
 
+/**
+ * This may require you doing:
+ * sudo cpan
+ * then 
+ * instruct cpan to autoconfigure
+ * then at the cpan prompt:
+ * install XML::Simple 
+ * at the cpan prompt
+ */
+
 use XML::Simple;
+
 
 use strict;
 use warnings;
