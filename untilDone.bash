@@ -1,6 +1,5 @@
 #!/bin/bash
 
-set -x
 
 numProcs=1
 
@@ -11,7 +10,13 @@ numProcs=`ps -ef | grep $1 -c`
 
 numProcs=`echo $numProcs - 3 | bc`
 
-if [[ "$numProcs" -gt 0 ]]; then printf . ; sleep 1; ps -ef | grep $1 ; fi
+if [[ "$numProcs" -gt 0 ]]; then 
+	printf . ; 
+	sleep 1; 
+	#echo ; 
+	#ps -ef | grep $1 ; 
+	#echo ; 
+fi
 
 
 done
