@@ -1,6 +1,7 @@
 #!/bin/bash
 
 export PATH=$PATH:~/bin/
+export PATH=$PATH:~/bin/local/
 
 
 . ~/bin/ps1git.bash
