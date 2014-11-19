@@ -17,3 +17,8 @@ __dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 __root="$(cd "$(dirname "${__dir}")" && pwd)" # <-- change this
 __file="${__dir}/$(basename "${BASH_SOURCE[0]}")"
 __base="$(basename ${__file} .sh)"
+
+
+#Capture everything to log
+exec >  >(tee -a foo.log)
+exec 2> >(tee -a foo.log >&2)
