@@ -20,5 +20,6 @@ __base="$(basename ${__file} .sh)"
 
 
 #Capture everything to log
-exec >  >(tee -a foo.log)
-exec 2> >(tee -a foo.log >&2)
+log=~/log/$__base.log
+exec >  >(tee -a $log)
+exec 2> >(tee -a $log >&2)
