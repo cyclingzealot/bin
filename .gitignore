@@ -11,3 +11,4 @@ jsonPrettyPrint.bash
 parseIt.bash
 validateJSON.bash
 todoToday.bash
+local/*
