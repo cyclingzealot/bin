@@ -74,7 +74,7 @@ homeLong=`echo $homeCoords | cut -d ','  -f 2  | tr -d ' ' `
 
 #echo Your lat long is $homeLat,$homeLong
 
-coords=`curl 'http://www.geohash.info/srv/feed.php?lat=45.422270&lon=-75.737583' | xml_grep --text_only --cond 'item/description' | cut -c 33-54 | sed 's/°//g' `
+coords=`curl "http://www.geohash.info/srv/feed.php?lat=${homeLat}&lon=${homeLong}" | xml_grep --text_only --cond 'item/description' | cut -c 33-54 | sed 's/°//g' `
 destLat=`echo $coords | cut -d ' '  -f 1  | tr -d ' ' `
 destLong=`echo $coords | cut -d ' '  -f 2  | tr -d ' ' `
 
@@ -94,4 +94,5 @@ else
 	message="Sorry, geohash is $dist km away"
 fi
 
+echo $message
 notify-send "$message"
