@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+#  notify-send, bc, sed, xml_grep are needed to run this tool
+
 #exit when command fails (use || true when a command can fail)
 set -o errexit
 
