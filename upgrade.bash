@@ -21,7 +21,7 @@ for pack in `cat /tmp/upgradePackageList.txt` ; do
 	if [ -a $continueFlag ] ; then sudo apt-get install $pack --only-upgrade --yes  -d; fi
 	if [ -a $continueFlag ] ; then sudo apt-get install $pack --only-upgrade --yes ;  fi
 	sleep 1
-	echo 
+	echo; echo; echo 
 done
 
 	if [ -a $continueFlag ] ; then sudo apt-get autoremove ;  fi
