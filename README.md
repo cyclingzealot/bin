@@ -1,4 +1,4 @@
 bin
 ===
 
-Common tools (mostly bash scripts) on many computers
+Common tools (mostly bash scripts) used by me on many computers
