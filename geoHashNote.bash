@@ -27,6 +27,8 @@ exec >  >(tee -a $log)
 exec 2> >(tee -a $log >&2)
 
 
+export DISPLAY=:0
+
 
 deg2rad () {
         bc -l <<< "$1 * 0.0174532925"
