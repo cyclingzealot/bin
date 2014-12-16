@@ -23,3 +23,5 @@ alias usageFiilesOnly='find . -maxdepth 3 -type f -print0 | xargs -0 du | sort -
 
 alias mv='mv -i'
 alias cp='cp -i'
+
+export PS1="\h $PS1"
