@@ -6,7 +6,6 @@ timesheet.bash
 totalRowCount.bash
 *.sw?
 eclipse
-mybashrc.bash
 jsonPrettyPrint.bash
 parseIt.bash
 validateJSON.bash
