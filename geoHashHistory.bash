@@ -1,6 +1,11 @@
 #! /usr/bin/perl
 #
 # GeoHistory - (C) 2012 AeroIllini <aeroillini@gmail.com>
+
+# jlam@credil.org: 
+# I don't know what the kml standard is.  For the purpose of 
+# importing into qgis 1.8 I inverted the latitude and longitude
+# so that the latitude comes first in <coordinates> field
 #
 # This script generates a kml file containing placemarks for every
 # geohash point in a certain graticule since a certain date. The
@@ -82,7 +87,7 @@ for ($i = 0; $i <= $delta; $i++) {
 	print $months[$month-1]," ",$day,", ",$year;
 	print "</name>";
 	print "<description>",$geo->lat,", ",$geo->lon,"</description>";
-	print "<Point><coordinates>",$geo->lon,",",$geo->lat,"</coordinates></Point>";
+	print "<Point><coordinates>",$geo->lat,",",$geo->lon,"</coordinates></Point>";
 	print "</Placemark>","\n";
 
 	# increment day and loop again!
