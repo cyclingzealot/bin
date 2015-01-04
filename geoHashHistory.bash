@@ -45,6 +45,8 @@ use Geo::Hashing;
 
 # This is the graticule we're calculating for.
 ($lat, $lon) = ("47", "-122");
+$lat = $ARGV[0] || 47 ;
+$lon = $ARGV[1] || -122;
 
 # Grab the current date.
 ($a,$a,$a,$todayday,$todaymonth,$todayyear,$a,$a,$a) = localtime(time);
