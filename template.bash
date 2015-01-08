@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+#Set the config file
+cofigFile='~/.binJlam/templateConfig'
+
 #exit when command fails (use || true when a command can fail)
 set -o errexit
 
@@ -23,3 +26,11 @@ __base="$(basename ${__file} .sh)"
 log=~/log/$__base.log
 exec >  >(tee -a $log)
 exec 2> >(tee -a $log >&2)
+
+
+#Check that the config file exists
+if [[ ! -f "$configFile" ]] ; then
+        echo "I need a file at $configFile with ..."
+        exit 1
+fi
+
