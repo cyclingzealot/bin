@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 #Set the config file
-cofigFile='~/.binJlam/templateConfig'
+configFile='~/.binJlam/templateConfig'
 
 #exit when command fails (use || true when a command can fail)
 set -o errexit
@@ -33,4 +33,3 @@ if [[ ! -f "$configFile" ]] ; then
         echo "I need a file at $configFile with ..."
         exit 1
 fi
-
