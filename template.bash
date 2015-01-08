@@ -33,3 +33,6 @@ if [[ ! -f "$configFile" ]] ; then
         echo "I need a file at $configFile with ..."
         exit 1
 fi
+
+
+### BEGIN SCRIPT ###############################################################
