@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+START=$(date +%s.%N)
+
 #Set the config file
 configFile='~/.binJlam/templateConfig'
 
@@ -20,10 +22,11 @@ __dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 __root="$(cd "$(dirname "${__dir}")" && pwd)" # <-- change this
 __file="${__dir}/$(basename "${BASH_SOURCE[0]}")"
 __base="$(basename ${__file} .sh)"
+ts=`date +'%Y%m%d-%H%M%S'`
 
 
 #Capture everything to log
-log=~/log/$__base.log
+log=~/log/$__base-${ts}.log
 exec >  >(tee -a $log)
 exec 2> >(tee -a $log >&2)
 
@@ -35,4 +38,15 @@ if [[ ! -f "$configFile" ]] ; then
 fi
 
 
+echo Begin `date`  .....
+
 ### BEGIN SCRIPT ###############################################################
+
+
+
+
+### END SCIPT ##################################################################
+
+END=$(date +%s.%N)
+DIFF=$(echo "$END - $START" | bc)
+echo Done.  `date` - $DIFF seconds
