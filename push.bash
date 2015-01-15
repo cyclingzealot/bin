@@ -1,5 +1,7 @@
 #!/bin/bash
 
+### Commits everything, pulls and, if pull succesfull, pushes
+
 git remote -v
 
 echo
