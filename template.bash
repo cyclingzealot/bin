@@ -32,10 +32,10 @@ exec 2> >(tee -a $log >&2)
 
 
 #Check that the config file exists
-if [[ ! -f "$configFile" ]] ; then
-        echo "I need a file at $configFile with ..."
-        exit 1
-fi
+#if [[ ! -f "$configFile" ]] ; then
+#        echo "I need a file at $configFile with ..."
+#        exit 1
+#fi
 
 
 echo Begin `date`  .....

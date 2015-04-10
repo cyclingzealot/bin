@@ -26,7 +26,8 @@ ts=`date +'%Y%m%d-%H%M%S'`
 
 
 #Capture everything to log
-log=~/log/$__base-${ts}.log
+log=/dev/null 
+#log=~/log/$__base-${ts}.log # Uncomment to debug
 exec >  >(tee -a $log)
 exec 2> >(tee -a $log >&2)
 
