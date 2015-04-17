@@ -66,7 +66,7 @@ mv -v $file $dest
 maxsize=500 #In MBs
 while [ "$(du -shm $dest | awk '{print $1}')" -gt $maxsize ]
 do
-  find $dest -maxdepth 1 -type f -printf '%T@\t%p\n' | \
+  find $dest -maxdepth 1 -type f -name '*.png' -printf '%T@\t%p\n' | \
       sort -n | head -n 25 | cut -d $'\t' -f 2-  | xargs -d '\n' rm -v
 done
 
