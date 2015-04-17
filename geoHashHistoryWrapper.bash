@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+# Requires 
+# libdate-calc-perl (or Date::calc), 
+# perl -MCPAN -e install Geo::Hashing 
+# and of course the geoHashHistory.pl script
+
 START=$(date +%s.%N)
 
 #Set the config file
@@ -12,7 +17,7 @@ set -o errexit
 set -o nounset
 
 #(a.k.a set -x) to trace what gets executed
-#set -o xtrace
+set -o xtrace
 
 # in scripts to catch mysqldump fails 
 set -o pipefail
@@ -26,10 +31,7 @@ ts=`date +'%Y%m%d-%H%M%S'`
 
 
 #Capture everything to log
-log=/dev/null 
-if [ -d /mnt/tmp/ ]; then
-	log=/mnt/tmp/$__base.log # Uncomment to debug
-fi
+log=~/log/$__base-${ts}.log
 exec >  >(tee -a $log)
 exec 2> >(tee -a $log >&2)
 
@@ -45,18 +47,24 @@ echo Begin `date`  .....
 
 ### BEGIN SCRIPT ###############################################################
 
-export DISPLAY=:0.0
-batteryPct=`acpi | cut -d ' ' -f 4 | sed -n 's/,$//p'`
-batteryNoPct=${batteryPct%%'%'}
-random=$((  RANDOM % 100  ))
+complete=~/.geoHistoryWrapper.modflag
 
-echo $batteryPct $batteryNoPct $random
-
-if [ "$batteryNoPct" -le "$random" ]; then
-	notify-send "Pile à $batteryPct"
-else 
-	echo "False: $batteryPct < $random"
+mod=0
+if [ -f $complete ]; then 
+	mod=$(date -r $complete  +%s)
 fi
+now=$(date +%s) 
+days=$(expr \( $now - $mod \) / 86400)
+
+if [ "$days" -gt 30 ]; then
+	for long in -74 -75 -76; do
+		$__dir/geoHashHistory.pl 45 $long > ~/tmp/geoHashHistory_45${long}.xml
+	done
+	touch $complete
+else 
+	echo Not redoing geoHashHistory as complete file is $days old
+fi
+
 
 
 ### END SCIPT ##################################################################
