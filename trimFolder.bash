@@ -12,7 +12,7 @@ set -o errexit
 set -o nounset
 
 #(a.k.a set -x) to trace what gets executed
-set -o xtrace
+#set -o xtrace
 
 # in scripts to catch mysqldump fails 
 set -o pipefail
@@ -52,7 +52,7 @@ maxsize=$2  # In MB
 while [ "$(du -shm $target | awk '{print $1}')" -gt $maxsize ]
 do
   find $target -maxdepth 1 -type f -printf '%T@\t%p\n' | \
-      sort -n | head -n 25 | cut -d $'\t' -f 2-  | xargs -d '\n' rm -vif
+      sort -nr | tail -n 1 | cut -d $'\t' -f 2-  | xargs -d '\n' rm -vf
 done
 
 
