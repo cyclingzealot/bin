@@ -55,6 +55,7 @@ dest=/home/$whoami/screenshots/
 file=/home/$whoami/$whoami-screenshot-`date +'%Y-%m-%d-%H-%M-%S'`.png
 mkdir -p $dest
 DISPLAY=:0 /usr/bin/scrot "$file"
+chmod 600 $file
 mv -v $file $dest
 
 
