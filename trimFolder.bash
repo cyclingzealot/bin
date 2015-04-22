@@ -49,6 +49,12 @@ echo Begin `date`  .....
 target=$1
 maxsize=$2  # In MB
 
+if [ -z "$target" -o -z "$maxsize" ]; then
+	echo Target and maxsize cannot be empty!
+	echo Usage: $0 target maxsize \(in MBs\)
+	exit 1
+fi
+
 while [ "$(du -shm $target | awk '{print $1}')" -gt $maxsize ]
 do
   find $target -maxdepth 1 -type f -printf '%T@\t%p\n' | \
