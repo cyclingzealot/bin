@@ -46,9 +46,11 @@ echo Begin `date`  .....
 #such as 
 #*/3 * * * * /home/jlam/bin/screenshot.bash 2> ~/log/screenshot.crontab.log 2>&1
 
-if [[ "`xprintidle`" -gt 1800000]]; then
+idleTime=`DISPLAY=:0 xprintidle`
+if [[ "$idleTime" -gt 1800000 ]] ; then
 	echo "Computer has been idle for more than 30 minutes, exiting with no screenshot"
 	exit 0
+else  echo Idle time is $idleTime
 fi
 
 
