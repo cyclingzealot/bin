@@ -2,9 +2,6 @@
 
 START=$(date +%s.%N)
 
-#Set the config file
-configFile='~/.binJlam/templateConfig'
-
 #exit when command fails (use || true when a command can fail)
 set -o errexit
 
@@ -23,6 +20,9 @@ __root="$(cd "$(dirname "${__dir}")" && pwd)" # <-- change this
 __file="${__dir}/$(basename "${BASH_SOURCE[0]}")"
 __base="$(basename ${__file} .sh)"
 ts=`date +'%Y%m%d-%H%M%S'`
+
+#Set the config file
+configFile='~/.binJlam/templateConfig'
 
 
 #Capture everything to log
