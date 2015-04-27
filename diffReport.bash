@@ -47,7 +47,7 @@ whoami=`whoami`
 
 reportPath=/tmp/$whoami-$prjName-$ts.diff
 touch $reportPath
-chmod 500 $reportPath
+chmod 600 $reportPath
 
 
 ### By default, the script runs standalone, output AND tees the diff to a path, 
