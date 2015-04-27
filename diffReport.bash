@@ -38,7 +38,6 @@ exec 2> >(tee -a $log >&2)
 #fi
 
 
-echo Begin `date`  .....
 
 ### BEGIN SCRIPT ###############################################################
 
@@ -71,7 +70,3 @@ fi
 
 
 ### END SCIPT ##################################################################
-
-END=$(date +%s.%N)
-DIFF=$(echo "$END - $START" | bc)
-echo Done.  `date` - $DIFF seconds
