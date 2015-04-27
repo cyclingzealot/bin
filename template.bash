@@ -30,7 +30,7 @@ log=~/log/$__base-${ts}.log
 exec >  >(tee -a $log)
 exec 2> >(tee -a $log >&2)
 touch $log
-chmod 700 $log
+chmod 400 $log
 
 
 #Check that the config file exists
