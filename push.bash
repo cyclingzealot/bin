@@ -8,7 +8,6 @@ echo
 
 reportPath=''
 if hash diffReport.bash 2>/dev/null; then
-    set -x
     reportPath=`diffReport.bash logOnly`
 fi
 
