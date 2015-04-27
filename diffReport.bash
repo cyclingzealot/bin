@@ -46,6 +46,8 @@ prjName=`basename $topPath`
 whoami=`whoami`
 
 reportPath=/tmp/$whoami-$prjName-$ts.diff
+touch $reportPath
+chmod 400 $reportPath
 
 
 ### By default, the script runs standalone, output AND tees the diff to a path, 
