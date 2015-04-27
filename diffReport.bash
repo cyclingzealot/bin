@@ -48,15 +48,25 @@ whoami=`whoami`
 
 reportPath=/tmp/$whoami-$prjName-$ts.diff
 
-git diff | tee $reportPath
 
-echo ; echo ; echo
+### By default, the script runs standalone, output AND tees the diff to a path, 
+if [[ -z "$1" ]]; then
+	git diff | tee $reportPath
 
-echo Report in:
-echo 
-echo $reportPath
+	echo ; echo ; echo
+	echo Report in:
+	echo 
+	echo $reportPath
 
-echo ; echo ; echo
+	echo ; echo ; echo
+### If any argument is supplied, just output the path so it can be used 
+### within an other script (such as push.bash)
+else 
+	git diff > $reportPath
+	print $reportPath
+fi
+
+
 
 
 ### END SCIPT ##################################################################
