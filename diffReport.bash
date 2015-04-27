@@ -63,7 +63,7 @@ if [[ -z "$1" ]]; then
 ### within an other script (such as push.bash)
 else 
 	git diff > $reportPath
-	print $reportPath
+	printf $reportPath
 fi
 
 
