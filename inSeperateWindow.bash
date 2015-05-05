@@ -6,7 +6,6 @@ START=$(date +%s.%N)
 set -o errexit
 
 #exit when your script tries to use undeclared variables
-set -o nounset
 
 #(a.k.a set -x) to trace what gets executed
 set -o xtrace
@@ -27,10 +26,10 @@ configFile='~/.binJlam/templateConfig'
 
 #Capture everything to log
 log=~/log/$__base-${ts}.log
-exec >  >(tee -a $log)
-exec 2> >(tee -a $log >&2)
-touch $log
-chmod 600 $log
+#exec >  >(tee -a $log)
+#exec 2> >(tee -a $log >&2)
+#touch $log
+#chmod 600 $log
 
 
 #Check that the config file exists
@@ -40,15 +39,23 @@ chmod 600 $log
 #fi
 
 
-echo Begin `date`  .....
+#echo Begin `date`  .....
 
 ### BEGIN SCRIPT ###############################################################
 
+cmd=''
+if [[ -z "$1" ]]; then 
+	cmd='echo Use me to launch a command in a seperate gnome-terminal window.  Very usefull for sudo things...; sleep 5; echo Closing in 5 seconds.... ; sleep 5'
+else
+	cmd=$1
+fi
+set -o nounset
 
+gnome-terminal -x bash -c "$cmd"
 
 
 ### END SCIPT ##################################################################
 
-END=$(date +%s.%N)
-DIFF=$(echo "$END - $START" | bc)
-echo Done.  `date` - $DIFF seconds
+#END=$(date +%s.%N)
+#DIFF=$(echo "$END - $START" | bc)
+#echo Done.  `date` - $DIFF seconds

@@ -44,7 +44,7 @@ echo Begin `date`  .....
 
 ### BEGIN SCRIPT ###############################################################
 
-
+echo If you have made your crontab right, you should see something in $log
 
 
 ### END SCIPT ##################################################################
