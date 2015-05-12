@@ -1,6 +1,11 @@
 #!/bin/bash
 
+# Upgrade per-language package manager
 sudo /usr/local/bin/composer self-update
+sudo npm install -g npm
+
+
+# Now upgrade system
 sudo apt-get update
 sudo apt-get upgrade --just-print | grep Inst | cut -f 2 -d ' ' | sort  > /tmp/upgradePackageList.txt
 
