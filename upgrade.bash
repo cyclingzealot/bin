@@ -24,7 +24,6 @@ for pack in `cat /tmp/upgradePackageList.txt` ; do
 	echo ===== To stop =======\> rm $continueFlag
 	if [ -a $continueFlag ] ; then sudo apt-get install $pack --only-upgrade --yes  -d; fi
 	if [ -a $continueFlag ] ; then sudo apt-get install $pack --only-upgrade --yes ;  fi
-	sleep 1
 	echo; echo; echo 
 done
 
