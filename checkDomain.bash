@@ -62,7 +62,7 @@ do
   # If you need list..
   # whois $d | egrep -i 'Expiry|Expiration|Expires on' | head -1 >> /tmp/domain.date
   #
-  echo ""
+  sleep 1 
 done 
 #
 # [ -f /tmp/domain.date ] && mail -s 'Domain renew / expiration date' you@yahoo.com < /tmp/domain.date || :
