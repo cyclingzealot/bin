@@ -22,7 +22,7 @@ __base="$(basename ${__file} .sh)"
 ts=`date +'%Y%m%d-%H%M%S'`
 
 #Set the config file
-configFile="~/.binJlam/templateConfig"
+configFile="$HOME/.binJlam/templateConfig"
 
 
 #Capture everything to log
