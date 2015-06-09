@@ -12,7 +12,7 @@ alias parseMultiLineInsert="sed \'s$),($),\n($g\'"
 
 export BC_ENV_ARGS=~/.bcrc
 
-alias usage='find .  -maxdepth 1 -print0 | xargs -0 du -aS | sort -n -r -k 1'
+alias usage='find .  -mindepth 1 -maxdepth 1 -print0 | xargs -0 du -s | sort -n -r -k 1'
 alias usageFiilesOnly='find . -maxdepth 3 -type f -print0 | xargs -0 du | sort -nrk 1'
 
 alias mv='mv -i'
