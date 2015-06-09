@@ -1,11 +1,3 @@
-#Standard git ignore for projects
-.*.sw?
-.buildpath
-.project
-.settings/
-*~
-.*.sw?
-.lock*
 ._*
 .\#*
 .#*
@@ -74,6 +66,7 @@ locale/en/LC_MESSAGES/django.mo
 locale/fr/LC_MESSAGES/django.mo
 .~lock.*
 .~lock.*#
+.lock*
 .~lock.*.od?#
 log
 log/django.log
@@ -105,6 +98,7 @@ scrapper.php
 settings_local.py
 src/wordpress/wp-config.php
 sshConfig
+#Standard git ignore for projects
 .*.sw?
 .sw?
 *.sw?
