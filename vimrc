@@ -18,7 +18,7 @@ set smartcase
 abbreviate teh the
 abbreviate eg e.g.
 
-set spell spelllang=en_ca
+" set spell spelllang=en_ca
 
 " No backup thanks to source control but might change this later
 set nobackup
