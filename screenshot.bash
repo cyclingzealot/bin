@@ -46,6 +46,13 @@ echo Begin `date`  .....
 #such as 
 #*/3 * * * * /home/jlam/bin/screenshot.bash 2> ~/log/screenshot.crontab.log 2>&1
 
+idleTime=`DISPLAY=:0 xprintidle`
+if [[ "$idleTime" -gt 1800000 ]] ; then
+	echo "Computer has been idle for more than 30 minutes, exiting with no screenshot"
+	exit 0
+else  echo Idle time is $idleTime
+fi
+
 
 #Author:  Shambhu Singh http://www.tecmint.com/take-screenshots-in-linux-using-scrot/
 #Author: jlam@credil.org
@@ -55,6 +62,7 @@ dest=/home/$whoami/screenshots/
 file=/home/$whoami/$whoami-screenshot-`date +'%Y-%m-%d-%H-%M-%S'`.png
 mkdir -p $dest
 DISPLAY=:0 /usr/bin/scrot "$file"
+chmod 600 $file
 mv -v $file $dest
 
 

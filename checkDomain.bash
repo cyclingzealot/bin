@@ -9,7 +9,6 @@ set -o errexit
 set -o nounset
 
 #(a.k.a set -x) to trace what gets executed
-set -o xtrace
 
 # in scripts to catch mysqldump fails 
 set -o pipefail
@@ -22,7 +21,8 @@ __base="$(basename ${__file} .sh)"
 ts=`date +'%Y%m%d-%H%M%S'`
 
 #Set the config file
-configFile="$HOME/.binJlam/templateConfig"
+configFile="$HOME/.checkDomain_domainList"
+
 
 
 #Capture everything to log
@@ -34,10 +34,16 @@ chmod 600 $log
 
 
 #Check that the config file exists
-#if [[ ! -f "$configFile" ]] ; then
-#        echo "I need a file at $configFile with ..."
-#        exit 1
-#fi
+if [ ! -f $configFile ] ; then
+        echo "I need a file at $configFile with a domain list on one line seperated by spaces and no new line" 
+	DOM="theos.in cricketnow.in nixcraft.com nixcraft.org nixcraft.biz nixcraft.net nixcraft.info cyberciti.biz cyberciti.org gite.in nixcraft.in"
+	echo
+	echo "Like:"
+	echo $DOM
+	echo
+	ls -l $configFile
+        exit 1
+fi
 
 
 echo Begin `date`  .....
@@ -45,6 +51,22 @@ echo Begin `date`  .....
 ### BEGIN SCRIPT ###############################################################
 
 
+# Author 
+# Vivek Gite - http://www.cyberciti.biz/tips/howto-monitor-domain-expiration-renew-date.html
+
+# Domain name list - add your domainname here
+for d in `cat $configFile`
+do
+  echo -n "$d - "
+  whois $d | egrep -i 'Expiry|Expiration|Expires on' | head -1 || true
+  # If you need list..
+  # whois $d | egrep -i 'Expiry|Expiration|Expires on' | head -1 >> /tmp/domain.date
+  #
+  sleep 1 
+done 
+#
+# [ -f /tmp/domain.date ] && mail -s 'Domain renew / expiration date' you@yahoo.com < /tmp/domain.date || :
+#
 
 
 ### END SCIPT ##################################################################

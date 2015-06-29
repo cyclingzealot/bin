@@ -1,6 +1,11 @@
 #!/bin/bash
 
+# Upgrade per-language package manager
 sudo /usr/local/bin/composer self-update
+sudo npm install -g npm
+
+
+# Now upgrade system
 sudo apt-get update
 sudo apt-get upgrade --just-print | grep Inst | cut -f 2 -d ' ' | sort  > /tmp/upgradePackageList.txt
 
@@ -19,7 +24,6 @@ for pack in `cat /tmp/upgradePackageList.txt` ; do
 	echo ===== To stop =======\> rm $continueFlag
 	if [ -a $continueFlag ] ; then sudo apt-get install $pack --only-upgrade --yes  -d; fi
 	if [ -a $continueFlag ] ; then sudo apt-get install $pack --only-upgrade --yes ;  fi
-	sleep 1
 	echo; echo; echo 
 done
 

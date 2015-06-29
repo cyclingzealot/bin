@@ -9,7 +9,7 @@ set -o errexit
 set -o nounset
 
 #(a.k.a set -x) to trace what gets executed
-set -o xtrace
+#set -o xtrace
 
 # in scripts to catch mysqldump fails 
 set -o pipefail
@@ -22,15 +22,13 @@ __base="$(basename ${__file} .sh)"
 ts=`date +'%Y%m%d-%H%M%S'`
 
 #Set the config file
-configFile="$HOME/.binJlam/templateConfig"
+configFile='~/.binJlam/templateConfig'
 
 
 #Capture everything to log
 log=~/log/$__base-${ts}.log
 exec >  >(tee -a $log)
 exec 2> >(tee -a $log >&2)
-touch $log
-chmod 600 $log
 
 
 #Check that the config file exists
@@ -40,15 +38,37 @@ chmod 600 $log
 #fi
 
 
-echo Begin `date`  .....
 
 ### BEGIN SCRIPT ###############################################################
 
+topPath=`git rev-parse --show-toplevel`
+prjName=`basename $topPath`
+whoami=`whoami`
+
+reportPath=/tmp/$whoami-$prjName-$ts.diff
+touch $reportPath
+chmod 600 $reportPath
+
+
+### By default, the script runs standalone, output AND tees the diff to a path, 
+if [[ -z "$1" ]]; then
+	git diff | tee $reportPath
+
+	echo ; echo ; echo
+	echo Report in:
+	echo 
+	echo $reportPath
+
+	echo ; echo ; echo
+### If any argument is supplied, just output the path so it can be used 
+### within an other script (such as push.bash)
+else 
+	git diff > $reportPath
+	printf $reportPath
+fi
+
+chmod 400 $reportPath
 
 
 
 ### END SCIPT ##################################################################
-
-END=$(date +%s.%N)
-DIFF=$(echo "$END - $START" | bc)
-echo Done.  `date` - $DIFF seconds

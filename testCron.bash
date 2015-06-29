@@ -22,7 +22,7 @@ __base="$(basename ${__file} .sh)"
 ts=`date +'%Y%m%d-%H%M%S'`
 
 #Set the config file
-configFile="$HOME/.binJlam/templateConfig"
+configFile='~/.binJlam/templateConfig'
 
 
 #Capture everything to log
@@ -44,7 +44,7 @@ echo Begin `date`  .....
 
 ### BEGIN SCRIPT ###############################################################
 
-
+echo If you have made your crontab right, you should see something in $log
 
 
 ### END SCIPT ##################################################################
