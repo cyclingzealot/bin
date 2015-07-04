@@ -65,6 +65,8 @@ else
 	echo Not redoing geoHashHistory as complete file is $days old
 fi
 
+$__dir/globalHashHistory.pl  > ~/tmp/geoHashHistory_global.xml
+
 
 
 ### END SCIPT ##################################################################
