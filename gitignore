@@ -1,8 +1,0 @@
-#Standard git ignore for projects
-.*.sw?
-.buildpath
-.project
-.settings/
-*~
-.*.sw?
-.lock*

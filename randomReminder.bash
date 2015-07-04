@@ -22,7 +22,7 @@ __base="$(basename ${__file} .sh)"
 ts=`date +'%Y%m%d-%H%M%S'`
 
 #Set the config file
-configFile="$HOME/.binJlam/templateConfig"
+configFile='~/.binJlam/templateConfig'
 
 
 #Capture everything to log
@@ -44,6 +44,20 @@ echo Begin `date`  .....
 
 ### BEGIN SCRIPT ###############################################################
 
+export DISPLAY=:0
+
+start=`date -d "$1" +'%s'`
+end=`date -d "$2" +'%s'`
+
+range=`echo $end-$start | bc`
+
+random=`rand -M $range`
+
+hourShouldMsg=`echo $random + $start | bc`
+
+if [[ `date +'%s'` -gt "$hourShouldMsg" ]] ; then 
+	notify-send "$3"
+fi
 
 
 

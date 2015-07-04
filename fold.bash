@@ -9,7 +9,7 @@ set -o errexit
 set -o nounset
 
 #(a.k.a set -x) to trace what gets executed
-set -o xtrace
+#set -o xtrace
 
 # in scripts to catch mysqldump fails 
 set -o pipefail
@@ -22,7 +22,7 @@ __base="$(basename ${__file} .sh)"
 ts=`date +'%Y%m%d-%H%M%S'`
 
 #Set the config file
-configFile="$HOME/.binJlam/templateConfig"
+configFile="$HOME/.fold.config.bash"
 
 
 #Capture everything to log
@@ -34,21 +34,42 @@ chmod 600 $log
 
 
 #Check that the config file exists
-#if [[ ! -f "$configFile" ]] ; then
-#        echo "I need a file at $configFile with ..."
-#        exit 1
-#fi
+if [ ! -f "$configFile" ]; then
+        echo "I need a file at $configFile with one line with the default width, no line feed or carraige return"
+        exit 1
+fi
 
 
-echo Begin `date`  .....
+#echo Begin `date`  .....
 
 ### BEGIN SCRIPT ###############################################################
 
+scratchFile=/tmp/fold-$ts.txt
+touch $scratchFile
+chmod 600 $scratchFile
+
+widthDefault=`cat $configFile`
+
+width=${1:-$widthDefault}
+
+char='='
+length=`tput cols`
+yes "$char" |  head -n $length | tr -d "\n" | xargs echo || true
+
+echo Input your text then Crtl-D
+cat > $scratchFile
+
+yes "$char" |  head -n $length | tr -d "\n" | xargs echo || true
 
 
+fold -w $width -s $scratchFile
+
+rm $scratchFile
+
+yes "$char" |  head -n $length | tr -d "\n" | xargs echo || true
 
 ### END SCIPT ##################################################################
 
-END=$(date +%s.%N)
-DIFF=$(echo "$END - $START" | bc)
-echo Done.  `date` - $DIFF seconds
+#END=$(date +%s.%N)
+#DIFF=$(echo "$END - $START" | bc)
+#echo Done.  `date` - $DIFF seconds
