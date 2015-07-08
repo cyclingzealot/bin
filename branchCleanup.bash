@@ -4,4 +4,4 @@
 
 
 git checkout master &&
-git branch -d `git branch --merged | grep -v master | grep -v devServer`
+git branch -d `git branch --merged | grep -v master | grep -v devServer | grep -v release`
