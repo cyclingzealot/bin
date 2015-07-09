@@ -1,7 +1,9 @@
 #!/bin/bash
 
 
-if [[ $1 =~ '^[0-9]+$' ]]; then
+re='^[0-9]+$'
+
+if [[ "$1" =~ $re ]]; then
 	 for i in `seq $1 -1 0`; do printf "$i... " ; sleep 1; done
 	exit 0
 fi
