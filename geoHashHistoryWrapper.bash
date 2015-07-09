@@ -57,7 +57,7 @@ now=$(date +%s)
 days=$(expr \( $now - $mod \) / 86400)
 
 if [ "$days" -gt 30 ]; then
-	for long in -74 -75 -76; do
+	for long in -73 -75 -76; do
 		$__dir/geoHashHistory.pl 45 $long > ~/tmp/geoHashHistory_45${long}.xml
 	done
 	touch $complete
