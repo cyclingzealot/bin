@@ -52,25 +52,19 @@ baseFile=/tmp/hosts.base
 
 curl http://winhelp2002.mvps.org/hosts.txt | dos2unix > $tmpFileStore
 
-sleep 1
 
 wc -l $tmpFileStore
 
-sleep 1
 sudo cp -v $hostsFile $hostsFile.bak
-sleep 1
 
 lineNumber=`grep -n "$marker" $hostsFile | cut -d ':' -f 1 || true`
-sleep 1
 
 if [[ ! -z "$lineNumber" ]]; then 
 	let lineNumber--
-	sleep 1
 	head -n $lineNumber $hostsFile > $baseFile 
 else 
 	cp $hostsFile $baseFile
 fi
-sleep 1
 
 wc -l $baseFile
 
@@ -84,9 +78,9 @@ cat $tmpFileStore >> $baseFile
 
 wc -l $baseFile
 
-/usr/bin/less -M -N $baseFile
+sudo cp $baseFile $hostsFile
 
-sudo cp -i $baseFile $hostsFile
+less $hostsFile
 
 #rm -v $baseFile $tmpFileStore
 
