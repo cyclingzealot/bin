@@ -10,5 +10,5 @@ while(true); do
 	notice="$1 is up"
 	lynx -connect_timeout=2 -dump "$1" && echo && echo $notice && notify-send "$notice" && play -q `ls -rShd /usr/share/sounds/* | tail -n 1`
 	echo
-	sleep 1
+	sleep 5
 done
