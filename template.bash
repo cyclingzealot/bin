@@ -18,11 +18,28 @@ set -o pipefail
 __dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 __root="$(cd "$(dirname "${__dir}")" && pwd)" # <-- change this
 __file="${__dir}/$(basename "${BASH_SOURCE[0]}")"
-__base="$(basename ${__file} .sh)"
+__base="$(basename ${__file})"
 ts=`date +'%Y%m%d-%H%M%S'`
 
 #Set the config file
 configFile="$HOME/.binJlam/templateConfig"
+
+#Ensure only one copy is running
+pidfile=$HOME/.${__base}.pid
+if [ -f ${pidfile} ]; then
+   #verify if the process is actually still running under this pid
+   oldpid=`cat ${pidfile}`
+   result=`ps -ef | grep ${oldpid} | grep ${scriptname}`  
+
+   if [ -n "${result}" ]; then
+     echo "Script already running! Exiting"
+     exit 255
+   fi
+fi
+
+#grab pid of this process and update the pid file with it
+pid=`ps -ef | grep ${__base} | head -n1 |  awk ' {print $2;} '`
+echo ${pid} > ${pidfile}
 
 
 #Capture everything to log
@@ -52,3 +69,7 @@ echo Begin `date`  .....
 END=$(date +%s.%N)
 DIFF=$(echo "$END - $START" | bc)
 echo Done.  `date` - $DIFF seconds
+
+if [ -f ${pidfile} ]; then
+    rm ${pidfile}
+fi
