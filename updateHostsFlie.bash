@@ -18,28 +18,11 @@ set -o pipefail
 __dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 __root="$(cd "$(dirname "${__dir}")" && pwd)" # <-- change this
 __file="${__dir}/$(basename "${BASH_SOURCE[0]}")"
-__base="$(basename ${__file})"
+__base="$(basename ${__file} .sh)"
 ts=`date +'%Y%m%d-%H%M%S'`
 
 #Set the config file
 configFile="$HOME/.binJlam/templateConfig"
-
-#Ensure only one copy is running
-pidfile=$HOME/.${__base}.pid
-if [ -f ${pidfile} ]; then
-   #verify if the process is actually still running under this pid
-   oldpid=`cat ${pidfile}`
-   result=`ps -ef | grep ${oldpid} | grep ${__base} || true`  
-
-   if [ -n "${result}" ]; then
-     echo "Script already running! Exiting"
-     exit 255
-   fi
-fi
-
-#grab pid of this process and update the pid file with it
-pid=`ps -ef | grep ${__base} | grep -v 'vi ' | head -n1 |  awk ' {print $2;} '`
-echo ${pid} > ${pidfile}
 
 
 #Capture everything to log
@@ -61,6 +44,45 @@ echo Begin `date`  .....
 
 ### BEGIN SCRIPT ###############################################################
 
+tmpFileStore=/tmp/winHelpHostsFile.txt
+marker='### BAD HOSTS BEGIN'
+hostsFile=/etc/hosts
+baseFile=/tmp/hosts.base
+
+
+curl http://winhelp2002.mvps.org/hosts.txt | dos2unix > $tmpFileStore
+
+
+wc -l $tmpFileStore
+
+sudo cp -v $hostsFile $hostsFile.bak
+
+lineNumber=`grep -n "$marker" $hostsFile | cut -d ':' -f 1 || true`
+
+if [[ ! -z "$lineNumber" ]]; then 
+	let lineNumber--
+	head -n $lineNumber $hostsFile > $baseFile 
+else 
+	cp $hostsFile $baseFile
+fi
+
+wc -l $baseFile
+
+
+echo >> $baseFile
+echo >> $baseFile
+echo >> $baseFile
+echo >> $baseFile
+echo "$marker" >> $baseFile
+cat $tmpFileStore >> $baseFile
+
+wc -l $baseFile
+
+sudo cp $baseFile $hostsFile
+
+less $hostsFile
+
+#rm -v $baseFile $tmpFileStore
 
 
 
@@ -69,7 +91,3 @@ echo Begin `date`  .....
 END=$(date +%s.%N)
 DIFF=$(echo "$END - $START" | bc)
 echo Done.  `date` - $DIFF seconds
-
-if [ -f ${pidfile} ]; then
-    rm ${pidfile}
-fi
