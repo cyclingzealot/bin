@@ -44,6 +44,7 @@ echo Begin `date`  .....
 
 ### BEGIN SCRIPT ###############################################################
 
+export DISPLAY=:0
 idleTime=`xprintidle` 
 
 if [[ "$idleTime" -gt 1800000 ]]; then
