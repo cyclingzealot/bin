@@ -7,6 +7,9 @@ set -o errexit
 set -o nounset
 
 
+set -x 
+
+
 ### Commits everything, pulls and, if pull succesfull, pushes
 
 git remote -v
@@ -19,7 +22,7 @@ if hash diffReport.bash 2>/dev/null; then
 fi
 
 set -x 
-git commit -am "$1" 
+git commit -am "$1"  || true
 echo
 git pull && echo && git push 
 set +x
