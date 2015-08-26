@@ -30,7 +30,7 @@ set +x
 echo 
 
 git-branch-status.bash || true
-git submodule foreach git-branch-status.bash || true
+git submodule foreach --recursive git-branch-status.bash || true
 
 
 
