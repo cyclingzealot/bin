@@ -47,6 +47,8 @@ echo Begin `date`  .....
 export DISPLAY=:0
 idleTime=`xprintidle` 
 
+echo Idle time is $idleTime
+
 if [[ "$idleTime" -gt 1800000 ]]; then
 	echo "Killing pidgin"
 	killall -v pidgin

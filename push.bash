@@ -1,5 +1,12 @@
 #!/bin/bash
 
+#exit when command fails (use || true when a command can fail)
+set -o errexit
+
+#exit when your script tries to use undeclared variables
+set -o nounset
+
+
 ### Commits everything, pulls and, if pull succesfull, pushes
 
 git remote -v
@@ -19,7 +26,10 @@ set +x
 
 echo 
 
-git status
+git-branch-status.bash || true
+git submodule foreach git-branch-status.bash || true
+
+
 
 if [[ ! -z "$reportPath" ]] ; then
 	echo; echo; echo
