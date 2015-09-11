@@ -21,3 +21,5 @@ alias cp='cp -i'
 export PS1="\h $PS1"
 
 export EDITOR=vim
+
+alias ssh='ssh -XA'

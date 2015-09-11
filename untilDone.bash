@@ -6,9 +6,8 @@ numProcs=1
 while [[ "$numProcs" -gt 0 ]]; do
 
 
-numProcs=`ps -ef | grep $1 -c`
-
-numProcs=`echo $numProcs - 3 | bc`
+#set -x
+numProcs=`ps -ef | grep $1 | grep -v grep | grep -v untilDone | wc -l`
 
 if [[ "$numProcs" -gt 0 ]]; then 
 	printf . ; 
