@@ -59,6 +59,8 @@ chmod 600 $log
 
 echo Begin `date`  .....
 
+echo; echo; echo;
+
 ### BEGIN SCRIPT ###############################################################
 
 
@@ -68,6 +70,7 @@ echo Begin `date`  .....
 
 END=$(date +%s.%N)
 DIFF=$(echo "$END - $START" | bc)
+echo; echo; echo;
 echo Done.  `date` - $DIFF seconds
 
 if [ -f ${pidfile} ]; then
