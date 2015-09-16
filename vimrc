@@ -4,6 +4,7 @@
 
 " Simplified vimrc for use when vim is installed but not gvim
 
+" Show line number
 set number
 set encoding=utf-8
 
@@ -50,3 +51,9 @@ set nowrap
 
 " Do word wrapping
 :nmap <Leader>e <Esc>:set wrap linebreak<CR>
+
+" Remove trailing white spaces
+autocmd BufWritePre *.pl :%s/\s\+$//e
+
+" Set smart indenting
+set smartindent
