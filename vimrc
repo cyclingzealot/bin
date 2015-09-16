@@ -30,7 +30,9 @@ set tabstop=4 shiftwidth=4 expandtab
 set nowrap
 
 "set the global map leader variable so that:
-:let mapleader = ","
+if ! has("patch547") 
+   :let mapleader = ","
+endif
 
 " Make it easy to update/reload _vimrc
 :nmap <Leader>s :source $HOME/_vimrc<CR>
