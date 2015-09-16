@@ -59,18 +59,15 @@ chmod 600 $log
 
 echo Begin `date`  .....
 
-echo; echo; echo;
-
 ### BEGIN SCRIPT ###############################################################
 
-
+ping -i 2 credil.org | perl -nle 'print scalar(localtime), "   ", $_'
 
 
 ### END SCIPT ##################################################################
 
 END=$(date +%s.%N)
 DIFF=$(echo "$END - $START" | bc)
-echo; echo; echo;
 echo Done.  `date` - $DIFF seconds
 
 if [ -f ${pidfile} ]; then
