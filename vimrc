@@ -55,7 +55,9 @@ endif
 :nmap <Leader>e <Esc>:set wrap linebreak<CR>
 
 " Remove trailing white spaces
-autocmd BufWritePre *.pl :%s/\s\+$//e
+if ! has("patch547") 
+   autocmd BufWritePre *.pl :%s/\s\+$//e
+endif
 
 " Set smart indenting
 set smartindent
