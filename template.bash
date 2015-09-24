@@ -56,6 +56,7 @@ chmod 600 $log
 #        exit 1
 #fi
 
+export DISPLAY=:0
 
 echo Begin `date`  .....
 
