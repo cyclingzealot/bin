@@ -71,8 +71,10 @@ newOwner=$2
 extraArgs=${3-''}
 
 set -x 
-for tbl in `psql $extraArgs -qAt -c "select tablename from pg_tables where schemaname = 'public';" $database` ; do  
-    psql $extraArgs -c "alter table \"$tbl\" owner to $newOwner" $database ;
+for tbl in `psql $extraArgs -qAt -c "select tableowner,tablename from pg_tables where schemaname = 'public';" $database` ; do  
+    table=`echo $tbl | cut -d '|' -f 2`
+    owner=`echo $tbl | cut -d '|' -f 1`
+    psql $extraArgs -d $database -U $owner -c "alter table \"$table\" owner to $newOwner" $database ;
 done
 
 for tbl in `psql $extraArgs -qAt -c "select sequence_name from information_schema.sequences where sequence_schema = 'public';" $database` ; do  
