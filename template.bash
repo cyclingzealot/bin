@@ -15,10 +15,10 @@ set -o xtrace
 set -o pipefail
 
 # Set magic variables for current file & dir
-__dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-__root="$(cd "$(dirname "${__dir}")" && pwd)" # <-- change this
-__file="${__dir}/$(basename "${BASH_SOURCE[0]}")"
-__base="$(basename ${__file})"
+__dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"   # Dir of the script
+__root="$(cd "$(dirname "${__dir}")" && pwd)"           # Dir of the dir of the script
+__file="${__dir}/$(basename "${BASH_SOURCE[0]}")"       # Full path of the script
+__base="$(basename ${__file})"                          # Name of the script
 ts=`date +'%Y%m%d-%H%M%S'`
 
 #Set the config file
