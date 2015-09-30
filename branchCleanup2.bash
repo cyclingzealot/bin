@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 
-# WIP not working yet
+# WIP not working yet.  Problem with if condition grepping for branch exceptions
 
 START=$(date +%s.%N)
 
