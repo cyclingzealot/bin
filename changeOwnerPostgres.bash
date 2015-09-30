@@ -66,9 +66,16 @@ echo; echo; echo;
 
 # From http://stackoverflow.com/questions/1348126/modify-owner-on-all-tables-simultaneously-in-postgresql
 
-database=$1
-newOwner=$2
+
+database=${1:-}
+newOwner=${2:-}
 extraArgs=${3-''}
+
+if [[ -z ${database} || -z ${newOwner} ]] ; then 
+    echo Usage: $__base '$database $newOwner'
+    echo
+    exit 1
+fi
 
 set -x 
 for tbl in `psql $extraArgs -qAt -c "select tableowner,tablename from pg_tables where schemaname = 'public';" $database` ; do  
