@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+
+# WIP not working yet.  Problem with if condition grepping for branch exceptions
+
 START=$(date +%s.%N)
 
 #exit when command fails (use || true when a command can fail)
@@ -64,7 +67,19 @@ echo; echo; echo;
 
 ### BEGIN SCRIPT ###############################################################
 
+dontDelete=${1:-}
 
+git checkout master
+
+branches=`git branch --merged | grep -v master | grep -v devServer | grep -v release`
+
+for branche in $branches ; do
+    branche=`echo "${branche}" | sed -e 's/^[ \t]*//'`
+    if [[ -z $dontDelete || ! echo $dontDelete | grep -q $branche ]] ; then
+        echo $branche
+        #git branch -d $branche
+    fi
+done  
 
 
 ### END SCIPT ##################################################################

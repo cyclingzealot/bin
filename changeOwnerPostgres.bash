@@ -9,16 +9,16 @@ set -o errexit
 set -o nounset
 
 #(a.k.a set -x) to trace what gets executed
-set -o xtrace
+#set -o xtrace
 
 # in scripts to catch mysqldump fails 
 set -o pipefail
 
 # Set magic variables for current file & dir
-__dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"   # Dir of the script
-__root="$(cd "$(dirname "${__dir}")" && pwd)"           # Dir of the dir of the script
-__file="${__dir}/$(basename "${BASH_SOURCE[0]}")"       # Full path of the script
-__base="$(basename ${__file})"                          # Name of the script
+__dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+__root="$(cd "$(dirname "${__dir}")" && pwd)" # <-- change this
+__file="${__dir}/$(basename "${BASH_SOURCE[0]}")"
+__base="$(basename ${__file})"
 ts=`date +'%Y%m%d-%H%M%S'`
 
 #Set the config file
@@ -64,8 +64,34 @@ echo; echo; echo;
 
 ### BEGIN SCRIPT ###############################################################
 
+# From http://stackoverflow.com/questions/1348126/modify-owner-on-all-tables-simultaneously-in-postgresql
 
 
+database=${1:-}
+newOwner=${2:-}
+extraArgs=${3-''}
+
+if [[ -z ${database} || -z ${newOwner} ]] ; then 
+    echo Usage: $__base '$database $newOwner'
+    echo
+    exit 1
+fi
+
+set -x 
+for tbl in `psql $extraArgs -qAt -c "select tableowner,tablename from pg_tables where schemaname = 'public';" $database` ; do  
+    table=`echo $tbl | cut -d '|' -f 2`
+    owner=`echo $tbl | cut -d '|' -f 1`
+    psql $extraArgs -d $database -U $owner -c "alter table \"$table\" owner to $newOwner" $database ;
+done
+
+for tbl in `psql $extraArgs -qAt -c "select sequence_name from information_schema.sequences where sequence_schema = 'public';" $database` ; do  
+    psql $extraArgs -c "alter table \"$tbl\" owner to $newOwner" $database ; 
+done
+
+for tbl in `psql $extraArgs -qAt -c "select table_name from information_schema.views where table_schema = 'public';" $database` ; do  
+    psql $extraArgs -c "alter table \"$tbl\" owner to $newOwner" $database ; 
+done
+set +x
 
 ### END SCIPT ##################################################################
 
