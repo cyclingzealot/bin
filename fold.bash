@@ -51,6 +51,8 @@ chmod 600 $scratchFile
 widthDefault=`cat $configFile`
 
 width=${1:-$widthDefault}
+prefix=${2:-}
+
 
 char='='
 length=`tput cols`
@@ -61,8 +63,13 @@ cat > $scratchFile
 
 yes "$char" |  head -n $length | tr -d "\n" | xargs echo || true
 
+if [ ! -z "$prefix" ] ; then
+    let width=$width-2
+    fold -w $width -s $scratchFile | sed -e "s/^/$prefix /"
+else 
+    fold -w $width -s $scratchFile 
+fi
 
-fold -w $width -s $scratchFile
 
 rm $scratchFile
 
