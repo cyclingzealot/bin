@@ -55,7 +55,7 @@ echo Begin `date`  .....
 # Vivek Gite - http://www.cyberciti.biz/tips/howto-monitor-domain-expiration-renew-date.html
 
 # Domain name list - add your domainname here
-for d in `cat $configFile`
+for d in `sort $configFile`
 do
   echo -n "$d - "
   whois $d | egrep -i 'Expiry|Expiration|Expires on' | head -1 || true
