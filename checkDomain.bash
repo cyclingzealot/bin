@@ -9,6 +9,7 @@ set -o errexit
 set -o nounset
 
 #(a.k.a set -x) to trace what gets executed
+#set -x 
 
 # in scripts to catch mysqldump fails 
 set -o pipefail
@@ -54,16 +55,28 @@ echo Begin `date`  .....
 # Author 
 # Vivek Gite - http://www.cyberciti.biz/tips/howto-monitor-domain-expiration-renew-date.html
 
+workFile=/tmp/${__base}.workfile
+
 # Domain name list - add your domainname here
+numDomains=`wc -l $configFile | cut -d ' ' -f 1`
+i=1
+rm $workFile; touch $workFile
+echo Collecting data....
 for d in `sort $configFile`
 do
-  echo -n "$d - "
-  whois $d | egrep -i 'Expiry|Expiration|Expires on' | head -1 || true
+  echo "$i of $numDomains: $d..."
+  echo $d ' - ' `whois $d | egrep -i 'Expiry|Expiration|Expires on' | head -1` >> $workFile || true 
   # If you need list..
   # whois $d | egrep -i 'Expiry|Expiration|Expires on' | head -1 >> /tmp/domain.date
   #
+  let i++
   sleep 1 
 done 
+
+echo; echo ;
+cat $workFile | while read line; do longdate="$(echo "$line" | rev | cut -f1 -d" " | rev)"; longdateepoch="$(date -d $longdate +%s)"; echo "$longdateepoch $line"; done | sort | cut -d ' ' -f 2-
+echo; echo ;
+
 #
 # [ -f /tmp/domain.date ] && mail -s 'Domain renew / expiration date' you@yahoo.com < /tmp/domain.date || :
 #
