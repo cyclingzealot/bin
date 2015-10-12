@@ -60,7 +60,7 @@ workFile=/tmp/${__base}.workfile
 # Domain name list - add your domainname here
 numDomains=`wc -l $configFile | cut -d ' ' -f 1`
 i=1
-rm $workFile; touch $workFile
+rm -f $workFile || true; touch $workFile
 echo Collecting data....
 for d in `sort $configFile`
 do
