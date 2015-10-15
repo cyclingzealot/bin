@@ -61,3 +61,7 @@ endif
 
 " Set smart indenting
 set smartindent
+
+set wrap
+set linebreak
+set nolist  " list disables linebreak
