@@ -5,12 +5,12 @@
 set -x
 if [ $# -eq 0 ]
 then
-    OLDEST=$(find . -type f | cut -c3- |xargs ls -t | head -1)
+    OLDEST=$(find . -type f | cut -c3- |xargs ls -t | tail -1)
     #echo "OLDEST file: $OLDEST"
 
 elif [ -d "$1" ]; then
     cd $1
-    OLDEST=$(find . -type f | cut -c3- |xargs ls -t | head -1)
+    OLDEST=$(find . -type f | cut -c3- |xargs ls -t | tail -1)
     cd -
 
 else
