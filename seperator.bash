@@ -1,6 +1,6 @@
 #!/bin/bash
 
-char=${2:-'#'}
+char=${2:-'='}
 length=${1:-`tput cols`}
 
 if [ "$1" == "-h" ] ;  then
