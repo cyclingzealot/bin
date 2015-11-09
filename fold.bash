@@ -50,8 +50,8 @@ chmod 600 $scratchFile
 
 widthDefault=`cat $configFile`
 
-width=${1:-$widthDefault}
-prefix=${2:-}
+prefix=${1:-}
+width=${2:-$widthDefault}
 
 
 char='='
