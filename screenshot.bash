@@ -48,14 +48,20 @@ echo Begin `date`  .....
 
 
 idleTime=''
-for display in `seq 0 1 10` ; do
+display=`cat ~/.currentDisplay`
+idleTime=`DISPLAY=$display xprintidle` || true
+export DISPLAY=$display
+
+# Try to cycle through 10 digits if still no number
+for tryDisplay in `seq 0 1 10` ; do
     if [[ -z "$idleTime" ]]; then
-        idleTime=`DISPLAY=:$display xprintidle` || true
+        idleTime=`DISPLAY=:$tryDisplay xprintidle` || true
         if [[ -z "$idleTime" ]]; then
-            export DISPLAY=:$display
+            export DISPLAY=:$tryDisplay
         fi
     fi
 done 
+
 if [[ "$idleTime" -gt 1800000 ]] ; then
 	echo "Computer has been idle for more than 30 minutes, exiting with no screenshot"
 	exit 0
@@ -70,7 +76,8 @@ whoami=`whoami`
 dest=/home/$whoami/screenshots/
 file=/home/$whoami/$whoami-screenshot-`date +'%Y-%m-%d-%H-%M-%S'`.png
 mkdir -p $dest
-DISPLAY=:$display /usr/bin/scrot "$file"
+#DISPLAY=$display /usr/bin/scrot "$file"
+/usr/bin/scrot "$file"
 chmod 600 $file
 mv -v $file $dest
 
