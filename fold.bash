@@ -61,7 +61,7 @@ yes "$char" |  head -n $length | tr -d "\n" | xargs echo || true
 echo Input your text then Crtl-D
 cat > $scratchFile
 
-yes "$char" |  head -n $length | tr -d "\n" | xargs echo || true
+yes "$char" |  head -n $width | tr -d "\n" | xargs echo || true
 
 if [ ! -z "$prefix" ] ; then
     let width=$width-2
@@ -73,7 +73,7 @@ fi
 
 rm $scratchFile
 
-yes "$char" |  head -n $length | tr -d "\n" | xargs echo || true
+yes "$char" |  head -n $width | tr -d "\n" | xargs echo || true
 
 ### END SCIPT ##################################################################
 
