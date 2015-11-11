@@ -3,7 +3,7 @@
 START=$(date +%s.%N)
 
 #Set the config file
-configFile='~/.binJlam/templateConfig'
+configFile="$HOME/.currentDisplay"
 
 #exit when command fails (use || true when a command can fail)
 set -o errexit
@@ -32,10 +32,11 @@ exec 2> >(tee -a $log >&2)
 
 
 #Check that the config file exists
-#if [[ ! -f "$configFile" ]] ; then
-#        echo "I need a file at $configFile with ..."
-#        exit 1
-#fi
+if [[ ! -f "$configFile" ]] ; then
+        echo "I need a file at $configFile with the current display.  You may want to put this in your bashrc:"
+        echo "echo \$DISPLAY > ~/.currentDisplay"
+        exit 1
+fi
 
 
 echo Begin `date`  .....
@@ -48,19 +49,9 @@ echo Begin `date`  .....
 
 
 idleTime=''
-display=`cat ~/.currentDisplay`
+display=`cat $configFile`
 idleTime=`DISPLAY=$display xprintidle` || true
 export DISPLAY=$display
-
-# Try to cycle through 10 digits if still no number
-for tryDisplay in `seq 0 1 10` ; do
-    if [[ -z "$idleTime" ]]; then
-        idleTime=`DISPLAY=:$tryDisplay xprintidle` || true
-        if [[ -z "$idleTime" ]]; then
-            export DISPLAY=:$tryDisplay
-        fi
-    fi
-done 
 
 if [[ "$idleTime" -gt 1800000 ]] ; then
 	echo "Computer has been idle for more than 30 minutes, exiting with no screenshot"
