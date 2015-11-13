@@ -65,7 +65,7 @@ fi
 
 whoami=`whoami`
 dest=/home/$whoami/screenshots/
-file=/home/$whoami/$whoami-screenshot-`date +'%Y-%m-%d-%H-%M-%S'`.png
+file=$dest/$whoami-screenshot-`date +'%Y-%m-%d-%H-%M-%S'`.png
 mkdir -p $dest
 #DISPLAY=$display /usr/bin/scrot "$file"
 timeout --kill-after=0.1s 0.7s /usr/bin/scrot "$file" || echo "ERROR: Unable to take screenshot within alloted time"
