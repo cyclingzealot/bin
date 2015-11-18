@@ -83,7 +83,7 @@ fi
 maxsize=500 #In MBs
 while [ "$(du -shm $dest | awk '{print $1}')" -gt $maxsize ]
 do
-  find $dest -maxdepth 1 -type f -name '*.png' -printf '%T@\t%p\n' | \
+  find $dest -maxdepth 1 -type f -name '*.png*' -printf '%T@\t%p\n' | \
       sort -nr | tail -n 1 | cut -d $'\t' -f 2-  | xargs -d '\n' rm -v
 done
 
