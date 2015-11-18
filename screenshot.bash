@@ -70,7 +70,9 @@ mkdir -p $dest
 #DISPLAY=$display /usr/bin/scrot "$file"
 timeout --kill-after=0.1s 0.7s /usr/bin/scrot "$file" || echo "ERROR: Unable to take screenshot within alloted time"
 chmod 600 $file
-mv -v $file $dest
+if ! pngcheck $file ; then
+    mv -v $file $file.nogood
+fi
 
 
 #Author
