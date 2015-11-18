@@ -68,7 +68,7 @@ dest=/home/$whoami/screenshots/
 file=$dest/$whoami-screenshot-`date +'%Y-%m-%d-%H-%M-%S'`.png
 mkdir -p $dest
 #DISPLAY=$display /usr/bin/scrot "$file"
-timeout --kill-after=0.1s 0.7s /usr/bin/scrot "$file" || echo "ERROR: Unable to take screenshot within alloted time"
+timeout --kill-after=1s 2s /usr/bin/scrot "$file" || echo "ERROR: Unable to take screenshot within alloted time"
 chmod 600 $file
 if ! pngcheck $file ; then
     mv -v $file $file.nogood
