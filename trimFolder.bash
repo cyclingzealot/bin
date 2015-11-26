@@ -58,7 +58,7 @@ fi
 while [ "$(du -shm $target | awk '{print $1}')" -gt $maxsize ]
 do
   find $target -maxdepth 1 -type f -printf '%T@\t%p\n' | \
-      sort -nr | tail -n 1 | cut -d $'\t' -f 2-  | xargs -d '\n' rm -vf
+      sort -nr | tail -n 1 | cut -d $'\t' -f 2-  | xargs -d '\n' -I {} bash -c 'if lsof {} | grep {}; then echo "(Truncated by trimFolder.bash)" > {}; else rm -vf {}; fi'
 done
 
 
