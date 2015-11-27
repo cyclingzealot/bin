@@ -50,7 +50,9 @@ echo Begin `date`  .....
 
 idleTime=''
 display=`cat $configFile`
-idleTime=`DISPLAY=$display xprintidle` || true
+echo "Display obtained is"
+echo $display
+idleTime=`DISPLAY=$display xprintidle` || echo "Unable to get idle time"
 export DISPLAY=$display
 
 if [[ "$idleTime" -gt 1800000 ]] ; then
