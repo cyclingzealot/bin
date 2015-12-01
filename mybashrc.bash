@@ -32,3 +32,5 @@ fn='-mutt-clearlyu-medium-r-normal--0-0-100-100-p-0-iso10646-1'
 alias alert="xmessage -fn $fn -nearmouse"
 
 echo $DISPLAY > ~/.currentDisplay
+
+which dropbox > /dev/null && ((! dropbox running) || dropbox status) 

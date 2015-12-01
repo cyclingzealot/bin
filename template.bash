@@ -41,6 +41,9 @@ fi
 pid=`ps -ef | grep ${__base} | grep -v 'vi ' | head -n1 |  awk ' {print $2;} '`
 echo ${pid} > ${pidfile}
 
+# Create trap for lock file in case it fails
+trap 'rm -f $HOME/.lock.$gen' INT QUIT TERM EXIT
+
 
 #Capture everything to log
 log=~/log/$__base-${ts}.log

@@ -50,7 +50,9 @@ echo Begin `date`  .....
 
 idleTime=''
 display=`cat $configFile`
-idleTime=`DISPLAY=$display xprintidle` || true
+echo "Display obtained is"
+echo $display
+idleTime=`DISPLAY=$display xprintidle` || echo "Unable to get idle time"
 export DISPLAY=$display
 
 if [[ "$idleTime" -gt 1800000 ]] ; then
@@ -65,12 +67,18 @@ fi
 
 whoami=`whoami`
 dest=/home/$whoami/screenshots/
-file=/home/$whoami/$whoami-screenshot-`date +'%Y-%m-%d-%H-%M-%S'`.png
+file=$dest/$whoami-screenshot-`date +'%Y-%m-%d-%H-%M-%S'`.png
 mkdir -p $dest
 #DISPLAY=$display /usr/bin/scrot "$file"
-timeout --kill-after=0.1s 0.7s /usr/bin/scrot "$file" || echo "ERROR: Unable to take screenshot within alloted time"
+timeout --kill-after=1s 2s /usr/bin/scrot "$file" || echo "ERROR: Unable to take screenshot within alloted time"
 chmod 600 $file
-mv -v $file $dest
+if which pngcheck && ! pngcheck $file ; then
+    mv -v $file $file.nogood
+fi
+
+if ! which pngcheck ; then
+    echo NO PNGCHECK
+fi
 
 
 #Author
@@ -81,7 +89,7 @@ mv -v $file $dest
 maxsize=500 #In MBs
 while [ "$(du -shm $dest | awk '{print $1}')" -gt $maxsize ]
 do
-  find $dest -maxdepth 1 -type f -name '*.png' -printf '%T@\t%p\n' | \
+  find $dest -maxdepth 1 -type f -name '*.png*' -printf '%T@\t%p\n' | \
       sort -nr | tail -n 1 | cut -d $'\t' -f 2-  | xargs -d '\n' rm -v
 done
 
