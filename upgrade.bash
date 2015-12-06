@@ -1,5 +1,16 @@
 #!/bin/bash
 
+echo -n Waiting on connection before upgrade....
+while ! ping -c 1 -q www.credil.org > /dev/null 2>&1 ; do
+    echo -n .
+    sleep 1
+done
+
+echo
+echo Got connection.
+echo 
+
+
 # Upgrade per-language package manager
 sudo /usr/local/bin/composer self-update
 sudo npm install -g npm
