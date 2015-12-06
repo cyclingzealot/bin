@@ -16,6 +16,6 @@ fi
 
 remainder=`echo "$length - 3 - ${#term} - 2" | bc`
 
-echo -n '==='
+yes "$char" | head -n 3             | tr -d "\n" | xargs echo -n
 echo -n " $term "
-yes "$char" |  head -n $remainder | tr -d "\n" | xargs echo
+yes "$char" |  head -n $remainder   | tr -d "\n" | xargs echo
