@@ -46,17 +46,23 @@ echo Begin `date`  .....
 # that other guy 
 # http://stackoverflow.com/questions/25514434/bash-script-to-keep-deleting-files-until-directory-size-is-less-than-x#answer-25514993
 
-target=$1
-maxsize=$2  # In MB
+target=${1:-}
+maxsize=${2:-}  # In MB
 
-if [ -z "$target" -o -z "$maxsize" ]; then
-	echo Target and maxsize cannot be empty!
-	echo Usage: $0 target maxsize \(in MBs\)
+if [[ -z "$target" || -z "$maxsize" ]]; then
+    echo
+	echo Target and maxsize cannot be empty 
+    echo 2nd argument must be a number
+    echo 
+	echo Usage: $__base target maxsize \(in MBs\)
+    echo
 	exit 1
 fi
 
+
 while [ "$(du -shm $target | awk '{print $1}')" -gt $maxsize ]
 do
+  du -chs $target
   find $target -maxdepth 1 -type f -printf '%T@\t%p\n' | \
       sort -nr | tail -n 1 | cut -d $'\t' -f 2-  | xargs -d '\n' -I {} bash -c 'if lsof {} | grep {}; then echo "(Truncated by trimFolder.bash)" > {}; else rm -vf {}; fi'
 done
