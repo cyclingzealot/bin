@@ -31,11 +31,32 @@ exec >  >(tee -a $log)
 exec 2> >(tee -a $log >&2)
 
 
-#Check that the config file exists
-#if [[ ! -f "$configFile" ]] ; then
-#        echo "I need a file at $configFile with ..."
-#        exit 1
-#fi
+target=${1:-}
+maxsize=${2:-}  # In MB
+suffix=${3:-log}
+
+
+#Ensure only one copy is running
+callID=`basename $target`$suffix$maxsize
+pidfile=$HOME/.${__base}.$callID.pid
+if [ -f ${pidfile} ]; then
+   #verify if the process is actually still running under this pid
+   oldpid=`cat ${pidfile}`
+   result=`ps -ef | grep ${oldpid} | grep ${__base} || true`  
+
+   if [ -n "${result}" ]; then
+     echo "Script already running! Exiting"
+     exit 255
+   fi
+fi
+
+#grab pid of this process and update the pid file with it
+pid=`ps -ef | grep ${__base} | grep -v 'vi ' | head -n1 |  awk ' {print $2;} '`
+echo ${pid} > ${pidfile}
+
+# Create trap for lock file in case it fails
+trap "rm -f $pidfile" INT QUIT TERM EXIT
+
 
 
 echo Begin `date`  .....
@@ -46,9 +67,7 @@ echo Begin `date`  .....
 # that other guy 
 # http://stackoverflow.com/questions/25514434/bash-script-to-keep-deleting-files-until-directory-size-is-less-than-x#answer-25514993
 
-target=${1:-}
-maxsize=${2:-}  # In MB
-suffix=${3:-log}
+echo "Created pid file $pidfile"
 
 if [[ -z "$target" || -z "$maxsize" ]]; then
     echo
@@ -61,11 +80,10 @@ if [[ -z "$target" || -z "$maxsize" ]]; then
 fi
 
 
-#set -x 
 loopBegin=`date +%s`
 loopElapsed=0
 set -x 
-while [ "$(du -shm $target | awk '{print $1}')" -gt $maxsize -o "$loopElapsed" -gt 60 ]
+while [ "$(du -shm $target | awk '{print $1}')" -gt $maxsize -a "$loopElapsed" -lt 60 ]
 do
   du -chs $target
   find $target -maxdepth 1 -name "*.$suffix"  -type f -printf '%T@\t%p\n' | \
@@ -74,6 +92,7 @@ do
   loopNow=`date +%s`
   let "loopElapsed=$loopNow-$loopBegin"
 done
+set +x
 
 
 ### END SCIPT ##################################################################
