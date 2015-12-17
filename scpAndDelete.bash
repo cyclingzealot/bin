@@ -58,6 +58,7 @@ fi
 
 set -x 
 scp $host:$path $target
+ls -lh $target/`basename $path`
 ssh $host rm -vi $path
 set +x
 
