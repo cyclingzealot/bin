@@ -12,3 +12,5 @@ while [ "$oldTS" -eq "$newTS" ]; do
     newTS=`stat -c %Y $file`
 done
 
+echo
+echo $file changed, proceeding....
