@@ -68,3 +68,6 @@ set nolist  " list disables linebreak
 
 
 set statusline=%t[%{strlen(&fenc)?&fenc:'none'},%{&ff}]%h%m%r%y%=%c,%l/%L\ %P
+
+
+set hlsearch
