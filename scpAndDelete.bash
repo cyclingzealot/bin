@@ -56,7 +56,9 @@ if [[ -z "$host" || -z "$path" ]]; then
     exit 1
 fi
 
+set -x 
 scp -v $host:$path $target && ssh $host rm -vi $path
+set +x
 
 ### END SCIPT ##################################################################
 
