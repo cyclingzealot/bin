@@ -57,9 +57,7 @@ if [[ -z "$host" || -z "$path" ]]; then
 fi
 
 set -x 
-scp $host:$path $target
-ls -lh $target/`basename $path`
-ssh $host rm -vi $path
+scp -v $host:$path $target && ssh $host rm -vi $path
 set +x
 
 ### END SCIPT ##################################################################
