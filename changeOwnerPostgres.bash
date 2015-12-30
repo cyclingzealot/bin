@@ -3,7 +3,7 @@
 START=$(date +%s.%N)
 
 #exit when command fails (use || true when a command can fail)
-set -o errexit
+#set -o errexit
 
 #exit when your script tries to use undeclared variables
 set -o nounset
