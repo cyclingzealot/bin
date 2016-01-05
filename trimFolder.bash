@@ -82,7 +82,6 @@ fi
 
 loopBegin=`date +%s`
 loopElapsed=0
-set -x 
 while [ "$(du -shm $target | awk '{print $1}')" -gt $maxsize -a "$loopElapsed" -lt 60 ]
 do
   du -chs $target
@@ -92,7 +91,6 @@ do
   loopNow=`date +%s`
   let "loopElapsed=$loopNow-$loopBegin"
 done
-set +x
 
 
 ### END SCIPT ##################################################################
