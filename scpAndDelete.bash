@@ -57,7 +57,7 @@ if [[ -z "$host" || -z "$path" ]]; then
 fi
 
 set -x 
-scp -v $host:$path $target && ssh $host rm -vi $path
+scp --remove-source-files -v $host:$path $target 
 set +x
 
 ### END SCIPT ##################################################################
