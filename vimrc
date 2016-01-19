@@ -59,8 +59,9 @@ if ! has("patch547")
    autocmd BufWritePre *.pl :%s/\s\+$//e
 endif
 
-" Set smart indenting
-set smartindent
+" Set c indenting
+" No smart indent, see http://vim.wikia.com/wiki/Restoring_indent_after_typing_hash
+set cindent
 
 set wrap
 set linebreak
