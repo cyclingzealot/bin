@@ -22,8 +22,6 @@ export PS1="\h $PS1"
 export TMOUT=3600
 export EDITOR=vim
 
-alias ssh='ssh -XA'
-
 gcd() {
 	cd `git rev-parse --show-toplevel`
 }
