@@ -31,7 +31,7 @@ set tabstop=4 shiftwidth=4 expandtab
 set nowrap
 
 "set the global map leader variable so that:
-if ! has("patch547") 
+if ! has("patch547")
    :let mapleader = ","
 endif
 
@@ -55,9 +55,7 @@ endif
 :nmap <Leader>e <Esc>:set wrap linebreak<CR>
 
 " Remove trailing white spaces
-if ! has("patch547") 
-   autocmd BufWritePre *.pl :%s/\s\+$//e
-endif
+autocmd BufWritePre * :%s/\s\+$//e
 
 " Set c indenting
 " No smart indent, see http://vim.wikia.com/wiki/Restoring_indent_after_typing_hash
