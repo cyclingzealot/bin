@@ -70,7 +70,7 @@ echo Check git status first...
 git status
 
 echo
-countdown 5
+countdown.bash 5
 echo
 
 set -x
