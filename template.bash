@@ -8,10 +8,7 @@ set -o errexit
 #exit when your script tries to use undeclared variables
 set -o nounset
 
-#(a.k.a set -x) to trace what gets executed
-set -o xtrace
-
-# in scripts to catch mysqldump fails 
+# in scripts to catch mysqldump fails
 set -o pipefail
 
 # Set magic variables for current file & dir
@@ -29,7 +26,7 @@ pidfile=$HOME/.${__base}.pid
 if [ -f ${pidfile} ]; then
    #verify if the process is actually still running under this pid
    oldpid=`cat ${pidfile}`
-   result=`ps -ef | grep ${oldpid} | grep ${__base} || true`  
+   result=`ps -ef | grep ${oldpid} | grep ${__base} || true`
 
    if [ -n "${result}" ]; then
      echo "Script already running! Exiting"
@@ -67,6 +64,9 @@ echo Begin `date`  .....
 echo; echo; echo;
 
 ### BEGIN SCRIPT ###############################################################
+
+#(a.k.a set -x) to trace what gets executed
+set -o xtrace
 
 
 

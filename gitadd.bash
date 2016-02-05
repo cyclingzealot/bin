@@ -65,9 +65,19 @@ echo; echo; echo;
 
 ### BEGIN SCRIPT ###############################################################
 
+echo Check git status first...
+
+git status
+
+echo
+countdown 5
+echo
+
+set -x
 git add $1
 git commit -m "added $1" $1
 git push
+set +x
 
 
 ### END SCIPT ##################################################################
