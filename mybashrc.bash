@@ -19,10 +19,8 @@ alias mv='mv -i'
 alias cp='cp -i'
 
 export PS1="\h $PS1"
-export TMOUT=3600
+export TMOUT=43200
 export EDITOR=vim
-
-alias ssh='ssh -XA'
 
 gcd() {
 	cd `git rev-parse --show-toplevel`
