@@ -41,8 +41,8 @@ echo; echo; echo;
 
 ### BEGIN SCRIPT ###############################################################
 
-#Script assumes number are continuous (no dash or space)
-grep -ho "\(([0-9]\{3\})\|[0-9]\{3\}\)[ -]\?[0-9]\{3\}" $* | sort | uniq | grep -v '^$' | xargs -I {} sed -i "s/{}/555555/g" *
+# This won't quite work as it tuncates the last 4 digits, which I try to keep
+grep -ho "\(([2-9][0-9]\{2\})\|[2-9][0-9]\{2\}\)[ -]\?[0-9]\{3\}[ -]\?[0-9]\{4\}" $* | sort | uniq | grep -v '^$' | xargs -I {} sed -i "s/{}/555555/g" 
 
 
 ### END SCIPT ##################################################################
