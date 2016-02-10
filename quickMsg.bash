@@ -8,7 +8,10 @@ set -o errexit
 #exit when your script tries to use undeclared variables
 set -o nounset
 
-# in scripts to catch mysqldump fails
+#(a.k.a set -x) to trace what gets executed
+set -o xtrace
+
+# in scripts to catch mysqldump fails 
 set -o pipefail
 
 # Set magic variables for current file & dir
@@ -22,24 +25,24 @@ ts=`date +'%Y%m%d-%H%M%S'`
 configFile="$HOME/.binJlam/templateConfig"
 
 #Ensure only one copy is running
-pidfile=$HOME/.${__base}.pid
-if [ -f ${pidfile} ]; then
-   #verify if the process is actually still running under this pid
-   oldpid=`cat ${pidfile}`
-   result=`ps -ef | grep ${oldpid} | grep ${__base} || true`
-
-   if [ -n "${result}" ]; then
-     echo "Script already running! Exiting"
-     exit 255
-   fi
-fi
-
-#grab pid of this process and update the pid file with it
-pid=`ps -ef | grep ${__base} | grep -v 'vi ' | head -n1 |  awk ' {print $2;} '`
-echo ${pid} > ${pidfile}
-
-# Create trap for lock file in case it fails
-trap "rm -f $pidfile" INT QUIT TERM EXIT
+#pidfile=$HOME/.${__base}.pid
+#if [ -f ${pidfile} ]; then
+#   #verify if the process is actually still running under this pid
+#   oldpid=`cat ${pidfile}`
+#   result=`ps -ef | grep ${oldpid} | grep ${__base} || true`  
+#
+#   if [ -n "${result}" ]; then
+#     echo "Script already running! Exiting"
+#     exit 255
+#   fi
+#fi
+#
+##grab pid of this process and update the pid file with it
+#pid=`ps -ef | grep ${__base} | grep -v 'vi ' | head -n1 |  awk ' {print $2;} '`
+#echo ${pid} > ${pidfile}
+#
+## Create trap for lock file in case it fails
+#trap "rm -f $pidfile" INT QUIT TERM EXIT
 
 
 #Capture everything to log
@@ -65,11 +68,8 @@ echo; echo; echo;
 
 ### BEGIN SCRIPT ###############################################################
 
-#(a.k.a set -x) to trace what gets executed
-set -o xtrace
-
-
-
+msg="$1" ; 
+echo "$msg on `hostname`" | mail -s "$msg" "$2"
 
 ### END SCIPT ##################################################################
 
@@ -78,6 +78,6 @@ DIFF=$(echo "$END - $START" | bc)
 echo; echo; echo;
 echo Done.  `date` - $DIFF seconds
 
-if [ -f ${pidfile} ]; then
-    rm ${pidfile}
-fi
+#if [ -f ${pidfile} ]; then
+#    rm ${pidfile}
+#fi

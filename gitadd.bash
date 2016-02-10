@@ -21,25 +21,25 @@ ts=`date +'%Y%m%d-%H%M%S'`
 #Set the config file
 configFile="$HOME/.binJlam/templateConfig"
 
-#Ensure only one copy is running
-pidfile=$HOME/.${__base}.pid
-if [ -f ${pidfile} ]; then
-   #verify if the process is actually still running under this pid
-   oldpid=`cat ${pidfile}`
-   result=`ps -ef | grep ${oldpid} | grep ${__base} || true`
-
-   if [ -n "${result}" ]; then
-     echo "Script already running! Exiting"
-     exit 255
-   fi
-fi
-
-#grab pid of this process and update the pid file with it
-pid=`ps -ef | grep ${__base} | grep -v 'vi ' | head -n1 |  awk ' {print $2;} '`
-echo ${pid} > ${pidfile}
-
-# Create trap for lock file in case it fails
-trap "rm -f $pidfile" INT QUIT TERM EXIT
+##Ensure only one copy is running
+#pidfile=$HOME/.${__base}.pid
+#if [ -f ${pidfile} ]; then
+#   #verify if the process is actually still running under this pid
+#   oldpid=`cat ${pidfile}`
+#   result=`ps -ef | grep ${oldpid} | grep ${__base} || true`
+#
+#   if [ -n "${result}" ]; then
+#     echo "Script already running! Exiting"
+#     exit 255
+#   fi
+#fi
+#
+##grab pid of this process and update the pid file with it
+#pid=`ps -ef | grep ${__base} | grep -v 'vi ' | head -n1 |  awk ' {print $2;} '`
+#echo ${pid} > ${pidfile}
+#
+## Create trap for lock file in case it fails
+#trap "rm -f $pidfile" INT QUIT TERM EXIT
 
 
 #Capture everything to log
@@ -65,10 +65,19 @@ echo; echo; echo;
 
 ### BEGIN SCRIPT ###############################################################
 
-#(a.k.a set -x) to trace what gets executed
-set -o xtrace
+echo Check git status first...
 
+git status
 
+echo
+countdown.bash 5
+echo
+
+set -x
+git add $1
+git commit -m "added $1" $1
+git push
+set +x
 
 
 ### END SCIPT ##################################################################
@@ -78,6 +87,6 @@ DIFF=$(echo "$END - $START" | bc)
 echo; echo; echo;
 echo Done.  `date` - $DIFF seconds
 
-if [ -f ${pidfile} ]; then
-    rm ${pidfile}
-fi
+#if [ -f ${pidfile} ]; then
+#    rm ${pidfile}
+#fi
