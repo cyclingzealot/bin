@@ -70,6 +70,9 @@ echo Check git status first...
 git status
 
 echo
+echo Only $1 will be committed, but changes already committed will be pushed
+echo
+echo
 countdown.bash 5
 echo
 
