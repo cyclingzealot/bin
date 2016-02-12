@@ -59,19 +59,17 @@ chmod 600 $log
 
 export DISPLAY=:0
 
-echo; echo; echo;
-
 ### BEGIN SCRIPT ###############################################################
 
 th=15 # threshold in mintues
 
 #(a.k.a set -x) to trace what gets executed
-set -o xtrace
+#set -o xtrace
 
 display=`cat $configFile`
 export DISPLAY=$display
 
-if ! find /home/jlam/screenshots/ -mmin -15 -type f -name '*png' | egrep '.*' ; then
+if ! find /home/jlam/screenshots/ -mmin -15 -type f -name '*png' | egrep '.*' > /dev/null; then
     msg="NO SCREENSHOT FOUND WITHIN LAST $th minutes!"
     echo $msg
     notify-send $msg
@@ -86,5 +84,4 @@ fi
 
 END=$(date +%s.%N)
 DIFF=$(echo "$END - $START" | bc)
-echo; echo; echo;
 

@@ -31,4 +31,6 @@ alias alert="xmessage -fn $fn -nearmouse"
 
 echo $DISPLAY > ~/.currentDisplay
 
-which dropbox > /dev/null && ((! dropbox running) || dropbox status) 
+which dropbox > /dev/null && ((! dropbox running) || dropbox status)
+
+~/bin/screenshotCheck.bash
