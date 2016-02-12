@@ -60,6 +60,8 @@ autocmd BufWritePre * :%s/\s\+$//e
 " Set c indenting
 " No smart indent, see http://vim.wikia.com/wiki/Restoring_indent_after_typing_hash
 set cindent
+set cinkeys-=0#
+set indentkeys-=0#
 
 set wrap
 set linebreak
@@ -70,3 +72,5 @@ set statusline=%t[%{strlen(&fenc)?&fenc:'none'},%{&ff}]%h%m%r%y%=%c,%l/%L\ %P
 
 
 set hlsearch
+
+
