@@ -37,8 +37,8 @@ configFile="$HOME/.binJlam/templateConfig"
 ##grab pid of this process and update the pid file with it
 #pid=`ps -ef | grep ${__base} | grep -v 'vi ' | head -n1 |  awk ' {print $2;} '`
 #echo ${pid} > ${pidfile}
-#
-## Create trap for lock file in case it fails
+
+# Create trap for lock file in case it fails
 #trap "rm -f $pidfile" INT QUIT TERM EXIT
 
 
@@ -59,38 +59,29 @@ chmod 600 $log
 
 export DISPLAY=:0
 
-echo Begin `date`  .....
-
-echo; echo; echo;
-
 ### BEGIN SCRIPT ###############################################################
 
-echo Check git status first...
+th=15 # threshold in mintues
 
-git status
+#(a.k.a set -x) to trace what gets executed
+#set -o xtrace
 
-echo
-echo Only $1 will be committed, but changes already committed will be pushed
-echo
-echo
-countdown.bash 5
-echo
+display=`cat $configFile`
+export DISPLAY=$display
 
-set -x
-git add $1
-bn=`basename $1`
-git commit -m "added $bn" $1
-git push
-set +x
+if ! find /home/jlam/screenshots/ -mmin -15 -type f -name '*png' | egrep '.*' > /dev/null; then
+    msg="NO SCREENSHOT FOUND WITHIN LAST $th minutes!"
+    echo $msg
+    notify-send $msg
+fi
+
+
+
+
 
 
 ### END SCIPT ##################################################################
 
 END=$(date +%s.%N)
 DIFF=$(echo "$END - $START" | bc)
-echo; echo; echo;
-echo Done.  `date` - $DIFF seconds
 
-#if [ -f ${pidfile} ]; then
-#    rm ${pidfile}
-#fi
