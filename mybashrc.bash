@@ -34,5 +34,3 @@ echo $DISPLAY > ~/.currentDisplay
 which dropbox > /dev/null && ((! dropbox running) || dropbox status)
 
 alias newBranch='git checkout --track '
-
-~/bin/screenshotCheck.bash
