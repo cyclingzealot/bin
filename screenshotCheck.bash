@@ -19,7 +19,7 @@ __base="$(basename ${__file})"                          # Name of the script
 ts=`date +'%Y%m%d-%H%M%S'`
 
 #Set the config file
-configFile="$HOME/.binJlam/templateConfig"
+configFile="$HOME/.currentDisplay"
 
 ##Ensure only one copy is running
 #pidfile=$HOME/.${__base}.pid
