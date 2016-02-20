@@ -19,7 +19,7 @@ __base="$(basename ${__file})"                          # Name of the script
 ts=`date +'%Y%m%d-%H%M%S'`
 
 #Set the config file
-configFile="$HOME/.binJlam/templateConfig"
+configFile="$HOME/.currentDisplay"
 
 ##Ensure only one copy is running
 #pidfile=$HOME/.${__base}.pid
@@ -70,13 +70,9 @@ display=`cat $configFile`
 export DISPLAY=$display
 
 if ! find /home/jlam/screenshots/ -mmin -15 -type f -name '*png' | egrep '.*' > /dev/null; then
-    $__dir/screenshot.bash 2>&1 > /dev/null || true
-fi
-
-if ! find /home/jlam/screenshots/ -mmin -15 -type f -name '*png' | egrep '.*' > /dev/null; then
     msg="NO SCREENSHOT FOUND WITHIN LAST $th minutes!"
-    echo "$msg"
-    notify-send "$msg"
+    echo $msg
+    notify-send $msg
 fi
 
 

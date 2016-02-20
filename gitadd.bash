@@ -78,7 +78,8 @@ echo
 
 set -x
 git add $1
-git commit -m "added $1" $1
+bn=`basename $1`
+git commit -m "added $bn" $1
 git push
 set +x
 
