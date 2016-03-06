@@ -14,7 +14,7 @@ set -o nounset
 #(a.k.a set -x) to trace what gets executed
 #set -o xtrace
 
-# in scripts to catch mysqldump fails 
+# in scripts to catch mysqldump fails
 set -o pipefail
 
 # Set magic variables for current file & dir
@@ -44,7 +44,7 @@ echo Begin `date`  .....
 ### BEGIN SCRIPT ###############################################################
 
 #Desgined to run in a crontab
-#such as 
+#such as
 #*/3 * * * * /home/jlam/bin/screenshot.bash 2> ~/log/screenshot.crontab.log 2>&1
 
 
@@ -71,9 +71,11 @@ file=$dest/$whoami-screenshot-`date +'%Y-%m-%d-%H-%M-%S'`.png
 mkdir -p $dest
 #DISPLAY=$display /usr/bin/scrot "$file"
 timeout --kill-after=1s 2s /usr/bin/scrot "$file" || echo "ERROR: Unable to take screenshot within alloted time"
-chmod 600 $file
-if which pngcheck && ! pngcheck $file ; then
-    mv -v $file $file.nogood
+if [ -f $file ] ; then
+    chmod 600 $file;
+    if which pngcheck && ! pngcheck $file ; then
+        mv -v $file $file.nogood
+    fi
 fi
 
 if ! which pngcheck ; then
