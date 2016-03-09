@@ -52,12 +52,10 @@ chmod 600 $log
 
 
 #Check that the config file exists
-if [[ ! -f "$configFile" ]] ; then
-        echo "I need a file at $configFile with the current display"
-        echo "If you don't want a screenshot check:"
-        echo "cat > $configFile"
-        exit 1
-fi
+#if [[ ! -f "$configFile" ]] ; then
+#        echo "I need a file at $configFile with ..."
+#        exit 1
+#fi
 
 export DISPLAY=:0
 
@@ -69,18 +67,10 @@ th=15 # threshold in mintues
 #set -o xtrace
 
 display=`cat $configFile`
-
-set -x
-if [ "$display" == "nocheck" ]; then
-    exit
-fi
-
 export DISPLAY=$display
 
 if ! find /home/jlam/screenshots/ -mmin -15 -type f -name '*png' | egrep '.*' > /dev/null; then
     msg="NO SCREENSHOT FOUND WITHIN LAST $th minutes!"
-    echo "If you don't want a screenshot check:"
-    echo "echo nocheck > $configFile"
     echo $msg
     notify-send $msg
 fi
