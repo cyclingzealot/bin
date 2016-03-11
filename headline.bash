@@ -1,7 +1,7 @@
 #!/bin/bash
 
 term=$1
-length=${2:-72}
+length=${2:-70}
 char=${3:-'='}
 
 if [[ "$length" -eq -1 ]]; then
