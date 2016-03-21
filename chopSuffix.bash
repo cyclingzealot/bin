@@ -1,3 +1,3 @@
 #!/bin/bash
 
-echo $1  | rev | cut -d '.' -f 2- | rev
+echo $1  | rev | cut -d '.' -f 2- | rev | tr -d '\n'
