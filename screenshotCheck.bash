@@ -70,6 +70,10 @@ display=`cat $configFile`
 export DISPLAY=$display
 
 if ! find /home/jlam/screenshots/ -mmin -15 -type f -name '*png' | egrep '.*' > /dev/null; then
+    ~/bin/screenshot.bash
+fi
+
+if ! find /home/jlam/screenshots/ -mmin -15 -type f -name '*png' | egrep '.*' > /dev/null; then
     msg="NO SCREENSHOT FOUND WITHIN LAST $th minutes!"
     echo $msg
     notify-send $msg
