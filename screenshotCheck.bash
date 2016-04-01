@@ -70,7 +70,7 @@ display=`cat $configFile`
 export DISPLAY=$display
 
 if ! find /home/jlam/screenshots/ -mmin -15 -type f -name '*png' | egrep '.*' > /dev/null; then
-    ~/bin/screenshot.bash
+    ~/bin/screenshot.bash > /dev/null
 fi
 
 if ! find /home/jlam/screenshots/ -mmin -15 -type f -name '*png' | egrep '.*' > /dev/null; then
