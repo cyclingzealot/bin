@@ -14,3 +14,7 @@ else
 fi
 
 mv -vf $1.2 $1
+
+seperator.bash
+cat $1
+echo
