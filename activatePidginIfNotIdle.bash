@@ -49,11 +49,11 @@ idleTime=`xprintidle`
 
 echo Idle time is $idleTime
 
-pidginInstances=`ps -ef | grep pidgin | grep -v defunct | grep -v grep | wc -l`
+pidginInstances=`ps -ef | grep pidgin | grep -v defunct | grep -v grep | wc -l` || true
 
 echo There are $pidginInstances pidgin instances
 
-if [[ "$pidginInstances" -eq 0 -a "$idleTime" -lt 600000 ]]; then
+if [[ "$pidginInstances" -eq 0 && "$idleTime" -lt 600000 ]]; then
 	echo "Activating pidgin"
 	pidgin &
 else
