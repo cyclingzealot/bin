@@ -21,6 +21,7 @@ ts=`date +'%Y%m%d-%H%M%S'`
 #Set the config file
 configFile="$HOME/.binJlam/templateConfig"
 
+#=== BEGIN Unique instance ============================================
 #Ensure only one copy is running
 pidfile=$HOME/.${__base}.pid
 if [ -f ${pidfile} ]; then
@@ -40,6 +41,7 @@ echo ${pid} > ${pidfile}
 
 # Create trap for lock file in case it fails
 trap "rm -f $pidfile" INT QUIT TERM EXIT
+#=== END Unique instance ============================================
 
 
 #Capture everything to log
@@ -78,6 +80,8 @@ DIFF=$(echo "$END - $START" | bc)
 echo; echo; echo;
 echo Done.  `date` - $DIFF seconds
 
+#=== BEGIN Unique instance ============================================
 if [ -f ${pidfile} ]; then
     rm ${pidfile}
 fi
+#=== END Unique instance ============================================
