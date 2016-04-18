@@ -76,7 +76,7 @@ set -o xtrace
 ### END SCIPT ##################################################################
 
 END=$(date +%s.%N)
-DIFF=$(echo "$END - $START" | bc)
+DIFF=$(echo "round($END - $START)" | bc)
 echo; echo; echo;
 echo Done.  `date` - $DIFF seconds
 
