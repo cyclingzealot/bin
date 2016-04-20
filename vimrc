@@ -74,3 +74,10 @@ set statusline=%t[%{strlen(&fenc)?&fenc:'none'},%{&ff}]%h%m%r%y%=%c,%l/%L\ %P
 set hlsearch
 
 
+:filetype on
+au! BufNewFile,BufRead *.bat,*.sys setf dosbatch
+au! BufNewFile,BufRead *.rb,*.rake setf ruby
+au! BufNewFile,BufRead *.py, setf python
+autocmd BufWritePost *.rb  :!ruby -c %
+autocmd BufWritePost *.py  :!python -m py_compile %
+
