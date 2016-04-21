@@ -9,9 +9,9 @@ set -o errexit
 set -o nounset
 
 #(a.k.a set -x) to trace what gets executed
-set -o xtrace
+#set -o xtrace
 
-# in scripts to catch mysqldump fails 
+# in scripts to catch mysqldump fails
 set -o pipefail
 
 # Set magic variables for current file & dir
@@ -29,7 +29,7 @@ configFile="$HOME/.binJlam/templateConfig"
 #if [ -f ${pidfile} ]; then
 #   #verify if the process is actually still running under this pid
 #   oldpid=`cat ${pidfile}`
-#   result=`ps -ef | grep ${oldpid} | grep ${__base} || true`  
+#   result=`ps -ef | grep ${oldpid} | grep ${__base} || true`
 #
 #   if [ -n "${result}" ]; then
 #     echo "Script already running! Exiting"
@@ -68,8 +68,10 @@ echo; echo; echo;
 
 ### BEGIN SCRIPT ###############################################################
 
-msg="$1" ; 
+msg="$1" ;
 echo "$msg on `hostname`" | mail -s "$msg" "$2"
+
+echo To $2: $msg
 
 ### END SCIPT ##################################################################
 

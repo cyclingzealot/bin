@@ -19,9 +19,9 @@ __base="$(basename ${__file})"                          # Name of the script
 ts=`date +'%Y%m%d-%H%M%S'`
 
 #Set the config file
-configFile="$HOME/.currentDisplay"
+configFile="$HOME/.binJlam/templateConfig"
 
-##Ensure only one copy is running
+#Ensure only one copy is running
 #pidfile=$HOME/.${__base}.pid
 #if [ -f ${pidfile} ]; then
 #   #verify if the process is actually still running under this pid
@@ -59,33 +59,49 @@ chmod 600 $log
 
 export DISPLAY=:0
 
-### BEGIN SCRIPT ###############################################################
+echo Begin `date`  .....
 
-th=15 # threshold in mintues
+echo; echo; echo;
+
+### BEGIN SCRIPT ###############################################################
 
 #(a.k.a set -x) to trace what gets executed
 #set -o xtrace
 
-display=`cat $configFile`
-export DISPLAY=$display
+currentDir=`basename $PWD`
+targetDir=${1:-}
+parentPath=''
 
-if ! find /home/jlam/screenshots/ -mmin -15 -type f -name '*png' | egrep '.*' > /dev/null; then
-    ~/bin/screenshot.bash > /dev/null
+if [[ -z $targetDir ]]; then
+    targetDir=$currentDir
+    parentPath='../'
+    cd ..
+else
+    cd .
 fi
 
-if ! find /home/jlam/screenshots/ -mmin -15 -type f -name '*png' | egrep '.*' > /dev/null; then
-    msg="NO SCREENSHOT FOUND WITHIN LAST $th minutes!"
-    echo $msg
-    notify-send $msg
-fi
+targetGZ=$targetDir.`timestamp.bash`.tar.gz
+echo Compressing $targetDir into $parentPath$targetGZ
+echo
 
+tar -cO $targetDir | gzip -9v > $targetGZ
 
+echo
+ls -lhtd $targetDir*
+echo
 
+cd -
 
+echo
 
 
 ### END SCIPT ##################################################################
 
 END=$(date +%s.%N)
-DIFF=$(echo "$END - $START" | bc)
+DIFF=$(echo "round($END - $START)" | bc)
+echo; echo; echo;
+echo Done.  `date` - $DIFF seconds
 
+#if [ -f ${pidfile} ]; then
+#    rm ${pidfile}
+#fi

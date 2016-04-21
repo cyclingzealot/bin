@@ -19,27 +19,27 @@ __base="$(basename ${__file})"                          # Name of the script
 ts=`date +'%Y%m%d-%H%M%S'`
 
 #Set the config file
-configFile="$HOME/.currentDisplay"
+configFile="$HOME/.binJlam/templateConfig"
 
-##Ensure only one copy is running
-#pidfile=$HOME/.${__base}.pid
-#if [ -f ${pidfile} ]; then
-#   #verify if the process is actually still running under this pid
-#   oldpid=`cat ${pidfile}`
-#   result=`ps -ef | grep ${oldpid} | grep ${__base} || true`
-#
-#   if [ -n "${result}" ]; then
-#     echo "Script already running! Exiting"
-#     exit 255
-#   fi
-#fi
-#
-##grab pid of this process and update the pid file with it
-#pid=`ps -ef | grep ${__base} | grep -v 'vi ' | head -n1 |  awk ' {print $2;} '`
-#echo ${pid} > ${pidfile}
+#Ensure only one copy is running
+pidfile=$HOME/.${__base}.pid
+if [ -f ${pidfile} ]; then
+   #verify if the process is actually still running under this pid
+   oldpid=`cat ${pidfile}`
+   result=`ps -ef | grep ${oldpid} | grep ${__base} || true`
+
+   if [ -n "${result}" ]; then
+     echo "Script already running! Exiting"
+     exit 255
+   fi
+fi
+
+#grab pid of this process and update the pid file with it
+pid=`ps -ef | grep ${__base} | grep -v 'vi ' | head -n1 |  awk ' {print $2;} '`
+echo ${pid} > ${pidfile}
 
 # Create trap for lock file in case it fails
-#trap "rm -f $pidfile" INT QUIT TERM EXIT
+trap "rm -f $pidfile" INT QUIT TERM EXIT
 
 
 #Capture everything to log
@@ -59,33 +59,33 @@ chmod 600 $log
 
 export DISPLAY=:0
 
+echo Begin `date`  .....
+
+echo; echo; echo;
+
 ### BEGIN SCRIPT ###############################################################
 
-th=15 # threshold in mintues
-
 #(a.k.a set -x) to trace what gets executed
-#set -o xtrace
+set -o xtrace
 
-display=`cat $configFile`
-export DISPLAY=$display
+mkdir -p ~/bin/local/
 
-if ! find /home/jlam/screenshots/ -mmin -15 -type f -name '*png' | egrep '.*' > /dev/null; then
-    ~/bin/screenshot.bash > /dev/null
+if ls ~/bin/local/speedtest-cli && find ~/bin/local/speedtest-cli -mtime +30; then
+
+    wget -O ~/bin/local/speedtest-cli https://raw.github.com/sivel/speedtest-cli/master/speedtest_cli.py
+    chmod +x ~/bin/local/speedtest-cli
 fi
 
-if ! find /home/jlam/screenshots/ -mmin -15 -type f -name '*png' | egrep '.*' > /dev/null; then
-    msg="NO SCREENSHOT FOUND WITHIN LAST $th minutes!"
-    echo $msg
-    notify-send $msg
-fi
-
-
-
-
+~/bin/local/speedtest-cli
 
 
 ### END SCIPT ##################################################################
 
 END=$(date +%s.%N)
 DIFF=$(echo "$END - $START" | bc)
+echo; echo; echo;
+echo Done.  `date` - $DIFF seconds
 
+if [ -f ${pidfile} ]; then
+    rm ${pidfile}
+fi
