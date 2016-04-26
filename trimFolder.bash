@@ -67,6 +67,8 @@ echo Begin `date`  .....
 # that other guy 
 # http://stackoverflow.com/questions/25514434/bash-script-to-keep-deleting-files-until-directory-size-is-less-than-x#answer-25514993
 
+loopThreshold=600
+
 echo "Created pid file $pidfile"
 
 if [[ -z "$target" || -z "$maxsize" ]]; then
@@ -82,16 +84,18 @@ fi
 
 loopBegin=`date +%s`
 loopElapsed=0
-while [ "$(du -shm $target | awk '{print $1}')" -gt $maxsize -a "$loopElapsed" -lt 600 ]
+while [ "$(du -shm $target | awk '{print $1}')" -gt $maxsize -a "$loopElapsed" -lt "$loopThreshold" ]
 do
   du -chs $target
-  find $target -maxdepth 1 -name "*.$suffix"  -type f -printf '%T@\t%p\n' | \
+  find $target -name "*.$suffix"  -type f -printf '%T@\t%p\n' | \
       sort -nr | tail -n 1 | cut -d $'\t' -f 2-  | xargs -d '\n' -I {} bash -c 'if lsof {} | grep {}; then echo "(Truncated by trimFolder.bash)" > {}; else rm -vf {}; fi'
 
   loopNow=`date +%s`
-  echo "loopElapsed=$loopNow-$loopBegin"
+  echo "$loopElapsed=$loopNow-$loopBegin < $loopThreshold"
   let "loopElapsed=$loopNow-$loopBegin" || true
 done
+
+find $target -type d -empty -exec rmdir {} \; || true
 
 
 ### END SCIPT ##################################################################
