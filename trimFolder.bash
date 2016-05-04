@@ -14,7 +14,7 @@ set -o nounset
 #(a.k.a set -x) to trace what gets executed
 #set -o xtrace
 
-# in scripts to catch mysqldump fails 
+# in scripts to catch mysqldump fails
 set -o pipefail
 
 # Set magic variables for current file & dir
@@ -36,13 +36,24 @@ maxsize=${2:-}  # In MB
 suffix=${3:-log}
 
 
+if [[ -z "$target" || -z "$maxsize" ]]; then
+    echo
+	echo Target and maxsize cannot be empty
+    echo 2nd argument must be a number
+    echo
+	echo Usage: $__base target maxsize \(in MBs\)
+    echo
+	exit 1
+fi
+
+
 #Ensure only one copy is running
 callID=`basename $target`$suffix$maxsize
 pidfile=$HOME/.${__base}.$callID.pid
 if [ -f ${pidfile} ]; then
    #verify if the process is actually still running under this pid
    oldpid=`cat ${pidfile}`
-   result=`ps -ef | grep ${oldpid} | grep ${__base} || true`  
+   result=`ps -ef | grep ${oldpid} | grep ${__base} || true`
 
    if [ -n "${result}" ]; then
      echo "Script already running! Exiting"
@@ -63,24 +74,13 @@ echo Begin `date`  .....
 
 ### BEGIN SCRIPT ###############################################################
 
-# Author 
-# that other guy 
+# Author
+# that other guy
 # http://stackoverflow.com/questions/25514434/bash-script-to-keep-deleting-files-until-directory-size-is-less-than-x#answer-25514993
 
 loopThreshold=600
 
 echo "Created pid file $pidfile"
-
-if [[ -z "$target" || -z "$maxsize" ]]; then
-    echo
-	echo Target and maxsize cannot be empty 
-    echo 2nd argument must be a number
-    echo 
-	echo Usage: $__base target maxsize \(in MBs\)
-    echo
-	exit 1
-fi
-
 
 loopBegin=`date +%s`
 loopElapsed=0
