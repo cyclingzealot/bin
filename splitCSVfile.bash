@@ -16,6 +16,7 @@ __dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"   # Dir of the script
 __root="$(cd "$(dirname "${__dir}")" && pwd)"           # Dir of the dir of the script
 __file="${__dir}/$(basename "${BASH_SOURCE[0]}")"       # Full path of the script
 __base="$(basename ${__file})"                          # Name of the script
+pid=`ps -ef | grep ${__base} | grep -v 'vi ' | head -n1 |  awk ' {print $2;} '`
 ts=`date +'%Y%m%d-%H%M%S'`
 
 #Set the config file
@@ -35,21 +36,25 @@ echo; echo; echo;
 
 ### BEGIN SCRIPT ###############################################################
 
+# Chops a large CSV files into pieces
+
 #(a.k.a set -x) to trace what gets executed
 set -o xtrace
+
 
 original=`basename $1`
 numLines=$2
 
-base=~/bin/chopsuffix.bash `basename $original`
-suffix=~/bin/suffix.bash `basename $original`
+bn=`~/bin/chopSuffix.bash $original`
+suffix=`~/bin/suffix.bash $original`
 
-tail -n +2 $original | split -l $numLines - $bn_
-for file in $bn_*
+tail -n +2 $original | split -l $numLines - ${bn}_
+for file in ${bn}_*
 do
-    tmpFile=/tmp/$original.tmp
+    tmpFile=/tmp/$pid.$original.tmp
     head -n 1 $original > $tmpFile
     cat $file >> $tmpFile
+    rm $file
     mv -f $tmpFile ./$file.$suffix
 done
 
@@ -61,9 +66,3 @@ END=$(date +%s.%N)
 DIFF=$(echo "round($END - $START)" | bc)
 echo; echo; echo;
 echo Done.  `date` - $DIFF seconds
-
-#=== BEGIN Unique instance ============================================
-if [ -f ${pidfile} ]; then
-    rm ${pidfile}
-fi
-#=== END Unique instance ============================================
