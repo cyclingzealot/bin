@@ -2,6 +2,13 @@
 
 START=$(date +%s.%N)
 
+arg1=${1:-''}
+
+if [[ $arg1 == '--help' || $arg1 == '-h' ]]; then
+    echo "Script author should have provided documentation"
+    exit 0
+fi
+
 #exit when command fails (use || true when a command can fail)
 set -o errexit
 
@@ -17,6 +24,7 @@ __root="$(cd "$(dirname "${__dir}")" && pwd)"           # Dir of the dir of the 
 __file="${__dir}/$(basename "${BASH_SOURCE[0]}")"       # Full path of the script
 __base="$(basename ${__file})"                          # Name of the script
 ts=`date +'%Y%m%d-%H%M%S'`
+pid=`ps -ef | grep ${__base} | grep -v 'vi ' | head -n1 |  awk ' {print $2;} '`
 
 #Set the config file
 configFile="$HOME/.binJlam/templateConfig"
@@ -36,7 +44,6 @@ if [ -f ${pidfile} ]; then
 fi
 
 #grab pid of this process and update the pid file with it
-pid=`ps -ef | grep ${__base} | grep -v 'vi ' | head -n1 |  awk ' {print $2;} '`
 echo ${pid} > ${pidfile}
 
 # Create trap for lock file in case it fails
