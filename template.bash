@@ -24,6 +24,7 @@ __root="$(cd "$(dirname "${__dir}")" && pwd)"           # Dir of the dir of the 
 __file="${__dir}/$(basename "${BASH_SOURCE[0]}")"       # Full path of the script
 __base="$(basename ${__file})"                          # Name of the script
 ts=`date +'%Y%m%d-%H%M%S'`
+ds=`date +'%Y%m%d'`
 pid=`ps -ef | grep ${__base} | grep -v 'vi ' | head -n1 |  awk ' {print $2;} '`
 
 #Set the config file
