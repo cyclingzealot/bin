@@ -26,6 +26,7 @@ __base="$(basename ${__file})"                          # Name of the script
 ts=`date +'%Y%m%d-%H%M%S'`
 ds=`date +'%Y%m%d'`
 pid=`ps -ef | grep ${__base} | grep -v 'vi ' | head -n1 |  awk ' {print $2;} '`
+formerDir=`pwd`
 
 #Set the config file
 configFile="$HOME/.binJlam/templateConfig"
@@ -83,6 +84,8 @@ set -o xtrace
 set +x
 
 ### END SCIPT ##################################################################
+
+cd $formerDir
 
 END=$(date +%s.%N)
 DIFF=$(echo "round($END - $START)" | bc)
