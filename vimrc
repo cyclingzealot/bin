@@ -81,4 +81,5 @@ au! BufNewFile,BufRead *.py, setf python
 autocmd BufWritePost *.rb  :!ruby -c %
 autocmd BufWritePost *.rake  :!ruby -c %
 autocmd BufWritePost *.py  :!python -m py_compile %
+autocmd BufWritePost *.bash  :!bash -n %
 
