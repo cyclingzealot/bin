@@ -14,7 +14,7 @@ set -o nounset
 #(a.k.a set -x) to trace what gets executed
 #set -o xtrace
 
-# in scripts to catch mysqldump fails 
+# in scripts to catch mysqldump fails
 set -o pipefail
 
 # Set magic variables for current file & dir
@@ -36,13 +36,24 @@ maxsize=${2:-}  # In MB
 suffix=${3:-log}
 
 
+if [[ -z "$target" || -z "$maxsize" ]]; then
+    echo
+	echo Target and maxsize cannot be empty
+    echo 2nd argument must be a number
+    echo
+	echo Usage: $__base target maxsize \(in MBs\)
+    echo
+	exit 1
+fi
+
+
 #Ensure only one copy is running
 callID=`basename $target`$suffix$maxsize
 pidfile=$HOME/.${__base}.$callID.pid
 if [ -f ${pidfile} ]; then
    #verify if the process is actually still running under this pid
    oldpid=`cat ${pidfile}`
-   result=`ps -ef | grep ${oldpid} | grep ${__base} || true`  
+   result=`ps -ef | grep ${oldpid} | grep ${__base} || true`
 
    if [ -n "${result}" ]; then
      echo "Script already running! Exiting"
@@ -63,35 +74,28 @@ echo Begin `date`  .....
 
 ### BEGIN SCRIPT ###############################################################
 
-# Author 
-# that other guy 
+# Author
+# that other guy
 # http://stackoverflow.com/questions/25514434/bash-script-to-keep-deleting-files-until-directory-size-is-less-than-x#answer-25514993
+
+loopThreshold=600
 
 echo "Created pid file $pidfile"
 
-if [[ -z "$target" || -z "$maxsize" ]]; then
-    echo
-	echo Target and maxsize cannot be empty 
-    echo 2nd argument must be a number
-    echo 
-	echo Usage: $__base target maxsize \(in MBs\)
-    echo
-	exit 1
-fi
-
-
 loopBegin=`date +%s`
 loopElapsed=0
-while [ "$(du -shm $target | awk '{print $1}')" -gt $maxsize -a "$loopElapsed" -lt 600 ]
+while [ "$(du -shm $target | awk '{print $1}')" -gt $maxsize -a "$loopElapsed" -lt "$loopThreshold" ]
 do
   du -chs $target
-  find $target -maxdepth 1 -name "*.$suffix"  -type f -printf '%T@\t%p\n' | \
+  find $target -name "*.$suffix"  -type f -printf '%T@\t%p\n' | \
       sort -nr | tail -n 1 | cut -d $'\t' -f 2-  | xargs -d '\n' -I {} bash -c 'if lsof {} | grep {}; then echo "(Truncated by trimFolder.bash)" > {}; else rm -vf {}; fi'
 
   loopNow=`date +%s`
-  echo "loopElapsed=$loopNow-$loopBegin"
+  echo "$loopElapsed=$loopNow-$loopBegin < $loopThreshold"
   let "loopElapsed=$loopNow-$loopBegin" || true
 done
+
+find $target -type d -empty -exec rmdir {} \; || true
 
 
 ### END SCIPT ##################################################################
