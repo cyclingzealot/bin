@@ -39,3 +39,5 @@ which dropbox > /dev/null && ((! dropbox running) || dropbox status)
 
 alias newBranch='git checkout --track '
 alias clipboard='xsel --clipboard'
+
+~/bin/daysOfGiftLeft.bash
