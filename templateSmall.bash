@@ -28,15 +28,6 @@ ds=`date +'%Y%m%d'`
 pid=`ps -ef | grep ${__base} | grep -v 'vi ' | head -n1 |  awk ' {print $2;} '`
 formerDir=`pwd`
 
-#Set the config file
-configFile="$HOME/.binJlam/templateConfig"
-
-#Check that the config file exists
-#if [[ ! -f "$configFile" ]] ; then
-#        echo "I need a file at $configFile with ..."
-#        exit 1
-#fi
-
 export DISPLAY=:0
 
 echo Begin `date`  .....
