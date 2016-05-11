@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-START=$(date +%s.%N)
-
 arg1=${1:-''}
 
 if [[ $arg1 == '--help' || $arg1 == '-h' ]]; then
@@ -46,8 +44,3 @@ set +x
 ### END SCIPT ##################################################################
 
 cd $formerDir
-
-END=$(date +%s.%N)
-DIFF=$(echo "round($END - $START)" | bc)
-echo; echo; echo;
-echo Done.  `date` - $DIFF seconds
