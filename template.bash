@@ -18,8 +18,24 @@ set -o nounset
 # in scripts to catch mysqldump fails
 set -o pipefail
 
+# Resolve first directory of script
+PRG="$BASH_SOURCE"
+progname=`basename "$BASH_SOURCE"`
+
+while [ -h "$PRG" ] ; do
+    ls=`ls -ld "$PRG"`
+    link=`expr "$ls" : '.*-> \(.*\)$'`
+    if expr "$link" : '/.*' > /dev/null; then
+        PRG="$link"
+    else
+        PRG=`dirname "$PRG"`"/$link"
+    fi
+done
+
+__dir=$(dirname "$PRG")
+
+
 # Set magic variables for current file & dir
-__dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"   # Dir of the script
 __root="$(cd "$(dirname "${__dir}")" && pwd)"           # Dir of the dir of the script
 __file="${__dir}/$(basename "${BASH_SOURCE[0]}")"       # Full path of the script
 __base="$(basename ${__file})"                          # Name of the script
