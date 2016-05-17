@@ -41,3 +41,13 @@ alias newBranch='git checkout --track '
 alias clipboard='xsel --clipboard'
 
 ~/bin/daysOfGiftLeft.bash
+
+
+# For ssh agent fowrading in bash
+# From https://gist.github.com/martijnvermaat/8070533#gistcomment-1317075
+set -x
+if [[ -S "$SSH_AUTH_SOCK" && ! -h "$SSH_AUTH_SOCK" ]]; then
+    ln -sf "$SSH_AUTH_SOCK" ~/.ssh/ssh_auth_sock;
+fi
+set +x
+export SSH_AUTH_SOCK=~/.ssh/ssh_auth_sock;

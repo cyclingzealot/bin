@@ -9,7 +9,7 @@
 
 
 ### For ssh agent forwarding
-setenv SSH_AUTH_SOCK $HOME/.ssh/ssh_auth_sock
+#setenv SSH_AUTH_SOCK $HOME/.ssh/ssh_auth_sock
 
 defutf8 on
 
@@ -141,8 +141,8 @@ defbce "on"
 # http://www.jukie.net/~bart/blog/screen-ssh-agent
 #
 
-unsetenv SSH_AUTH_SOCK
-setenv SSH_AUTH_SOCK "$HOME/.screen/ssh-auth-sock.$HOSTNAME"
+#unsetenv SSH_AUTH_SOCK
+#setenv SSH_AUTH_SOCK "$HOME/.screen/ssh-auth-sock.$HOSTNAME"
 
 ################
 #
