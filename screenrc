@@ -7,6 +7,10 @@
 # This is how one can set a reattach password:
 # password ODSJQf.4IJN7E    # "1234"
 
+
+### For ssh agent forwarding
+setenv SSH_AUTH_SOCK $HOME/.ssh/ssh_auth_sock
+
 defutf8 on
 
 # no annoying audible bell, please
