@@ -7,8 +7,11 @@ set -o errexit
 set -o nounset
 
 
-set -x 
+set -x
 
+
+echo Chekcing and waiting until git finishes.....
+untilDone.bash git
 
 ### Commits everything, pulls and, if pull succesfull, pushes
 
@@ -21,13 +24,13 @@ if hash diffReport.bash 2>/dev/null; then
     reportPath=`diffReport.bash logOnly`
 fi
 
-set -x 
+set -x
 git commit -am "$1"  || true
 echo
-git pull && echo && git push 
+git pull && echo && git push
 set +x
 
-echo 
+echo
 
 git-branch-status.bash || true
 git submodule foreach --recursive git-branch-status.bash || true
@@ -40,7 +43,7 @@ if [[ ! -z "$reportPath" ]] ; then
 	echo $reportPath
 	echo; echo; echo
 fi
-	
+
 
 #echo 'Repacking.... this will be eventually in a seperate term window'
 #git repack -a -d --depth=250 --window=250

@@ -65,7 +65,7 @@ fi
 echo ${pid} > ${pidfile}
 
 # Create trap for lock file in case it fails
-trap "rm -f $pidfile" INT QUIT TERM EXIT
+trap "rm -f $pidfile" INT QUIT TERM ERR
 #=== END Unique instance ============================================
 
 
