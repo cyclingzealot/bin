@@ -80,7 +80,7 @@ else
     cd .
 fi
 
-targetGZ=$targetDir.`timestamp.bash`.tar.gz
+targetGZ=$targetDir.`ts.bash`.tar.gz
 echo Compressing $targetDir into $parentPath$targetGZ
 echo
 

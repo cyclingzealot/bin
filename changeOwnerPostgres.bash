@@ -78,17 +78,18 @@ if [ -z "$extraArgs" -a -f "$configFile" ]; then
 fi
 
 set -x
-for tbl in `psql $extraArgs -qAt -c "select tableowner,tablename from pg_tables where schemaname = 'public';" $database` ; do
+#for tbl in `psql $extraArgs -qAt -c "select tableowner,tablename from pg_tables where schemaname = 'public';" $database` ; do
+for tbl in `psql $extraArgs -qAt -c "select tableowner,tablename from pg_tables where schemaname not in ('pg_catalog', 'information_schema');" $database` ; do
     table=`echo $tbl | cut -d '|' -f 2`
     owner=`echo $tbl | cut -d '|' -f 1`
-    psql $extraArgs -d $database -U $owner -c "alter table \"$table\" owner to $newOwner" $database ;
+    psql $extraArgs -d $database -U $owner -c "alter table \"$table\" owner to $newOwner" || psql $extraArgs -d $database -c "alter table \"$table\" owner to $newOwner" ;
 done
 
-for tbl in `psql $extraArgs -qAt -c "select sequence_name from information_schema.sequences where sequence_schema = 'public';" $database` ; do
-    psql $extraArgs -c "alter table \"$tbl\" owner to $newOwner" $database ;
+for tbl in `psql $extraArgs -qAt -c "select sequence_name from information_schema.sequences where schemaname not in ('pg_catalog', 'information_schema');" $database` ; do
+    psql $extraArgs -c "alter table \"$tbl\" owner to $newOwner" $database
 done
 
-for tbl in `psql $extraArgs -qAt -c "select table_name from information_schema.views where table_schema = 'public';" $database` ; do
+for tbl in `psql $extraArgs -qAt -c "select table_name from information_schema.views where schemaname not in ('pg_catalog', 'information_schema');" $database` ; do
     psql $extraArgs -c "alter table \"$tbl\" owner to $newOwner" $database ;
 done
 set +x

@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
 
-START=$(date +%s.%N)
+arg1=${1:-''}
+
+if [[ $arg1 == '--help' || $arg1 == '-h' ]]; then
+    echo "Just specify the time (inclusive) of the first screenshot you wish to have. Time format HH:MM"
+    exit 0
+fi
 
 #exit when command fails (use || true when a command can fail)
 set -o errexit
@@ -16,17 +21,10 @@ __dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"   # Dir of the script
 __root="$(cd "$(dirname "${__dir}")" && pwd)"           # Dir of the dir of the script
 __file="${__dir}/$(basename "${BASH_SOURCE[0]}")"       # Full path of the script
 __base="$(basename ${__file})"                          # Name of the script
-pid=`ps -ef | grep ${__base} | grep -v 'vi ' | head -n1 |  awk ' {print $2;} '`
 ts=`date +'%Y%m%d-%H%M%S'`
-
-#Set the config file
-configFile="$HOME/.binJlam/templateConfig"
-
-#Check that the config file exists
-#if [[ ! -f "$configFile" ]] ; then
-#        echo "I need a file at $configFile with ..."
-#        exit 1
-#fi
+ds=`date +'%Y%m%d'`
+pid=`ps -ef | grep ${__base} | grep -v 'vi ' | head -n1 |  awk ' {print $2;} '`
+formerDir=`pwd`
 
 export DISPLAY=:0
 
@@ -36,33 +34,35 @@ echo; echo; echo;
 
 ### BEGIN SCRIPT ###############################################################
 
-# Chops a large CSV files into pieces
-
 #(a.k.a set -x) to trace what gets executed
 set -o xtrace
 
+since=${1:-}
 
-original=`basename $1`
-numLines=$2
+scDir=$HOME/screenshots/
 
-bn=`~/bin/chopSuffix.bash $original`
-suffix=`~/bin/suffix.bash $original`
+cd $scDir
 
-tail -n +2 $original | split -l $numLines - ${bn}_
-for file in ${bn}_*
-do
-    tmpFile=/tmp/$pid.$original.tmp
-    head -n 1 $original > $tmpFile
-    cat $file >> $tmpFile
-    rm $file
-    mv -f $tmpFile ./$file.$suffix
-done
+sinceTS=`date -d "$since" +'%s'`
+nowTS=`date +'%s'`;
+
+minDiff=`echo "($nowTS - $sinceTS)/60 + 2" | bc | cut -d. -f 1`
+
+noGoodCount=`find $scDir -mmin $minDiff -name '*.nogood.*' | wc -l `
+
+if find $scDir -mmin -$minDiff -name '*.png'; then
+    eog `find $scDir -mmin -$minDiff -name '*.png' ` &
+else
+    echo No file to open
+fi
+
+echo
+echo $noGoodCount no good png files
+echo
+
 
 set +x
 
 ### END SCIPT ##################################################################
 
-END=$(date +%s.%N)
-DIFF=$(echo "round($END - $START)" | bc)
-echo; echo; echo;
-echo Done.  `date` - $DIFF seconds
+cd $formerDir
