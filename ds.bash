@@ -1,4 +1,5 @@
 #!/bin/bash
 
+sep=${1:-''}
 
-date +'%Y%m%d' | tr -d '\n'
+date +"%Y$sep%m$sep%d" | tr -d '\n'
