@@ -11,7 +11,7 @@ set -o nounset
 #(a.k.a set -x) to trace what gets executed
 #set -o xtrace
 
-# in scripts to catch mysqldump fails 
+# in scripts to catch mysqldump fails
 set -o pipefail
 
 # Set magic variables for current file & dir
@@ -58,7 +58,7 @@ char='='
 length=`tput cols`
 yes "$char" |  head -n $length | tr -d "\n" | xargs echo || true
 
-echo Input your text then Crtl-D
+echo Input your text then Crtl-D.
 cat > $scratchFile
 
 yes "$char" |  head -n $width | tr -d "\n" | xargs echo || true
@@ -66,8 +66,8 @@ yes "$char" |  head -n $width | tr -d "\n" | xargs echo || true
 if [ ! -z "$prefix" ] ; then
     let width=$width-2
     fold -w $width -s $scratchFile | sed -e "s/^/$prefix /"
-else 
-    fold -w $width -s $scratchFile 
+else
+    fold -w $width -s $scratchFile
 fi
 
 
