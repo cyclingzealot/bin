@@ -1,13 +1,16 @@
+require 'byebug'
+require 'shellwords'
+require 'date'
 
-
-if ARGV[0].nil? or ARGV[1].nil?
-    $stderr.puts "Specify path and pattern"
+if ARGV[0].nil? or ARGV[1].nil? or ARGV[2].nil?
+    $stderr.puts "Specify path, pattern and start date"
     puts ARGV
     exit 1
 end
 
 path=ARGV[0]
 pattern=ARGV[1]
+dateStart=ARGV[2]
 
 #p Dir.methods.sort
 
@@ -17,14 +20,18 @@ if ! Dir.exist?(path)
 end
 
 
-grepBlob = `grep --color=auto -rn #{pattern} #{path}`
+grepBlob = `grep --color=auto -rn -e #{pattern.shellescape} #{path}`
+
+$stderr.puts "#{grepBlob.split("\n").count} results found"
 
 results = {}
 maxLength = 0
 
 grepBlob.split("\n").each { |r|
-    filePath    = r.split(':')[0]
+    filePath    = r.split(':')[0].strip
     lineNumber  = r.split(':')[1].to_i
+
+    next if filePath.include?('.sw')
 
     length = filePath.sub(path, '').length
     maxLength = [length, maxLength].max
@@ -36,10 +43,48 @@ grepBlob.split("\n").each { |r|
     end
 }
 
+fileBlob = `find #{path}/* -type f`
 
-results.each{ |f, a|
-    line_count = `wc -l "#{f}"`.strip.split(' ')[0].to_i
+fileBlob.split("\n").each { |r|
+    filePath = r.strip
 
-    puts "#{(f.sub(path, '')+':').ljust(maxLength+2)} #{(a.max.to_f/line_count.to_f * 100).round().to_s.rjust(3)}% (#{a.max}/#{line_count})"
+    if results[filePath].nil?
+        results[filePath] = [0]
+    end
+
+    length = filePath.sub(path, '').length
+    maxLength = [length, maxLength].max
+
 }
 
+lastRow = "At this rate we will be finished:"
+
+maxLength = [lastRow.length, maxLength].max
+
+results = results.sort_by{ |f, a|
+    #line_count = `wc -l "#{f}"`.strip.split(' ')[0].to_i
+    lreviewed = a.max - a.min
+    lreviewed
+}.reverse
+
+totalLineCount      = 0
+totalLinesReviewed   = 0
+
+results.each{ |f, a|
+    line_count      = `wc -l "#{f}"`.strip.split(' ')[0].to_i
+    totalLineCount += line_count
+
+    lreviewed           = a.max - a.min
+    totalLinesReviewed   += lreviewed
+
+    puts "#{(f.sub(path, '').sub(/^\//, '') +':').ljust(maxLength+2)} #{(lreviewed.to_f/line_count.to_f * 100).round().to_s.rjust(3)}% (#{lreviewed}/#{line_count})"
+}
+
+numDays = DateTime.now - DateTime.parse(dateStart)
+
+pace = totalLinesReviewed.to_f/numDays.to_f
+
+finish = DateTime.now + ((totalLineCount-totalLinesReviewed) / pace)
+
+puts
+puts "At this rate we will be finished:".ljust(maxLength+2) + finish.strftime('%c')
