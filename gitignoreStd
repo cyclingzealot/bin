@@ -1,8 +1,8 @@
-wp-config.php
-database/backups/*
+*.sw?
 .buildpath
 .project
 .settings/
-*.sw?
+.htaccess
+.htpasswd
 .~lock.*
-
+wp-config.php
