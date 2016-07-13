@@ -26,6 +26,9 @@ ds=`date +'%Y%m%d'`
 pid=`ps -ef | grep ${__base} | grep -v 'vi ' | head -n1 |  awk ' {print $2;} '`
 formerDir=`pwd`
 
+# If you require named arguments, see
+# http://stackoverflow.com/questions/192249/how-do-i-parse-command-line-arguments-in-bash
+
 export DISPLAY=:0
 
 echo Begin `date`  .....
