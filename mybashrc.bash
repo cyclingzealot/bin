@@ -20,7 +20,7 @@ alias cp='cp -i'
 
 export PS1="\h $PS1"
 export TMOUT=43200
-export EDITOR=vim
+export EDITOR=vi
 
 gcd() {
 	cd `git rev-parse --show-toplevel`
