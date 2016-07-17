@@ -83,4 +83,5 @@ autocmd BufWritePost *.rake  :!ruby -c %
 autocmd BufWritePost *.py  :!python -m py_compile %
 autocmd BufWritePost *.bash  :!bash -n %
 autocmd BufWritePost *.php  :!php -l %
+autocmd BufWritePost *.txt  :!wc -w %
 
