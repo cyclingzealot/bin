@@ -87,4 +87,5 @@ pace = totalLinesReviewed.to_f/numDays.to_f
 finish = DateTime.now + ((totalLineCount-totalLinesReviewed) / pace)
 
 puts
+puts "#{(totalLinesReviewed/totalLineCount.to_f.to_f*100).round()} % (#{totalLinesReviewed}/#{totalLineCount})"
 puts "At this rate we will be finished:".ljust(maxLength+2) + finish.strftime('%c')
