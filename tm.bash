@@ -1,3 +1,5 @@
 #!/bin/bash
 
-date | tr -d "\n" ; echo "   $1"
+clear
+echo `date +'%H:%M'`  $@
+figlet -W -w `tput cols` `date +'%H:%M'` $'\n' "$@"
