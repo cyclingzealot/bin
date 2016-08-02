@@ -29,7 +29,7 @@ formerDir=`pwd`
 ### BEGIN SCRIPT ###############################################################
 
 #(a.k.a set -x) to trace what gets executed
-set -o xtrace
+#set -o xtrace
 
 since=${1:-'00:00'}
 
@@ -43,8 +43,9 @@ nowTS=`date +'%s'`;
 minDiff=`echo "($nowTS - $sinceTS)/60 + 2" | bc | cut -d. -f 1`
 
 noGoodCount=`find $scDir -mmin $minDiff -name '*.nogood.*' | wc -l `
-
-if find $scDir -mmin -$minDiff -name '*.png' > /dev/null ; then
+numFilesToOpen=`find $scDir -mmin -$minDiff -name '*.png' | wc -l`
+if [[  "$numFilesToOpen" != "0" ]]  > /dev/null ; then
+    echo "Opening $numFilesToOpen files"
     eog `find $scDir -mmin -$minDiff -name '*.png' | sort`
 else
     echo No file to open
