@@ -19,7 +19,7 @@ alias mv='mv -i'
 alias cp='cp -i'
 
 export PS1="\h $PS1"
-export TMOUT=43200
+export TMOUT=22100
 export EDITOR=vi
 
 gcd() {
