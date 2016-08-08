@@ -22,7 +22,7 @@ end
 
 grepBlob = `grep --color=auto -rn -e #{pattern.shellescape} #{path}`
 
-$stderr.puts "#{grepBlob.split("\n").count} results found"
+#$stderr.puts "#{grepBlob.split("\n").count} results found"
 
 results = {}
 maxLength = 0
