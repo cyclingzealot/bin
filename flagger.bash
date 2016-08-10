@@ -3,7 +3,7 @@
 arg1=${1:-''}
 
 if [[ $arg1 == '--help' || $arg1 == '-h' ]]; then
-    echo "Provide flag name and seconds to green as second argument"
+    echo "Provide flag name as first arg and seconds to green as second argument"
     exit 0
 fi
 
