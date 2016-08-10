@@ -53,10 +53,10 @@ if [ "$secsToGreen" -lt "0" ]; then
     # Threshold is a negative number, so we clear the flag,
     # giving a green next time, right away
     # we wish time elapsed since the last event we let pass
+    # Flagger.bash will exit 0 however, indicating normal operation
     rm $flagPath
-fi
-
-if [[ ! -f "$flagPath" ]]; then
+    exit 0
+elif [[ ! -f "$flagPath" ]]; then
     # We've never been asked to keep tabs on this flag, so you can go
     green=1
 elif [[ `~/bin/secsSinceMod.bash $flagPath` -gt "$secsToGreen" ]]; then
