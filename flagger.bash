@@ -49,7 +49,7 @@ flagPath=$flagsDir/$flagName
 
 green=0
 
-if [ "$secsToGreen" -lt "0" ]; then
+if [ "$secsToGreen" -lt "0" ]; then
     # Threshold is a negative number, so we clear the flag,
     # giving a green next time, right away
     # we wish time elapsed since the last event we let pass
