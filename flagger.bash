@@ -49,17 +49,29 @@ flagPath=$flagsDir/$flagName
 
 green=0
 
+if [ "$secsToGreen" -lt "0" ]; then
+    # Threshold is a negative number, so we clear the flag,
+    # giving a green next time, right away
+    # we wish time elapsed since the last event we let pass
+    rm $flagPath
+fi
+
 if [[ ! -f "$flagPath" ]]; then
+    # We've never been asked to keep tabs on this flag, so you can go
     green=1
 elif [[ `~/bin/secsSinceMod.bash $flagPath` -gt "$secsToGreen" ]]; then
+    # It's been more seconds since your threshold that this event happened, so you can go
     green=1
 else
+    # It's been fewer seconds since your threshold that this event happened, so no, stop
     green=0
 fi
 
 if [[ "$green" -eq "0" ]]; then
+    # You can't go: exit 1 so flagger.bash && $otherScript does not run
     exit 1
 elif [[ "$green" -eq "1" ]]; then
+    # You can go, so we will touch the flag, and exit 0 so flagger.bash && $otherScript runs
     touch $flagPath
     exit 0
 fi
