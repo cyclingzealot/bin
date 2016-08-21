@@ -3,7 +3,7 @@
 arg1=${1:-''}
 
 if [[ $arg1 == '--help' || $arg1 == '-h' ]]; then
-    echo "Just specify the time (inclusive) of the first screenshot you wish to have. Time format HH:MM"
+    echo "Script author should have provided documentation"
     exit 0
 fi
 
@@ -26,35 +26,39 @@ ds=`date +'%Y%m%d'`
 pid=`ps -ef | grep ${__base} | grep -v 'vi ' | head -n1 |  awk ' {print $2;} '`
 formerDir=`pwd`
 
+# If you require named arguments, see
+# http://stackoverflow.com/questions/192249/how-do-i-parse-command-line-arguments-in-bash
+
+export DISPLAY=:0
+
+echo Begin `date`  .....
+
+echo; echo; echo;
+
 ### BEGIN SCRIPT ###############################################################
 
 #(a.k.a set -x) to trace what gets executed
-#set -o xtrace
+set -o xtrace
 
-since=${1:-'00:00'}
+for file in `find $PWD -name '*.zip' ` ; do
+    dir=`dirname $file`;
+    bn=`basename $file`
+    echo $dir;
+    cd $dir;
 
-scDir=$HOME/screenshots/
+    newDir=`chopSuffix.bash $bn`
 
-cd $scDir
+    mkdir -p $newDir
 
-sinceTS=`date -d "$since" +'%s'`
-nowTS=`date +'%s'`;
+    mv $bn $newDir
 
-minDiff=`echo "($nowTS - $sinceTS)/60 + 2" | bc | cut -d. -f 1`
+    cd $newDir
 
-noGoodCount=`find $scDir -mmin $minDiff -name '*.nogood.*' | wc -l `
-numFilesToOpen=`find $scDir -mmin -$minDiff -name '*.png' | wc -l`
-if [[  "$numFilesToOpen" != "0" ]]  > /dev/null ; then
-    echo "Opening $numFilesToOpen files"
-    eog `find $scDir -mmin -$minDiff -name '*.png' | sort`
-else
-    echo No file to open
-fi
+    unzip  $bn
 
-echo
-echo $noGoodCount no good png files
-echo
+    rm  $bn
 
+done
 
 set +x
 

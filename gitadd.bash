@@ -70,16 +70,19 @@ echo Check git status first...
 git status
 
 echo
-echo Only $1 will be committed, but changes already committed will be pushed
+echo Only $@ will be committed, but changes already committed will be pushed
 echo
 echo
 countdown.bash 5
 echo
 
 set -x
-git add $1
-bn=`basename $1`
-git commit -m "added $bn" $1
+git add $@
+bn=''
+for file in $@ ; do
+    bn="$bn `basename $file`"
+done
+git commit -m "added $bn" $@
 git push
 set +x
 

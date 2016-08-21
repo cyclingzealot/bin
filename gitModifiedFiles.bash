@@ -1,4 +1,11 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
+arg1=${1:-''}
+
+if [[ $arg1 == '--help' || $arg1 == '-h' ]]; then
+    echo "Script author should have provided documentation"
+    exit 0
+fi
 
 #exit when command fails (use || true when a command can fail)
 set -o errexit
@@ -17,44 +24,26 @@ __base="$(basename ${__file})"                          # Name of the script
 ts=`date +'%Y%m%d-%H%M%S'`
 ds=`date +'%Y%m%d'`
 pid=`ps -ef | grep ${__base} | grep -v 'vi ' | head -n1 |  awk ' {print $2;} '`
-formerDir=`pwd`
+#formerDir=`pwd`
 
+# If you require named arguments, see
+# http://stackoverflow.com/questions/192249/how-do-i-parse-command-line-arguments-in-bash
 
-echo Chekcing and waiting until git finishes.....
+export DISPLAY=:0
 
-untilDone.bash -s git -e "$__base"
+#echo Begin `date`  .....
 
-### Commits everything, pulls and, if pull succesfull, pushes
+#echo; echo; echo;
 
-git remote -v
+### BEGIN SCRIPT ###############################################################
 
-echo
+#(a.k.a set -x) to trace what gets executed
+#set -o xtrace
 
-reportPath=''
-if hash diffReport.bash 2>/dev/null; then
-    reportPath=`diffReport.bash logOnly`
-fi
+git status  | grep modified | awk '{printf $3 "\n"}'
 
-set -x
-git commit -am "$1"  || true
-echo
-git pull && echo && git push
-set +x
+#set +x
 
-echo
+### END SCIPT ##################################################################
 
-git-branch-status.bash || true
-git submodule foreach --recursive git-branch-status.bash || true
-
-
-
-if [[ ! -z "$reportPath" ]] ; then
-	echo; echo; echo
-	echo Diff report in
-	echo $reportPath
-	echo; echo; echo
-fi
-
-
-#echo 'Repacking.... this will be eventually in a seperate term window'
-#git repack -a -d --depth=250 --window=250
+#cd $formerDir
