@@ -1,14 +1,14 @@
 #!/bin/bash
 
 echo -n Waiting on connection before upgrade....
-while ! ping -c 1 -q www.credil.org > /dev/null 2>&1 ; do
+while ! ping -W 5 -c 1 -q www.credil.org > /dev/null 2>&1 ; do
     echo -n .
     sleep 1
 done
 
 echo
 echo Got connection.
-echo 
+echo
 
 
 # Upgrade per-language package manager
@@ -27,7 +27,7 @@ continueFlag=/tmp/continueUpgrade
 i="0"
 
 touch $continueFlag
-for pack in `cat /tmp/upgradePackageList.txt` ; do 
+for pack in `cat /tmp/upgradePackageList.txt` ; do
 	i=`echo "$i + 1" | bc`
 	pct=`echo "$i * 100 / $numPacks" | bc`
 
@@ -36,10 +36,10 @@ for pack in `cat /tmp/upgradePackageList.txt` ; do
 	echo ===== To stop =======\> rm $continueFlag
 	if [ -a $continueFlag ] ; then sudo apt-get install $pack --only-upgrade --yes  -d; fi
 	if [ -a $continueFlag ] ; then sudo apt-get install $pack --only-upgrade --yes ;  fi
-	echo; echo; echo 
+	echo; echo; echo
 done
 
 	if [ -a $continueFlag ] ; then sudo apt-get autoremove ;  fi
 
-echo 
+echo
 rm -v $continueFlag;
