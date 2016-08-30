@@ -1,6 +1,6 @@
 #!/bin/bash
 
-for file in `git status | grep 'modified' | awk '{print $3 }'`; do
+for file in `git status | grep -E 'modifié|modified' | cut -c 2- | awk '{print $2 }'`; do
     seperator.bash ;
     git diff $file | head -n 30;
     echo
