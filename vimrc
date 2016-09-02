@@ -84,4 +84,4 @@ autocmd BufWritePost *.py  :!python -m py_compile %
 autocmd BufWritePost *.bash  :!bash -n %
 autocmd BufWritePost *.php  :!php -l %
 autocmd BufWritePost *.txt  :!wc -w %
-
+autocmd BufWritePost *.js :! uglifyjs % > /dev/null && echo Syntax OK

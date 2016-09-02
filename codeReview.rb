@@ -27,7 +27,7 @@ grepBlob = `grep --color=auto -rn -e #{pattern.shellescape} #{path}`
 results = {}
 maxLength = 0
 
-grepBlob.split("\n").each { |r|
+grepBlob.force_encoding("iso-8859-1").split("\n").each { |r|
     filePath    = r.split(':')[0].strip
     lineNumber  = r.split(':')[1].to_i
 
