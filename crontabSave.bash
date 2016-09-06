@@ -26,18 +26,22 @@ ds=`date +'%Y%m%d'`
 pid=`ps -ef | grep ${__base} | grep -v 'vi ' | head -n1 |  awk ' {print $2;} '`
 formerDir=`pwd`
 
+mkdir -p ~/backups
+backupFile=~/backups/$__base-${ts}.backup
+touch $backupFile
+chmod 600 $backupFile
+
+
 # If you require named arguments, see
 # http://stackoverflow.com/questions/192249/how-do-i-parse-command-line-arguments-in-bash
 
-export DISPLAY=:0
+echo "#Saved on `date`" | tee $backupFile
 
-echo "#Saved on `date`"
-
-echo; echo; echo;
+printf "\n\n\n" | tee -a $backupFile
 
 ### BEGIN SCRIPT ###############################################################
 
-crontab -l
+crontab -l | tee -a $backupFile
 
 ### END SCIPT ##################################################################
 
