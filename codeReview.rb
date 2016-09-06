@@ -34,6 +34,7 @@ grepBlob.force_encoding("iso-8859-1").split("\n").each { |r|
     lineNumber  = r.split(':')[1].to_i
 
     next if filePath.include?('.sw')
+    next if filePath.include?('.asm')
 
     length = filePath.sub(path, '').length
     maxLength = [length, maxLength].max
