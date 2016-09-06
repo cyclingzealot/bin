@@ -26,8 +26,9 @@ ds=`date +'%Y%m%d'`
 pid=`ps -ef | grep ${__base} | grep -v 'vi ' | head -n1 |  awk ' {print $2;} '`
 formerDir=`pwd`
 
-mkdir -p ~/backups
-backupFile=~/backups/$__base-${ts}.backup
+backupDest=~/backups/crontab/
+mkdir -p $backupDest
+backupFile=$backupDest/$__base-${ts}.backup
 touch $backupFile
 chmod 600 $backupFile
 
