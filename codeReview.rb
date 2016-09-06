@@ -14,10 +14,12 @@ dateStart=ARGV[2]
 
 #p Dir.methods.sort
 
-if ! Dir.exist?(path)
-    $stderr.puts "#{path} does not seem to be a directory"
-    exit 1
-end
+path.split(' ').each { |p|
+    if ! Dir.exist?(p)
+        $stderr.puts "#{p} does not seem to be a directory"
+        exit 1
+    end
+}
 
 
 grepBlob = `grep --color=auto -rn -e #{pattern.shellescape} #{path}`
@@ -28,7 +30,7 @@ results = {}
 maxLength = 0
 
 grepBlob.force_encoding("iso-8859-1").split("\n").each { |r|
-    filePath    = r.split(':')[0].strip
+    filePath    = r.split(':')[0].strip.sub('//', '/')
     lineNumber  = r.split(':')[1].to_i
 
     next if filePath.include?('.sw')
@@ -46,7 +48,7 @@ grepBlob.force_encoding("iso-8859-1").split("\n").each { |r|
 fileBlob = `find #{path}/* -type f`
 
 fileBlob.split("\n").each { |r|
-    filePath = r.strip
+    filePath = r.strip.sub('//', '/')
 
     if results[filePath].nil?
         results[filePath] = [0]
@@ -64,6 +66,7 @@ maxLength = [lastRow.length, maxLength].max
 results = results.sort_by{ |f, a|
     #line_count = `wc -l "#{f}"`.strip.split(' ')[0].to_i
     lreviewed = a.max - a.min
+    line_count      = `wc -l "#{f}"`.strip.split(' ')[0].to_i
     lreviewed
 }.reverse
 
@@ -77,7 +80,8 @@ results.each{ |f, a|
     lreviewed           = a.max - a.min
     totalLinesReviewed   += lreviewed
 
-    puts "#{(f.sub(path, '').sub(/^\//, '') +':').ljust(maxLength+2)} #{(lreviewed.to_f/line_count.to_f * 100).round().to_s.rjust(3)}% (#{lreviewed}/#{line_count})"
+
+    puts "#{(f.sub(path, '').sub(/^\//, '') +' :').ljust(maxLength+2)} #{(lreviewed.to_f/line_count.to_f * 100).round().to_s.rjust(3)}% (#{lreviewed}/#{line_count})"
 }
 
 numDays = DateTime.now - DateTime.parse(dateStart)
