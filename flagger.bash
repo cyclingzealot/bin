@@ -39,7 +39,7 @@ echo; echo; echo;
 ### BEGIN SCRIPT ###############################################################
 
 #(a.k.a set -x) to trace what gets executed
-set -o xtrace
+#set -o xtrace
 
 flagsDir=$HOME/.flagger/
 mkdir -p $flagsDir
