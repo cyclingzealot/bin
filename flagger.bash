@@ -2,8 +2,9 @@
 
 arg1=${1:-''}
 
-if [[ $arg1 == '--help' || $arg1 == '-h' ]]; then
+if [[ $arg1 == '--help' || $arg1 == '-h' || $arg1 == '' ]]; then
     echo "Provide flag name as first arg and seconds to green as second argument"
+    echo "Script will exit 0 if you can go, so the next command must be tied with &&, not ||"
     exit 0
 fi
 
