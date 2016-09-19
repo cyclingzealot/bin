@@ -70,10 +70,12 @@ echo; echo; echo;
 
 echo
 runningvms=`VBoxManage  list runningvms | cut -d '"' -f 2 ` || true
+echo Running vms:
+echo $runningvms
 if [ ! -z "$runningvms" ]; then
     echo Shutting down VMs.....
-    countdown.bash 5
-    for vm in "$runningvms"; do
+    countdown.bash 2
+    for vm in $runningvms; do
     	echo Saving $vm
         set -x
     	VBoxManage controlvm $vm savestate
