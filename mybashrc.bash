@@ -52,4 +52,4 @@ export SSH_AUTH_SOCK=~/.ssh/ssh_auth_sock;
 
 alias firefox-reboot='untilDone.bash firefox; firefox'
 
-PROMPT_COMMAND='echo -en "\033]0; $("pwd") \a"'
+PROMPT_COMMAND='echo -en "\033]0; $("hostname")@$("pwd") \a"'
