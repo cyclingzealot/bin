@@ -11,7 +11,7 @@ set -o nounset
 #(a.k.a set -x) to trace what gets executed
 #set -o xtrace
 
-# in scripts to catch mysqldump fails 
+# in scripts to catch mysqldump fails
 set -o pipefail
 
 # Set magic variables for current file & dir
@@ -45,14 +45,20 @@ echo Begin `date`  .....
 ### BEGIN SCRIPT ###############################################################
 
 export DISPLAY=:0
-idleTime=`xprintidle` 
+idleTime=`xprintidle`
 
 echo Idle time is $idleTime
+
+if [[ -f /tmp/dontKillPidgin ]]; then
+    echo "Not killing pidgin because /tmp/dontKillPidgin"
+    exit 1
+fi
+
 
 if [[ "$idleTime" -gt 1800000 ]]; then
 	echo "Killing pidgin"
 	killall -v pidgin
-else 
+else
 	echo "Not killing pidgin"
 fi
 
