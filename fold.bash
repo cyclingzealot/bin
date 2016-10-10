@@ -65,9 +65,9 @@ yes "$char" |  head -n $width | tr -d "\n" | xargs echo || true
 
 if [ ! -z "$prefix" ] ; then
     let width=$width-2
-    fold -w $width -s $scratchFile | sed -e "s/^/$prefix /"
+    fold -w $width -s $scratchFile | sed -e "s/^/$prefix /" | sed -e "s/^> >/>/"
 else
-    fold -w $width -s $scratchFile
+    fold -w $width -s $scratchFile | sed "s/^> > /> /"
 fi
 
 
