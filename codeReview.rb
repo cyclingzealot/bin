@@ -82,6 +82,7 @@ results.each{ |f, a|
     totalLinesReviewed   += lreviewed
 
 
+    debugger if (lreviewed.to_f/line_count.to_f * 100).nan?
     puts "#{(f.sub(path, '').sub(/^\//, '') +' :').ljust(maxLength+2)} #{(lreviewed.to_f/line_count.to_f * 100).round().to_s.rjust(3)}% (#{lreviewed}/#{line_count})"
 }
 
