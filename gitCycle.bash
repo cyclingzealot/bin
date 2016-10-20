@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Cycled through all modified files to do seperate commits and distinct comments.
+
 for file in `git status | grep -E 'modifié|modified' | cut -c 2- | awk '{print $2 }'`; do
     seperator.bash ;
     git diff $file | head -n 30;
