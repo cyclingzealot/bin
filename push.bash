@@ -35,9 +35,16 @@ if hash diffReport.bash 2>/dev/null; then
     reportPath=`diffReport.bash logOnly`
 fi
 
-set -x
+echo Git commit...
 git commit -am "$1"  || true
 echo
+
+echo Submodule check...
+git submodule init
+git submodule update
+echo
+
+echo 'git pull & git push'
 git pull && echo && git push
 set +x
 
@@ -45,6 +52,7 @@ echo
 
 git-branch-status.bash || true
 git submodule foreach --recursive git-branch-status.bash || true
+
 
 
 
