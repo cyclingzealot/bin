@@ -1,0 +1,3 @@
+[submodule "gitTools"]
+	path = gitTools
+	url = git@github.com:cyclingzealot/gitTools.git
