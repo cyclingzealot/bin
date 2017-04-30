@@ -2,6 +2,7 @@
 
 export PATH=$PATH:~/bin/
 export PATH=$PATH:~/bin/local/
+export PATH=$PATH:~/bin/gitTools/
 
 
 . ~/bin/ps1git.bash
