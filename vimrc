@@ -73,6 +73,8 @@ set statusline=%t[%{strlen(&fenc)?&fenc:'none'},%{&ff}]%h%m%r%y%=%c,%l/%L\ %P
 
 set hlsearch
 
+:syntax on
+
 
 :filetype on
 au! BufNewFile,BufRead *.bat,*.sys setf dosbatch
