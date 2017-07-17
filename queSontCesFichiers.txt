@@ -1,0 +1,4 @@
+vmlinuz: le noyeaux Linux compressé
+initrd: Initial RAM disk
+System.map: Table des symboles du noyeau, utile pour le déboggage mais pas le démarrage
+config: Pour référence lors du déboggage
