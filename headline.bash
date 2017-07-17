@@ -1,8 +1,8 @@
 #!/bin/bash
 
 term=$1
-length=${2:-70}
-char=${3:-'='}
+char=${2:-'='}
+length=${3:-70}
 
 if [[ "$length" -eq -1 ]]; then
     length=`tput cols `
