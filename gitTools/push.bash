@@ -40,8 +40,10 @@ git commit -am "$1"  || true
 echo
 
 echo Submodule check...
+cd `git rev-parse --show-toplevel`
 git submodule init
 git submodule update
+cd -
 echo
 
 echo 'git pull & git push'
