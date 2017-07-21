@@ -41,7 +41,7 @@ which dropbox > /dev/null && ((! dropbox running) || dropbox status)
 alias newBranch='git checkout --track '
 alias clipboard='xsel --clipboard'
 
-~/bin/daysOfGiftLeft.bash
+flagger.bash timeUntil 60 && ~/bin/timeUntil.bash
 
 
 # For ssh agent fowrading in bash
@@ -54,3 +54,4 @@ export SSH_AUTH_SOCK=~/.ssh/ssh_auth_sock;
 alias firefox-reboot='untilDone.bash firefox; firefox'
 
 PROMPT_COMMAND='echo -en "\033]0; $("hostname")@$("pwd") \a"'
+

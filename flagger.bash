@@ -32,9 +32,9 @@ formerDir=`pwd`
 
 export DISPLAY=:0
 
-echo Begin `date`  .....
+#echo Begin `date`  .....
 
-echo; echo; echo;
+#echo; echo; echo;
 
 ### BEGIN SCRIPT ###############################################################
 

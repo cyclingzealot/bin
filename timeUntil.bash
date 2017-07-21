@@ -73,8 +73,12 @@ function genUntilString {
             let diffTime=diffTime/24
             ;;
         jours)
+            timeUnit='semaines'
+            let diffTime=diffTime/7
+            ;;
+        semaines)
             timeUnit='mois'
-            let diffTime=diffTime/30
+            let diffTime=diffTime*7/365*12
             ;;
         mois)
             timeUnit='années'
