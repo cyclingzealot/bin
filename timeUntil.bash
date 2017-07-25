@@ -88,6 +88,7 @@ function genUntilString {
     done
 
     echo $diffTime $timeUnit
+    echo ''
 
 }
 
@@ -96,9 +97,10 @@ for line in `cat $configFile`; do
     targetDateTime=`echo $line | cut -d';' -f 1`
     string=`echo $line | cut -d';' -f 2`
 
-    untilString=$(genUntilString $targetDateTime)
-
-    echo $string $'\t' $untilString
+    if [[ `date '+%s' -d $targetDateTime` -ge `date '+%s'` ]]; then
+        untilString=$(genUntilString $targetDateTime)
+        echo $string $'\t' $untilString
+    fi
 
 done
 
