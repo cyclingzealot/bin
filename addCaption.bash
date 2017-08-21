@@ -100,7 +100,7 @@ set -o xtrace
 
 width=$(identify -format %w $1)
 convert -background '#0008' -fill white -gravity center \
-              -size ${width}x30 caption:'Copeland Park' \
+              -size ${width}x30 caption:"$2" \
                 $1 +swap -gravity south -composite \
                   $1-watermark.png
 
