@@ -99,10 +99,12 @@ echo; echo; echo;
 set -o xtrace
 
 width=$(identify -format %w $1)
+newFile=`chopSuffix.bash $1`
+suffix=`suffix.bash $1`
 convert -background '#0008' -fill white -gravity center \
-              -size ${width}x30 caption:"$2" \
+              -size ${width}x20 caption:"$2" \
                 $1 +swap -gravity south -composite \
-                  $1-watermark.png
+                  $newFile-watermark.$suffix
 
 
 set +x
