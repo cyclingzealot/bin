@@ -55,3 +55,13 @@ alias firefox-reboot='untilDone.bash firefox; firefox'
 
 PROMPT_COMMAND='echo -en "\033]0; $("hostname")@$("pwd") \a"'
 
+alias battery=acpi
+
+function set-title() {
+  if [[ -z "$ORIG" ]]; then
+    ORIG=$PS1
+  fi
+  TITLE="\[\e]2;$*\a\]"
+  PS1=${ORIG}${TITLE}
+}
+
