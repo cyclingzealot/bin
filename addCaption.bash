@@ -95,6 +95,9 @@ echo; echo; echo;
 
 ### BEGIN SCRIPT ###############################################################
 
+
+height=${3:-20}
+
 #(a.k.a set -x) to trace what gets executed
 set -o xtrace
 
@@ -102,7 +105,7 @@ width=$(identify -format %w $1)
 newFile=`chopSuffix.bash $1`
 suffix=`suffix.bash $1`
 convert -background '#0008' -fill white -gravity center \
-              -size ${width}x20 caption:"$2" \
+              -size ${width}x${height} caption:"$2" \
                 $1 +swap -gravity south -composite \
                   $newFile-watermark.$suffix
 
