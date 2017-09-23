@@ -98,10 +98,13 @@ echo; echo; echo;
 #(a.k.a set -x) to trace what gets executed
 #set -o xtrace
 
-logPath=~/log/tracerouteFlora.`ts.bash`.log ;
+scriptDir=~/.tracerouteLogging/
+mkdir -p $scriptDir
+logPath=$scriptDir/traceroute.`ts.bash`.log ;
 while (true) ; do
     bash -c 'echo -n "Date "; date +"%Y/%m/%d %H:%M:%S"; traceroute credil.org' | tee -a $logPath;
     echo Log path is $logPath
+    ls -lh $logPath
     echo Sleeping 5s....
     sleep 5
 done
