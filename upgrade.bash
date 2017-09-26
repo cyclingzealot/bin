@@ -12,8 +12,9 @@ echo
 
 
 # Upgrade per-language package manager
-sudo /usr/local/bin/composer self-update
-sudo npm install -g npm
+ls /usr/local/bin/composer && sudo /usr/local/bin/composer self-update
+which npm && sudo npm install -g npm
+which rvm && rvm get head
 
 
 # Now upgrade system
