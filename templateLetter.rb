@@ -3,8 +3,9 @@
 require 'byebug'
 
 ### First let's make sure there is a membershil list
-if ARGV[0].nil? or ARGV[1].nil? then
+if ARGV[0].nil? or ARGV[1].nil? or ['-h', '--help'].include?(ARGV[0]) then
     $stderr.puts "I need the full path of the template file and data file"
+    #$stderr.puts "First column of the data file is used as key to name letters stored in /tmp/"
     exit 1
 end
 
