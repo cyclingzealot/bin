@@ -1,11 +1,13 @@
 #!/usr/bin/env bash
 
-arg1=${1:-''}
+arg1=${1:-1000}
 
 if [[ $arg1 == '--help' || $arg1 == '-h' ]]; then
     echo "Script author should have provided documentation"
     exit 0
 fi
+
+thresholdNum=${1:-1000}
 
 #exit when command fails (use || true when a command can fail)
 set -o errexit
@@ -58,7 +60,7 @@ function genUntilString {
     timeUnit='s'
     diffTime=$diffTS
 
-    while [ $diffTime -ge 1000 ] && [ $timeUnit != 'années' ]; do
+    while [ $diffTime -ge "$thresholdNum" ] && [ $timeUnit != 'années' ]; do
         case "$timeUnit" in
         s)
             timeUnit='min'
