@@ -68,7 +68,7 @@ set linebreak
 set nolist  " list disables linebreak
 
 
-set statusline=%t[%{strlen(&fenc)?&fenc:'none'},%{&ff}]%h%m%r%y%=%c,%l/%L\ %P
+set statusline=%F%t[%{strlen(&fenc)?&fenc:'none'},%{&ff}]%h%m%r%y%=%c,%l/%L\ %P
 
 
 set hlsearch
@@ -87,3 +87,5 @@ autocmd BufWritePost *.bash  :!bash -n %
 autocmd BufWritePost *.php  :!php -l %
 autocmd BufWritePost *.txt  :!wc -w %
 autocmd BufWritePost *.js :! uglifyjs % > /dev/null && echo Syntax OK
+
+
