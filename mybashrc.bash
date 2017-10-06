@@ -65,3 +65,12 @@ function set-title() {
   PS1=${ORIG}${TITLE}
 }
 
+case "$-" in
+*i*)
+    echo -n "Tab name: "
+    read tabName
+    if [[ ! -z "$tabName" ]]; then set-title $tabName; fi
+    ;;
+esac
+
+
