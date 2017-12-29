@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# set -x
+
 export PATH=$PATH:~/bin/
 export PATH=$PATH:~/bin/local/
 export PATH=$PATH:~/bin/gitTools/
@@ -65,13 +67,13 @@ function set-title() {
   PS1=${ORIG}${TITLE}
 }
 
-case "$-" in
-*i*)
-    echo -n "Tab name: "
-    read tabName
-    if [[ ! -z "$tabName" ]]; then set-title $tabName; fi
-    ;;
-esac
+	case "$-" in
+	*i*)
+	    echo -n "Tab name: "
+	    read tabName
+	    if [[ ! -z "$tabName" ]]; then set-title $tabName; fi
+	    ;;
+	esac
 
 
 ~/bin/flagger.bash upgradeBash 604800 && ~/bin/upgrade.bash
