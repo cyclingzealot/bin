@@ -73,5 +73,3 @@ case "$-" in
     ;;
 esac
 
-
-~/bin/flagger.bash upgradeBash 604800 && ~/bin/upgrade.bash
