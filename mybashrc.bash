@@ -76,4 +76,4 @@ function set-title() {
 	esac
 
 
-~/bin/flagger.bash upgradeBash 604800 && ~/bin/upgrade.bash
+alias findSortByDate='find . -printf "%T@ %Tc %p\n" | sort -n'
