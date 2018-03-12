@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# set -x
+
 export PATH=$PATH:~/bin/
 export PATH=$PATH:~/bin/local/
 export PATH=$PATH:~/bin/gitTools/
@@ -74,3 +76,4 @@ case "$-" in
 esac
 
 alias rvmDo='rvm default do'
+alias findSortByDate='find . -printf "%T@ %Tc %p\n" | sort -n'
