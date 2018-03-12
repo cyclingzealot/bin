@@ -46,11 +46,14 @@ noGoodCount=`find $scDir -mmin $minDiff -name '*.nogood.*' | wc -l `
 numFilesToOpen=`find $scDir -mmin -$minDiff -name '*.png' | wc -l`
 if [[  "$numFilesToOpen" != "0" ]]  > /dev/null ; then
     echo "Opening $numFilesToOpen files"
-    eog `find $scDir -mmin -$minDiff -name '*.png' | sort`
-else
-    echo No file to open
+    if which eog; then
+        eog `find $scDir -mmin -$minDiff -name '*.png' | sort`
+    elif which xviewer; then
+        xviewer `find $scDir -mmin -$minDiff -name '*.png' | sort`
+    else
+        echo NO VIEWER
+    fi
 fi
-
 echo
 echo $noGoodCount no good png files
 echo
