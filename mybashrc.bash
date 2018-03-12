@@ -73,4 +73,4 @@ case "$-" in
     ;;
 esac
 
-
+alias rvmDo='rvm default do'
