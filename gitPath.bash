@@ -21,4 +21,4 @@ if ! ls $extraPath  > /dev/null 2>&1 ; then
     extraPath=''
 fi
 
-echo "$gitBaseName/`echo $PWD | cut -c $gitRootLength-`"$extraPath
+echo -n "$gitBaseName`echo $PWD/ | cut -c $gitRootLength-`"$extraPath
