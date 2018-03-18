@@ -95,7 +95,7 @@ function genUntilString {
 }
 
 IFS=$'\n'
-for line in `sort $configFile`; do
+for line in `grep -v '#' $configFile | sort`; do
     targetDateTime=`echo $line | cut -d';' -f 1`
     string=`echo $line | cut -d';' -f 2`
 
