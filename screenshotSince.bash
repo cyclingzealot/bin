@@ -53,9 +53,11 @@ if [[  "$numFilesToOpen" != "0" ]]  > /dev/null ; then
     else
         echo NO VIEWER
     fi
+    echo $noGoodCount no good png files
+else
+    echo "No screenshots to open"
 fi
 echo
-echo $noGoodCount no good png files
 echo
 
 
