@@ -39,7 +39,7 @@ echo; echo; echo;
 #(a.k.a set -x) to trace what gets executed
 loadTH=$1
 
-loadavg=`uptime | awk '{print $10+0}'`
+loadavg=`uptime | awk '{print $11+0}'`
 # bash doesn't understand floating point
 # so convert the number to an interger
 thisloadavg=`echo $loadavg|awk -F \. '{print $1}'`
