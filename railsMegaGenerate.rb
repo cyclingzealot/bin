@@ -22,7 +22,11 @@ CSV.open(filePath, 'rb', headers: :first_row, encoding: 'UTF-8', col_sep: "\t") 
             railsGstr = "rails g #{currentModel} "
         end
 
-        railsGstr += row['attribute'] + ':' + row['datatype'] + ' '
+        railsGstr += row['attribute'] + ':' + row['datatype']
+
+        railsGstr += ':uniq' if ['VRAI', 'TRUE'].include?(row['unique'])
+
+        railsGstr += ' '
 
         puts railsGstr if linenum == line_count
     end
