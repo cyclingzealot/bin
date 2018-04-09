@@ -1,6 +1,8 @@
 " Author shussain@credil.org
 " https://github.com/shussain/vimrc/blob/master/_vimrc-simplified
 
+set nocp
+
 
 " Simplified vimrc for use when vim is installed but not gvim
 
