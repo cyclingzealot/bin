@@ -1,14 +1,32 @@
 require 'csv'
 require 'byebug'
+require 'optparse'
+require 'facets'
 
 filePath=ARGV[0]
+
+params = ARGV.getopts("hc", "change", "file:", "help")
+
+# Show help if requested or the file parameter is not specified
+if params.slice(:h, :help).count > 0 or params.slice(":file", ":f").count == 0
+    puts "Usage: -f $filePath [-c[hange]]"
+    exit 1
+end
+
+
+def detectSeperator(filePath)
+    firstLine = File.open(filePath, &:readline)
+    [',', ":", ";", "\t"].max_by{|s| firstLine.split(s).count}
+end
+
 
 if not File.exists?(filePath)
     $stderr.puts "No file at #{filePath}"
     exit 1
 end
 
-CSV.open(filePath, 'rb', headers: :first_row, encoding: 'UTF-8', col_sep: "\t") do |csv|
+sep=detectSeperator(filePath)
+CSV.open(filePath, 'rb', headers: :first_row, encoding: 'UTF-8', col_sep: sep) do |csv|
     currentModel = ''
     railsGstr = ''
     line_count = File.readlines(filePath).size
