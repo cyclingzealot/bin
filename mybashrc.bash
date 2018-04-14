@@ -59,7 +59,7 @@ PROMPT_COMMAND='echo -en "\033]0; $("hostname")@$("pwd") \a"'
 
 alias battery=acpi
 
-function set-title() {
+function settitle() {
   if [[ -z "$ORIG" ]]; then
     ORIG=$PS1
   fi
@@ -71,7 +71,7 @@ case "$-" in
 *i*)
     echo -n "Tab name: "
     read tabName
-    if [[ ! -z "$tabName" ]]; then set-title $tabName; fi
+    if [[ ! -z "$tabName" ]]; then settitle $tabName; fi
     ;;
 esac
 
