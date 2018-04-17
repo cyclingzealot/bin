@@ -66,6 +66,7 @@ function settitle() {
   TITLE="\[\e]2;$*\a\]"
   PS1=${ORIG}${TITLE}
 }
+alias set-title=settitle
 
 case "$-" in
 *i*)
