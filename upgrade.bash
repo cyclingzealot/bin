@@ -18,9 +18,12 @@ which rvm && rvm get head
 
 
 # Now upgrade system
+# Check to see if apt is running
 untilDone.bash apt-get
-sudo apt-get update
-sudo apt-get upgrade --just-print | grep Inst | cut -f 2 -d ' ' | sort  > /tmp/upgradePackageList.txt
+# Wait until the load is below 2
+~/bin/loadBelowCheck.bash -r -t=1
+sudo nice -n 19 apt-get update
+sudo nice -n 19 apt-get upgrade --just-print | grep Inst | cut -f 2 -d ' ' | sort  > /tmp/upgradePackageList.txt
 
 numPacks=`wc -l /tmp/upgradePackageList.txt | cut -f 1 -d ' '`
 
@@ -35,12 +38,14 @@ for pack in `cat /tmp/upgradePackageList.txt` ; do
 
 	echo "$pack ($i of $numPacks - $pct %)"
 	echo ===== To stop =======\> rm $continueFlag
-	if [ -a $continueFlag ] ; then sudo apt-get install $pack --only-upgrade --yes  -d; fi
-	if [ -a $continueFlag ] ; then sudo apt-get install $pack --only-upgrade --yes ;  fi
+    # Ideally, loadBelowCheck should be after sudo
+    set -x
+	if [ -a $continueFlag ] ; then ~/bin/loadBelowCheck.bash -r -t=2; sudo nice -n 19 apt-get install $pack --only-upgrade --yes  -d; fi
+	if [ -a $continueFlag ] ; then ~/bin/loadBelowCheck.bash -r -t=2; sudo nice -n 19 apt-get install $pack --only-upgrade --yes ;  fi
 	echo; echo; echo
 done
 
-	if [ -a $continueFlag ] ; then sudo apt-get autoremove ;  fi
+	if [ -a $continueFlag ] ; then sudo nice -n 19 apt-get autoremove ;  fi
 
 echo
 rm -v $continueFlag;
