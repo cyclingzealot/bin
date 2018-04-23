@@ -30,6 +30,24 @@ formerDir=`pwd`
 # If you require named arguments, see
 # http://stackoverflow.com/questions/192249/how-do-i-parse-command-line-arguments-in-bash
 
+for i in "$@"
+do
+case $i in
+    -r|--repeat)
+    REPEAT="true"
+    shift # past argument=value
+    ;;
+    -t=*|--threshold=*)
+    loadTH="${i#*=}"
+    shift # past argument=value
+    ;;
+    *)
+          # unknown option
+    ;;
+esac
+done
+
+
 export DISPLAY=:0
 
 echo; echo; echo;
@@ -37,19 +55,28 @@ echo; echo; echo;
 ### BEGIN SCRIPT ###############################################################
 
 #(a.k.a set -x) to trace what gets executed
-loadTH=$1
 
-loadavg=`uptime | awk '{print $11+0}'`
+cycles=0
+while  [[ $cycles -eq 0  || "$REPEAT" = "true" ]] ; do
+sleep 1
+loadavg=`uptime | awk '{print $10+0}'`
 # bash doesn't understand floating point
 # so convert the number to an interger
 thisloadavg=`echo $loadavg|awk -F \. '{print $1}'`
 exitCode=1
 if [ "$thisloadavg" -ge "$loadTH" ]; then
- echo "Busy - Load Average $loadavg ($thisloadavg) "
- top -bn 1
+ if (( $cycles == 0 )) ; then
+    echo -n "Busy - Load Average ";
+ fi
+
+ echo -n "$thisloadavg... "
+ sleep 1
 else
  exitCode=0
+ REPEAT="false"
 fi
+let cycles++ || true
+done
 
 exit $exitCode
 
