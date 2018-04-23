@@ -7,10 +7,16 @@ require 'facets'
 params = ARGV.getopts("dha", "addColumns", "noSnakeCase", "file:", "help", "debug")
 params.symbolize_keys!
 
+def headersRequired()
+    ["model", "attribute", "datatype", "unique", "default"]
+end
+
 # Show help if requested or the file parameter is not specified
-if params.slice(:h, :help).select{|k,v| v}.count > 0 or params.slice(:file, :f).count == 0
-    byebug
+if params.slice(:h, :help).select{|k,v| v}.count > 0 or params.slice(:file, :f).reject{|k,v| v.nil?}.count == 0
     puts "Usage: -f $filePath [-a[ddColumns] [-noSnakeCase]] [-d[ebug]]"
+    puts "Your csv file must have the headers:\n\t#{headersRequired().join("\t")}"
+    puts "For references, as long as your attribute name is singular, it should work and will ouput \$attributeName:references, which in turn will generate t.references and add_index (AFAIK).  See https://railsguides.net/advanced-rails-model-generators/"
+    puts "Attributes starting with # will be skipped"
     exit 1
 end
 
@@ -19,10 +25,6 @@ filePath=params[:file] or params[:f]
 def detectSeperator(filePath)
     firstLine = File.open(filePath, &:readline)
     [',', ":", ";", "\t"].max_by{|s| firstLine.split(s).count}
-end
-
-def headersRequired()
-    ["model", "attribute", "datatype", "unique", "default"]
 end
 
 
@@ -36,7 +38,7 @@ def checkDataType(dataTypeStr)
 end
 
 def allowedDataTypes()
-    [:primary_key, :string, :text, :integer, :bigint, :float, :decimal, :numeric, :datetime, :time, :date, :binary, :boolean].map{|v| v.to_s}
+    [:primary_key, :string, :text, :integer, :bigint, :float, :decimal, :numeric, :datetime, :time, :date, :binary, :boolean, :references].map{|v| v.to_s}
 end
 
 
@@ -61,6 +63,11 @@ CSV.open(filePath, 'r', headers: :first_row, encoding: 'UTF-8', col_sep: sep) do
     csv.read.each do |row|
         linenum += 1
         #next if (row['model'].nil? or row['model'].empty?)
+
+        attributeName = row['attribute'].strip
+        attributeName = attributeName.snakecase unless params[:noSnakeCase]
+        next if attributeName.starts_with?('#')
+
         if (params[:d] or params[:debug])
             puts "#{linenum}/#{line_count} #{railsGstr}"
         end
@@ -85,11 +92,9 @@ CSV.open(filePath, 'r', headers: :first_row, encoding: 'UTF-8', col_sep: sep) do
             railsGstr = "rails g #{generateType} #{migrationName} "
         end
 
-        attributeName = row['attribute']
-        attributeName = attributeName.snakecase unless params[:noSnakeCase]
 
         dataType = row['datatype']
-        raise "#{dataType} not among allowed data types (#{allowedDataTypes()}).  Code needs to be added for add_reference" if not checkDataType(dataType)
+        raise "#{dataType} not among allowed data types (#{allowedDataTypes()})" if not checkDataType(dataType)
 
         railsGstr += attributeName + ':' + dataType
 
