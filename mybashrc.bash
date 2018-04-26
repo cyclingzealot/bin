@@ -79,4 +79,4 @@ esac
 alias rvmDo='rvm default do'
 alias findSortByDate='find . -printf "%T@ %Tc %p\n" | sort -n'
 
-alias consoleRails="bash --login -c 'rvm default do rails c'"
+alias railsConsole="bash --login -c 'rvm default do rails c'"
