@@ -30,6 +30,8 @@ formerDir=`pwd`
 # If you require named arguments, see
 # http://stackoverflow.com/questions/192249/how-do-i-parse-command-line-arguments-in-bash
 
+lookAtWait="false"
+REPEAT="false"
 for i in "$@"
 do
 case $i in
