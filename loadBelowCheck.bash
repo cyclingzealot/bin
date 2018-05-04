@@ -41,6 +41,10 @@ case $i in
     loadTH="${i#*=}"
     shift # past argument=value
     ;;
+    -w|--waiting)
+    lookAtWait="true"
+    shift # past argument=value
+    ;;
     *)
           # unknown option
     ;;
@@ -59,14 +63,24 @@ echo; echo; echo;
 cycles=0
 while  [[ $cycles -eq 0  || "$REPEAT" = "true" ]] ; do
 sleep 1
-loadavg=`uptime | awk '{print $10+0}'`
+
+what=''
+loadavg=''
+if [[ "$lookAtWait" = "true" ]] ; then
+    loadavg=`top -b  -n 1 | head -n 3 | tail -n 1 | tr -s ' ' | cut -d ' ' -f 10 | cut -d , -f 1 | cut -d. -f 1`
+    what='number of waiting processes'
+else
+    loadavg=`uptime | awk '{print $10+0}'`
+    what='load average'
+fi
+
 # bash doesn't understand floating point
 # so convert the number to an interger
 thisloadavg=`echo $loadavg|awk -F \. '{print $1}'`
 exitCode=1
 if [ "$thisloadavg" -ge "$loadTH" ]; then
  if (( $cycles == 0 )) ; then
-    echo -n "Busy - Load Average ";
+    echo -n "Busy - $what ";
  fi
 
  echo -n "$thisloadavg... "
