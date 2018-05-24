@@ -9,3 +9,5 @@ function set-title() {
 
 echo You must run this preceeded with a dot, if you have not alreadyo
 type set-title
+
+set-title $1

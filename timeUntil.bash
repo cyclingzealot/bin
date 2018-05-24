@@ -95,13 +95,13 @@ function genUntilString {
 }
 
 IFS=$'\n'
-for line in `cat $configFile`; do
+for line in `grep -v '^#' $configFile | sort`; do
     targetDateTime=`echo $line | cut -d';' -f 1`
     string=`echo $line | cut -d';' -f 2`
 
     if [[ `date '+%s' -d $targetDateTime` -ge `date '+%s'` ]]; then
         untilString=$(genUntilString $targetDateTime)
-        echo $string $'\t' $untilString
+        printf "%-15s $string\n" $untilString
     fi
 
 done
