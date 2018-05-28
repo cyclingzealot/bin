@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# set -x
+
 export PATH=$PATH:~/bin/
 export PATH=$PATH:~/bin/local/
 export PATH=$PATH:~/bin/gitTools/
@@ -57,20 +59,34 @@ PROMPT_COMMAND='echo -en "\033]0; $("hostname")@$("pwd") \a"'
 
 alias battery=acpi
 
-function set-title() {
+function settitle() {
   if [[ -z "$ORIG" ]]; then
     ORIG=$PS1
   fi
   TITLE="\[\e]2;$*\a\]"
   PS1=${ORIG}${TITLE}
 }
+alias set-title=settitle
 
 case "$-" in
 *i*)
     echo -n "Tab name: "
     read tabName
-    if [[ ! -z "$tabName" ]]; then set-title $tabName; fi
+    if [[ ! -z "$tabName" ]]; then settitle $tabName; fi
     ;;
 esac
 
+#alias rvmDo='rvm default do'
+function rvmDo() {
+    if which rvm > /dev/null; then
+        rvm default do "$@"
+    else
+        toRun="$@"
+        toRun="rvm default do $toRun"
+        bash --login -c "$toRun"
+    fi
+}
 
+alias findSortByDate='find . -printf "%T@ %Tc %p\n" | sort -n'
+
+alias railsConsole="bash --login -c 'rvm default do rails c'"
