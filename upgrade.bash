@@ -34,13 +34,13 @@ sudo nice -n 19 apt-get update
 
 set -x
 numPacks=$(updateList)
+continueFlag=/tmp/continueUpgrade
+touch $continueFlag
 
-while [ $numPacks -gt 0 ] ; do
-	continueFlag=/tmp/continueUpgrade
+while [ $numPacks -gt 0 && -a $continueFlag ] ; do
 	i="0"
 
-	touch $continueFlag
-	for pack in `cat /tmp/upgradePackageList.txt | head -n 10 ` ; do
+	for pack in `cat /tmp/upgradePackageList.txt | head -n 20 ` ; do
 		i=`echo "$i + 1" | bc`
 		pct=`echo "$i * 100 / $numPacks" | bc`
 
