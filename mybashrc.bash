@@ -66,6 +66,7 @@ function settitle() {
   TITLE="\[\e]2;$*\a\]"
   PS1=${ORIG}${TITLE}
 }
+alias set-title=settitle
 
 case "$-" in
 *i*)
@@ -75,5 +76,17 @@ case "$-" in
     ;;
 esac
 
-alias rvmDo='rvm default do'
+#alias rvmDo='rvm default do'
+function rvmDo() {
+    if which rvm > /dev/null; then
+        rvm default do "$@"
+    else
+        toRun="$@"
+        toRun="rvm default do $toRun"
+        bash --login -c "$toRun"
+    fi
+}
+
 alias findSortByDate='find . -printf "%T@ %Tc %p\n" | sort -n'
+
+alias railsConsole="bash --login -c 'rvm default do rails c'"
