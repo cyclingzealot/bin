@@ -41,13 +41,13 @@ echo; echo; echo;
 #(a.k.a set -x) to trace what gets executed
 set -o xtrace
 
-if ! which addresses.bash ; then
-    echo "addresses.bash is  required"
-    exit 1
-fi
+#if ! which addresses.bash ; then
+#    echo "addresses.bash is  required"
+#    exit 1
+#fi
 
 scratchFile=/tmp/`hostname`IsAt.txt
-addresses.bash > $scratchFile
+~/bin/addresses.bash > $scratchFile
 
 chmod 600 $scratchFile
 
