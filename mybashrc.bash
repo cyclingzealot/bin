@@ -90,3 +90,5 @@ function rvmDo() {
 alias findSortByDate='find . -printf "%T@ %Tc %p\n" | sort -n'
 
 alias railsConsole="bash --login -c 'rvm default do rails c'"
+
+alias dimForNight=redshift
