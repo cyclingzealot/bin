@@ -2,8 +2,12 @@
 
 arg1=${1:-''}
 
-if [[ $arg1 == '--help' || $arg1 == '-h' ]]; then
-    echo "Script author should have provided documentation"
+__file="${__dir}/$(basename "${BASH_SOURCE[0]}")"       # Full path of the script
+__base="$(basename ${__file})"                          # Name of the script
+
+if [[ $arg1 == '--help' || $arg1 == '-h' || -z "$arg1" ]]; then
+    echo "Need to provide file name. Usage: $__base \$listOfFiles. Can be a bash file wildcards."
+    echo "Ex: $__base *.jpg"
     exit 0
 fi
 
@@ -19,8 +23,6 @@ set -o pipefail
 # Set magic variables for current file & dir
 __dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"   # Dir of the script
 __root="$(cd "$(dirname "${__dir}")" && pwd)"           # Dir of the dir of the script
-__file="${__dir}/$(basename "${BASH_SOURCE[0]}")"       # Full path of the script
-__base="$(basename ${__file})"                          # Name of the script
 ts=`date +'%Y%m%d-%H%M%S'`
 ds=`date +'%Y%m%d'`
 pid=`ps -ef | grep ${__base} | grep -v 'vi ' | head -n1 |  awk ' {print $2;} '`
@@ -40,7 +42,7 @@ echo; echo; echo;
 #(a.k.a set -x) to trace what gets executed
 set -o xtrace
 
-for file in *.jpg *.gif *.svg *.png ; do
+for file in "$@" ; do
     eog $file
     echo Look at the picture then close...
     untilDone.bash eog
