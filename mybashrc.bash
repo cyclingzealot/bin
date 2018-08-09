@@ -86,6 +86,7 @@ case "$-" in
     ;;
 esac
 
+#alias rvmDo='rvm default do'
 function rvmDo() {
     if which rvm > /dev/null; then
         rvm default do "$@"
@@ -100,4 +101,6 @@ alias rmvDo='echo No rmvDo. I think you meant rvmDo'
 alias findSortByDate='find . -printf "%T@ %Tc %p\n" | sort -n'
 alias findSortBySize='find . -type f  -exec du -h {} + | sort -r -h'
 
-#alias bash --login -c 'rvm default do rails c'"
+alias railsConsole="bash --login -c 'rvm default do rails c'"
+
+alias dimForNight=redshift
