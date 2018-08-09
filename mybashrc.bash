@@ -68,6 +68,16 @@ function settitle() {
 }
 alias set-title=settitle
 
+
+set -x
+function railsConsole() {
+    TITLE="\[\e]2;console\a\]"
+    PS1=${ORIG}${TITLE}
+    bash --login -c 'rvm default do rails c'
+}
+set +x
+
+
 case "$-" in
 *i*)
     echo -n "Tab name: "
@@ -76,7 +86,6 @@ case "$-" in
     ;;
 esac
 
-#alias rvmDo='rvm default do'
 function rvmDo() {
     if which rvm > /dev/null; then
         rvm default do "$@"
@@ -86,7 +95,9 @@ function rvmDo() {
         bash --login -c "$toRun"
     fi
 }
+alias rmvDo='echo No rmvDo. I think you meant rvmDo'
 
 alias findSortByDate='find . -printf "%T@ %Tc %p\n" | sort -n'
+alias findSortBySize='find . -type f  -exec du -h {} + | sort -r -h'
 
-alias railsConsole="bash --login -c 'rvm default do rails c'"
+#alias bash --login -c 'rvm default do rails c'"
