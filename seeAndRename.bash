@@ -2,8 +2,8 @@
 
 arg1=${1:-''}
 
-if [[ $arg1 == '--help' || $arg1 == '-h' ]]; then
-    echo "Script author should have provided documentation"
+if [[ $arg1 == '--help' || $arg1 == '-h' || -z "$arg1" ]]; then
+    echo "Supply a file pattern to go through those file and renmae them"
     exit 0
 fi
 
@@ -40,16 +40,36 @@ echo; echo; echo;
 #(a.k.a set -x) to trace what gets executed
 set -o xtrace
 
-for file in *.jpg *.gif *.svg *.png ; do
-    eog $file
-    echo Look at the picture then close...
-    untilDone.bash eog
-    read -p "Move $file to ? " newFileName
-    newFileName=${newFileName:-$file}
-    if [ "$newFileName" != "$file" ]; then
-        mv -v $file $newFileName || true
+OIFS="$IFS"
+IFS=$'\n'
+
+
+for file in "$@" ; do
+    app=''
+    suffix=${file: -4}
+    if [[ "$suffix" == ".jpg" || "$suffix" == ".png" || "$suffix" == ".gif" ]]; then
+        app=`which eog`
+        eog $file
+    elif [ "$suffix" == ".pdf" ]; then
+        app=`which evince`
+        evince $file
+    else
+        echo "Don't khow how to open $file"
+    fi
+
+    if [[ ! -z "$app" ]] ; then
+        echo Look at the picture then close...
+        untilDone.bash "$app"
+        read -p "Move $file to ? " newFileName
+        newFileName=${newFileName:-$file}
+        if [ "$newFileName" != "$file" ]; then
+            mv -v $file $newFileName || true
+        fi
     fi
 done
+
+
+IFS="$OIFS"
 
 
 set +x

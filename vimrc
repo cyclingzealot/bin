@@ -90,4 +90,5 @@ autocmd BufWritePost *.php  :!php -l %
 autocmd BufWritePost *.txt  :!wc -w %
 autocmd BufWritePost *.js :! node -c % > /dev/null && echo Syntax OK
 
+autocmd BufWritePost :mks! ~/.vim/sessions/%
 
