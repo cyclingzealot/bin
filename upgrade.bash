@@ -30,7 +30,7 @@ echo Check to see if apt is running
 untilDone.bash apt-get
 
 echo Wait until the load is below 2
-~/bin/loadBelowCheck.bash -w -r -t=1
+~/bin/loadBelowCheck.bash -w -r -t=3
 sudo nice -n 19 apt-get update
 
 
@@ -51,8 +51,8 @@ while [ $numPacks -gt 0 ] && [ -a $continueFlag ] ; do
 		echo ===== To stop =======\> rm $continueFlag
 	    # Ideally, loadBelowCheck should be after sudo
 	    set -x
-		if [ -a $continueFlag ] ; then ~/bin/loadBelowCheck.bash -w -r -t=1; sudo nice -n 19 apt-get install $pack --only-upgrade --yes  -d; fi
-		if [ -a $continueFlag ] ; then ~/bin/loadBelowCheck.bash -w -r -t=1; sudo nice -n 19 apt-get install $pack --only-upgrade --yes ;  fi
+		if [ -a $continueFlag ] ; then ~/bin/loadBelowCheck.bash -w -r -t=3; sudo nice -n 19 apt-get install $pack --only-upgrade --yes  -d; fi
+		if [ -a $continueFlag ] ; then ~/bin/loadBelowCheck.bash -w -r -t=3; sudo nice -n 19 apt-get install $pack --only-upgrade --yes ;  fi
 		echo; echo; echo
 	done
 
