@@ -64,6 +64,8 @@ CSV.open(filePath, 'r', headers: :first_row, encoding: 'UTF-8', col_sep: sep) do
         linenum += 1
         #next if (row['model'].nil? or row['model'].empty?)
 
+        next if row.all?{|column,value| value.blank?}
+        byebug if row['attribute'].nil?
         attributeName = row['attribute'].strip
         attributeName = attributeName.snakecase unless params[:noSnakeCase]
         next if attributeName.starts_with?('#')

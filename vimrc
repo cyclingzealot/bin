@@ -1,6 +1,8 @@
 " Author shussain@credil.org
 " https://github.com/shussain/vimrc/blob/master/_vimrc-simplified
 
+set nocp
+
 
 " Simplified vimrc for use when vim is installed but not gvim
 
@@ -88,4 +90,5 @@ autocmd BufWritePost *.php  :!php -l %
 autocmd BufWritePost *.txt  :!wc -w %
 autocmd BufWritePost *.js :! node -c % > /dev/null && echo Syntax OK
 
+autocmd BufWritePost :mks! ~/.vim/sessions/%
 

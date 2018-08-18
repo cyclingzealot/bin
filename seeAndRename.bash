@@ -42,16 +42,36 @@ echo; echo; echo;
 #(a.k.a set -x) to trace what gets executed
 set -o xtrace
 
+OIFS="$IFS"
+IFS=$'\n'
+
+
 for file in "$@" ; do
-    eog $file
-    echo Look at the picture then close...
-    untilDone.bash eog
-    read -p "Move $file to ? " newFileName
-    newFileName=${newFileName:-$file}
-    if [ "$newFileName" != "$file" ]; then
-        mv -v $file $newFileName || true
+    app=''
+    suffix=${file: -4}
+    if [[ "$suffix" == ".jpg" || "$suffix" == ".png" || "$suffix" == ".gif" ]]; then
+        app=`which eog`
+        eog $file
+    elif [ "$suffix" == ".pdf" ]; then
+        app=`which evince`
+        evince $file
+    else
+        echo "Don't khow how to open $file"
+    fi
+
+    if [[ ! -z "$app" ]] ; then
+        echo Look at the picture then close...
+        untilDone.bash "$app"
+        read -p "Move $file to ? " newFileName
+        newFileName=${newFileName:-$file}
+        if [ "$newFileName" != "$file" ]; then
+            mv -v $file $newFileName || true
+        fi
     fi
 done
+
+
+IFS="$OIFS"
 
 
 set +x
