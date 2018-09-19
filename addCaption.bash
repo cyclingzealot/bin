@@ -4,8 +4,8 @@ START=$(date +%s.%N)
 
 arg1=${1:-''}
 
-if [[ $arg1 == '--help' || $arg1 == '-h' ]]; then
-    echo "Script author should have provided documentation"
+if [[ $arg1 == '--help' || $arg1 == '-h' || -z "$arg1" ]]; then
+    echo "Usage: $0 \filePath caption [height]"
     exit 0
 fi
 
