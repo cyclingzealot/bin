@@ -105,4 +105,4 @@ alias railsConsole="bash --login -c 'rvm default do rails c'"
 
 alias dimForNight=redshift
 
-echo TMOUT set to `echo $TMOUT/'(60*60*24)' | bc | cut -c 1-4` days
+echo TMOUT set to `echo $TMOUT/'(60*60)' | bc | cut -d. -f 1` hours
