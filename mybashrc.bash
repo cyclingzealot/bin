@@ -22,7 +22,7 @@ alias mv='mv -i'
 alias cp='cp -i'
 
 export PS1="\h $PS1"
-export TMOUT=86400
+export TMOUT=43200
 export EDITOR=vi
 
 gcd() {
@@ -104,3 +104,5 @@ alias findSortBySize='find . -type f  -exec du -h {} + | sort -r -h'
 alias railsConsole="bash --login -c 'rvm default do rails c'"
 
 alias dimForNight=redshift
+
+echo TMOUT set to `echo $TMOUT/'(60*60*24)' | bc | cut -c 1-4` days
