@@ -1,5 +1,3 @@
-#!/usr/bin/env bash
-
 arg1=${1:-''}
 
 if [[ $arg1 == '--help' || $arg1 == '-h' || -z "$arg1" ]]; then
@@ -48,11 +46,11 @@ for file in "$@" ; do
     app=''
     suffix=${file: -4}
     if [[ "$suffix" == ".jpg" || "$suffix" == ".png" || "$suffix" == ".gif" ]]; then
-        app=`which eog`
-        eog $file
+        app=`which eog || which xviewer`
+        $app $file
     elif [ "$suffix" == ".pdf" ]; then
         app=`which evince`
-        evince $file
+        $app $file
     else
         echo "Don't khow how to open $file"
     fi
