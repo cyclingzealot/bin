@@ -18,8 +18,8 @@ export BC_ENV_ARGS=~/.bcrc
 alias usage='find .  -mindepth 1 -maxdepth 1 -print0 | xargs -0 du -s | sort -n -r -k 1'
 alias usageFiilesOnly='find . -maxdepth 3 -type f -print0 | xargs -0 du | sort -nrk 1'
 
-alias mv='mv -i'
-alias cp='cp -i'
+alias mv='mv -vi'
+alias cp='cp -vi'
 
 export PS1="\h $PS1"
 export TMOUT=43200
@@ -98,11 +98,17 @@ function rvmDo() {
 }
 alias rmvDo='echo No rmvDo. I think you meant rvmDo'
 
-alias findSortByDate='find . -printf "%T@ %Tc %p\n" | sort -n'
-alias findSortBySize='find . -type f  -exec du -h {} + | sort -r -h'
+#alias findSortByDate='find . -printf "%T@ %Tc %p\n" | sort -n'
+#alias findSortBySize='find . -type f  -exec du -h {} + | sort -r -h'
 
 alias railsConsole="bash --login -c 'rvm default do rails c'"
 
 alias dimForNight=redshift
 
 echo TMOUT set to `echo $TMOUT/'(60*60)' | bc | cut -d. -f 1` hours
+
+
+umask 027
+echo
+echo umask set to `umask`
+echo
