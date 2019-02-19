@@ -64,27 +64,27 @@ function genUntilString {
         case "$timeUnit" in
         s)
             timeUnit='min'
-            let diffTime=diffTime/60
+            let diffTime="diffTS/60"
             ;;
         min)
             timeUnit='hrs'
-            let diffTime=diffTime/60
+            let diffTime="diffTS/(60*60)"
             ;;
         hrs)
             timeUnit='jours'
-            let diffTime=diffTime/24
+            let diffTime="diffTS/(24*60*60)"
             ;;
         jours)
             timeUnit='semaines'
-            let diffTime=diffTime/7
+            let diffTime="diffTS/(7*24*60*60)"
             ;;
         semaines)
             timeUnit='mois'
-            let diffTime=diffTime*7/365*12
+            let diffTime="diffTS/((365/12)*24*60*60)"
             ;;
         mois)
             timeUnit='années'
-            let diffTime=diffTime/12
+            let diffTime="diffTS/(365*25*60*60)"
             ;;
         esac
     done
