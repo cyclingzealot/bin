@@ -88,7 +88,7 @@ while [ "$(du -shm $target | awk '{print $1}')" -gt $maxsize -a "$loopElapsed" -
 do
   du -chs $target
   find $target -name "*.$suffix"  -type f -printf '%T@\t%p\n' | \
-      sort -nr | tail -n 1 | cut -d $'\t' -f 2-  | xargs -d '\n' -I {} bash -c 'if lsof {} | grep {}; then echo "(Truncated by trimFolder.bash)" > {}; else rm -vf {}; fi'
+      sort -nr | tail -n 1 | cut -d $'\t' -f 2-  | xargs -d '\n' -I {} bash -c 'set -x; if lsof {} | grep {}; then echo "(Truncated by trimFolder.bash)" > {}; else rm -vf {}; fi; set +x'
 
   loopNow=`date +%s`
   echo "$loopElapsed=$loopNow-$loopBegin < $loopThreshold"
