@@ -9,9 +9,9 @@ set -o errexit
 set -o nounset
 
 #(a.k.a set -x) to trace what gets executed
-#set -x 
+#set -x
 
-# in scripts to catch mysqldump fails 
+# in scripts to catch mysqldump fails
 set -o pipefail
 
 # Set magic variables for current file & dir
@@ -36,7 +36,7 @@ chmod 600 $log
 
 #Check that the config file exists
 if [ ! -f $configFile ] ; then
-        echo "I need a file at $configFile with a domain list on one line seperated by spaces and no new line" 
+        echo "I need a file at $configFile with a domain list on one line seperated by spaces and no new line"
 	DOM="theos.in cricketnow.in nixcraft.com nixcraft.org nixcraft.biz nixcraft.net nixcraft.info cyberciti.biz cyberciti.org gite.in nixcraft.in"
 	echo
 	echo "Like:"
@@ -52,7 +52,7 @@ echo Begin `date`  .....
 ### BEGIN SCRIPT ###############################################################
 
 
-# Author 
+# Author
 # Vivek Gite - http://www.cyberciti.biz/tips/howto-monitor-domain-expiration-renew-date.html
 
 workFile=/tmp/${__base}.workfile
@@ -65,13 +65,13 @@ echo Collecting data....
 for d in `sort $configFile`
 do
   echo "$i of $numDomains: $d..."
-  echo $d ' - ' `whois $d | egrep -i 'Expiry|Expiration|Expires on' | head -1` >> $workFile || true 
+  echo $d ' - ' `whois $d | egrep -i 'Expiry|Expiration|Expires on' | head -1` >> $workFile || true
   # If you need list..
   # whois $d | egrep -i 'Expiry|Expiration|Expires on' | head -1 >> /tmp/domain.date
   #
   let i++
-  sleep 1 
-done 
+  sleep 10
+done
 
 echo; echo ;
 cat $workFile | while read line; do longdate="$(echo "$line" | rev | cut -f1 -d" " | rev)"; longdateepoch="$(date -d $longdate +%s)"; echo "$longdateepoch $line"; done | sort | cut -d ' ' -f 2-
