@@ -1,7 +1,18 @@
 " Author shussain@credil.org
 " https://github.com/shussain/vimrc/blob/master/_vimrc-simplified
 
+let &titlestring = expand("%:t")
+if &term == "screen"
+  set t_ts=^[k
+  set t_fs=^[\
+endif
+if &term == "screen" || &term == "xterm"
+  set title
+endif
 set nocp
+
+
+autocmd vimenter * :!mesg n
 
 
 " Simplified vimrc for use when vim is installed but not gvim
@@ -74,6 +85,7 @@ set statusline=%F%t[%{strlen(&fenc)?&fenc:'none'},%{&ff}]%h%m%r%y%=%c,%l/%L\ %P
 
 
 set hlsearch
+
 
 :syntax on
 
