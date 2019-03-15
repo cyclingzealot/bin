@@ -51,10 +51,13 @@ for file in "$@" ; do
     suffix=${file: -4}
     if [[ "$suffix" == ".jpg" || "$suffix" == ".png" || "$suffix" == ".gif" ]]; then
         app=`which eog`
-        eog $file
+        $app $file
     elif [ "$suffix" == ".pdf" ]; then
         app=`which evince`
-        evince $file
+        $app $file
+    elif [ "$suffix" == ".mp4" ]; then
+        app=`which vlc`
+        $app $file
     else
         echo "Don't khow how to open $file"
     fi
@@ -65,7 +68,7 @@ for file in "$@" ; do
         read -p "Move $file to ? " newFileName
         newFileName=${newFileName:-$file}
         if [ "$newFileName" != "$file" ]; then
-            mv -v $file $newFileName || true
+            mv -vi $file $newFileName || true
         fi
     fi
 done
