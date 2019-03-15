@@ -4,6 +4,6 @@
 
 
 git checkout master &&
-git branch -d `git branch --merged | grep -v master | grep -v devServer | grep -v release | grep -v staging`
+git branch -d `git branch --merged | grep -v master | grep -v devServer | grep -v release | grep -v staging | grep -v toDeploy `
 
 git branch
