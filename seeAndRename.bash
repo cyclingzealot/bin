@@ -1,7 +1,13 @@
+#!/usr/bin/env bash
+
 arg1=${1:-''}
 
+__file="${__dir}/$(basename "${BASH_SOURCE[0]}")"       # Full path of the script
+__base="$(basename ${__file})"                          # Name of the script
+
 if [[ $arg1 == '--help' || $arg1 == '-h' || -z "$arg1" ]]; then
-    echo "Supply a file pattern to go through those file and renmae them"
+    echo "Need to provide file name. Usage: $__base \$listOfFiles. Can be a bash file wildcards."
+    echo "Ex: $__base *.jpg"
     exit 0
 fi
 
@@ -17,8 +23,6 @@ set -o pipefail
 # Set magic variables for current file & dir
 __dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"   # Dir of the script
 __root="$(cd "$(dirname "${__dir}")" && pwd)"           # Dir of the dir of the script
-__file="${__dir}/$(basename "${BASH_SOURCE[0]}")"       # Full path of the script
-__base="$(basename ${__file})"                          # Name of the script
 ts=`date +'%Y%m%d-%H%M%S'`
 ds=`date +'%Y%m%d'`
 pid=`ps -ef | grep ${__base} | grep -v 'vi ' | head -n1 |  awk ' {print $2;} '`
@@ -51,6 +55,9 @@ for file in "$@" ; do
     elif [ "$suffix" == ".pdf" ]; then
         app=`which evince`
         $app $file
+    elif [ "$suffix" == ".mp4" ]; then
+        app=`which vlc`
+        $app $file
     else
         echo "Don't khow how to open $file"
     fi
@@ -61,7 +68,7 @@ for file in "$@" ; do
         read -p "Move $file to ? " newFileName
         newFileName=${newFileName:-$file}
         if [ "$newFileName" != "$file" ]; then
-            mv -v $file $newFileName || true
+            mv -vi $file $newFileName || true
         fi
     fi
 done
