@@ -80,7 +80,7 @@ else
     cd .
 fi
 
-targetGZ=$targetDir.`ts.bash`.tar.gz
+targetGZ=$targetDir.$ts.tar.gz
 echo Compressing $targetDir into $parentPath$targetGZ
 echo
 
