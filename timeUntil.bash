@@ -96,11 +96,12 @@ function genUntilString {
 
 IFS=$'\n'
 printCounter=0
+let linesMax=`tput lines`-10
 for line in `grep -v '^#' $configFile | sort`; do
     targetDateTime=`echo $line | cut -d';' -f 1`
     string=`echo $line | cut -d';' -f 2`
 
-    if [[ `date '+%s' -d $targetDateTime` -ge `date '+%s'` ]] && [[ $printCounter -le 10 ]] ; then
+    if [[ `date '+%s' -d $targetDateTime` -ge `date '+%s'` ]] && [[ $printCounter -le $linesMax ]] ; then
         untilString=$(genUntilString $targetDateTime)
         printf "%-15s $string\n" $untilString
         let printCounter++ || true
