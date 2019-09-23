@@ -70,7 +70,7 @@ do
   # whois $d | egrep -i 'Expiry|Expiration|Expires on' | head -1 >> /tmp/domain.date
   #
   let i++
-  sleep 10
+  sleep 1
 done
 
 echo; echo ;
