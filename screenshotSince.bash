@@ -45,7 +45,10 @@ minDiff=`echo "($nowTS - $sinceTS)/60 + 2" | bc | cut -d. -f 1`
 noGoodCount=`find $scDir -mmin $minDiff -name '*.nogood.*' | wc -l `
 numFilesToOpen=`find $scDir -mmin -$minDiff -name '*.png' | wc -l`
 if [[  "$numFilesToOpen" != "0" ]]  > /dev/null ; then
+    echo
     echo "Opening $numFilesToOpen files"
+    echo "$noGoodCount files not opened"
+    echo
     if which eog; then
         eog `find $scDir -mmin -$minDiff -name '*.png' | sort`
     elif which xviewer; then
@@ -53,7 +56,6 @@ if [[  "$numFilesToOpen" != "0" ]]  > /dev/null ; then
     else
         echo NO VIEWER
     fi
-    echo $noGoodCount no good png files
 else
     echo "No screenshots to open"
 fi
