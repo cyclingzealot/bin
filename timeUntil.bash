@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 
-arg1=${1:-1000}
+arg1=${1:-100}
 
 if [[ $arg1 == '--help' || $arg1 == '-h' ]]; then
     echo "Script author should have provided documentation"
     exit 0
 fi
 
-thresholdNum=${1:-1000}
+thresholdNum=$arg1
 
 #exit when command fails (use || true when a command can fail)
 set -o errexit
