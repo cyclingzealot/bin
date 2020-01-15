@@ -7,7 +7,7 @@ if [[ $arg1 == '--help' || $arg1 == '-h' ]]; then
     exit 0
 fi
 
-thresholdNum=$arg1
+thresholdNum=${1:-100}
 
 #exit when command fails (use || true when a command can fail)
 set -o errexit

@@ -97,10 +97,12 @@ au! BufNewFile,BufRead *.py, setf python
 autocmd BufWritePost *.rb  :!ruby -c %
 autocmd BufWritePost *.rake  :!ruby -c %
 autocmd BufWritePost *.py  :!python -m py_compile %
+autocmd BufWritePost *.pl  :!perl -c %
 autocmd BufWritePost *.bash  :!bash -n %
 autocmd BufWritePost *.php  :!php -l %
 autocmd BufWritePost *.txt  :!wc -w %
 autocmd BufWritePost *.js :! node -c % > /dev/null && echo Syntax OK
+autocmd BufWritePost *.json :!python -m json.tool % > /dev/null && echo Syntax OK
 
 autocmd BufWritePost :mks! ~/.vim/sessions/%
 
