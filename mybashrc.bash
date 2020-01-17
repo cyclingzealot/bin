@@ -105,6 +105,8 @@ alias railsConsole="bash --login -c 'rvm default do rails c'"
 
 alias dimForNight=redshift
 
+alias removeSpaces="rename -v  -e 's/ /_/g' "
+
 echo TMOUT set to `echo $TMOUT/'(60*60)' | bc | cut -d. -f 1` hours
 
 
