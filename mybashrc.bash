@@ -106,6 +106,9 @@ alias railsConsole="bash --login -c 'rvm default do rails c'"
 alias dimForNight=redshift
 
 alias removeSpaces="rename -v  -e 's/ /_/g' "
+alias renameSpaces=removeSpaces
+
+alias whatIsMyIp="wget -q -O - checkip.dyndns.org|sed -e 's/.*Current IP Address: //' -e 's/<.*$//'"
 
 echo TMOUT set to `echo $TMOUT/'(60*60)' | bc | cut -d. -f 1` hours
 
