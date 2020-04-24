@@ -44,6 +44,8 @@ printf "\n\n\n" | tee -a $backupFile
 
 crontab -l | tee -a $backupFile
 
+find $backupDest -mtime +548 -name "$__base-*.backup" -exec rm -v {} \;
+
 ### END SCIPT ##################################################################
 
 cd $formerDir
