@@ -95,6 +95,7 @@ au! BufNewFile,BufRead *.bat,*.sys setf dosbatch
 au! BufNewFile,BufRead *.rb,*.rake setf ruby
 au! BufNewFile,BufRead *.py, setf python
 autocmd BufWritePost *.rb  :!ruby -c %
+" autocmd BufWritePost *.erb  :!erb -x -T '-' % | ruby -c
 autocmd BufWritePost *.rake  :!ruby -c %
 autocmd BufWritePost *.py  :!python -m py_compile %
 autocmd BufWritePost *.pl  :!perl -c %

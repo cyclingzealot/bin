@@ -6,6 +6,6 @@ mod=0
 if [ -f $1 ]; then
 	mod=$(date -r $1 +%s)
 fi
-now=$(date +%s)          
-days=$(expr \( $now - $mod \) )
-printf $days
+now=$(date +%s)
+secs=$(expr \( $now - $mod \) )
+printf $secs
