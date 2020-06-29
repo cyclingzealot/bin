@@ -25,6 +25,9 @@ export PS1="\h $PS1"
 export TMOUT=43200
 export EDITOR=vi
 
+
+export TERM=xterm-256color   # For tmux & vim compatibilty
+
 gcd() {
 	cd `git rev-parse --show-toplevel`
 }
