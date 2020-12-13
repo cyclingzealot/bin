@@ -60,7 +60,7 @@ chmod 600 $scratchPath
 echo Making backup file
 cp -vi $fileName $fileName.bak
 
-gpg -d $fileName > $scratchPath
+gpg -d --ignore-mdc-error $fileName > $scratchPath
 
 echo "Edit file $scratchPath"; sleep 1
 vi $scratchPath
