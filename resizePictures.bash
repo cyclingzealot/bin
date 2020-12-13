@@ -26,25 +26,35 @@ ds=`date +'%Y%m%d'`
 pid=`ps -ef | grep ${__base} | grep -v 'vi ' | head -n1 |  awk ' {print $2;} '`
 formerDir=`pwd`
 
-backupDest=~/backups/crontab/
-mkdir -p $backupDest
-backupFile=$backupDest/$__base-${ts}.backup
-touch $backupFile
-chmod 600 $backupFile
-
-
 # If you require named arguments, see
 # http://stackoverflow.com/questions/192249/how-do-i-parse-command-line-arguments-in-bash
 
-echo "#Saved on `date`" | tee $backupFile
+export DISPLAY=:0
 
-printf "\n\n\n" | tee -a $backupFile
+echo Begin `date`  .....
+
+echo; echo; echo;
 
 ### BEGIN SCRIPT ###############################################################
 
-crontab -l | tee -a $backupFile
+#(a.k.a set -x) to trace what gets executed
+set -o xtrace
 
-find $backupDest -mtime +548 -name "$__base-*.backup" -exec rm -v {} \;
+for script in chopSuffix.bash suffix.bash; do
+if ! which $script ; then
+    echo "Script $script required"
+    exit 1
+fi
+done
+
+
+for file in "$@"; do
+    nonSuffix=`chopSuffix.bash $file`
+    suffix=`suffix.bash $file`
+    convert -verbose $file -resize 800x $nonSuffix.800px.$suffix
+done
+
+set +x
 
 ### END SCIPT ##################################################################
 
