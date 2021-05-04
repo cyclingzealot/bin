@@ -20,11 +20,11 @@ alias usageFiilesOnly='find . -maxdepth 3 -type f -print0 | xargs -0 du | sort -
 
 alias mv='mv -vi'
 alias cp='cp -vi'
+alias bc='bc -l'
 
 export PS1="\h $PS1"
 export TMOUT=43200
 export EDITOR=vi
-
 
 export TERM=xterm-256color   # For tmux & vim compatibilty
 
@@ -104,6 +104,8 @@ alias rmvDo='echo No rmvDo. I think you meant rvmDo'
 #alias findSortByDate='find . -printf "%T@ %Tc %p\n" | sort -n'
 #alias findSortBySize='find . -type f  -exec du -h {} + | sort -r -h'
 
+alias filesBySize="find . -type f -ls -printf '\0' | sort -zk7n | tr -d '\0'"
+
 alias railsConsole="bash --login -c 'rvm default do rails c'"
 
 alias dimForNight=redshift
@@ -114,6 +116,11 @@ alias removeSpacesOld="rename -v  's/ /_/g' "
 
 alias whatIsMyIp="wget -q -O - checkip.dyndns.org|sed -e 's/.*Current IP Address: //' -e 's/<.*$//'"
 
+alias dnsReset="sudo /etc/init.d/dns-clean restart; sudo /etc/init.d/networking force-reload"
+
+alias addColumn="paste -sd+ | bc"
+
+
 echo TMOUT set to `echo $TMOUT/'(60*60)' | bc | cut -d. -f 1` hours
 
 
@@ -121,3 +128,5 @@ umask 027
 echo
 echo umask set to `umask`
 echo
+
+

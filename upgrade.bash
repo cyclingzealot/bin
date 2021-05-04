@@ -30,6 +30,7 @@ echo Check to see if apt is running
 untilDone.bash apt-get
 
 waitTH=6
+sudo -l > /dev/null
 echo Waiting until the load is below $waitTH
 ~/bin/loadBelowCheck.bash -w -r -t=$waitTH
 sudo nice -n 19 apt-get update

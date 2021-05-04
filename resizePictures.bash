@@ -2,14 +2,10 @@
 
 arg1=${1:-''}
 
-if [[ $arg1 == '--help' || $arg1 == '-h' || -z "$1" ]]; then
-    echo "You need to profile a file name"
-    echo "Usage: $0 \$fileName"
+if [[ $arg1 == '--help' || $arg1 == '-h' ]]; then
+    echo "Script author should have provided documentation"
     exit 0
 fi
-
-
-fileName=$1
 
 #exit when command fails (use || true when a command can fail)
 set -o errexit
@@ -42,35 +38,21 @@ echo; echo; echo;
 ### BEGIN SCRIPT ###############################################################
 
 #(a.k.a set -x) to trace what gets executed
-#set -o xtrace
+set -o xtrace
 
-
-fileBaseName=`basename $fileName`
-fileBaseName=`chopSuffix.bash $fileBaseName`
-scratchPath=~/tmp/$fileBaseName
-
-
-if [ -f $scratchPath ]; then
-    rm -iv $scratchPath
+for script in chopSuffix.bash suffix.bash; do
+if ! which $script ; then
+    echo "Script $script required"
+    exit 1
 fi
-
-touch $scratchPath
-chmod 600 $scratchPath
-
-echo Making backup file
-cp -vi $fileName $fileName.bak
-
-gpg -d --ignore-mdc-error $fileName > $scratchPath
-
-echo "Edit file $scratchPath"; sleep 1
-vi $scratchPath
-
-gpg -c $scratchPath
-
-echo "Testing decrypt..."; sleep 1
-gpg -d $scratchPath.gpg && mv -vi $scratchPath.gpg $fileName && rm -vi $scratchPath
+done
 
 
+for file in "$@"; do
+    nonSuffix=`chopSuffix.bash $file`
+    suffix=`suffix.bash $file`
+    convert -verbose $file -resize 800x $nonSuffix.800px.$suffix
+done
 
 set +x
 
