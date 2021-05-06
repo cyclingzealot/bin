@@ -43,8 +43,12 @@ echo; echo; echo;
 #(a.k.a set -x) to trace what gets executed
 set -o xtrace
 
-sudo chown -v $newOwner $itemToMove
-sudo mv -iv $itemToMove $destination
+itemToMove="$1"
+newOwner="$2"
+destination="$3"
+
+sudo chown -v "$newOwner"   "$itemToMove"
+sudo mv   -iv "$itemToMove" "$destination"
 
 
 set +x
