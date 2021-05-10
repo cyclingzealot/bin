@@ -36,6 +36,9 @@ gpwd() {
 	git rev-parse --show-toplevel | tr -d '\n'
 }
 
+# To see git log from all branches.  You can specify a file after
+gitChangesAllBranches="git log --all --"  #From https://stackoverflow.com/a/7466798/1611925
+
 fn='-mutt-clearlyu-medium-r-normal--0-0-100-100-p-0-iso10646-1'
 alias alert="xmessage -fn $fn -nearmouse"
 
