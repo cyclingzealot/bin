@@ -3,7 +3,7 @@
 arg1=${1:-''}
 
 if [[ $arg1 == '--help' || $arg1 == '-h' ]]; then
-    echo "Script author should have provided documentation"
+    echo "Resizes pictures to 800 px width.  No args."
     exit 0
 fi
 
