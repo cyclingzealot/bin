@@ -120,6 +120,11 @@ alias dnsReset="sudo /etc/init.d/dns-clean restart; sudo /etc/init.d/networking 
 
 alias addColumn="paste -sd+ | bc"
 
+alias stopFirefox='killall -g -STOP firefox'
+alias continueFirefox='killall -g -CONT firefox'
+alias firefoxStop=stopFirefox
+alias firefoxContinue=continueFirefox
+
 
 echo TMOUT set to `echo $TMOUT/'(60*60)' | bc | cut -d. -f 1` hours
 
