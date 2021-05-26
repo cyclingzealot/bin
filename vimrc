@@ -78,7 +78,10 @@ set indentkeys-=0#
 
 set wrap
 set linebreak
-set nolist  " list disables linebreak
+"set nolist  " list disables linebreak
+
+set listchars=nbsp:·
+set list
 
 
 set statusline=%F%t[%{strlen(&fenc)?&fenc:'none'},%{&ff}]%h%m%r%y%=%c,%l/%L\ %P
