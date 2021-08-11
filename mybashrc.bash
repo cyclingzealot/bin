@@ -2,6 +2,18 @@
 
 # set -x
 
+# From https://askubuntu.com/a/22257/333952
+confirm() {
+    echo -n "Do you want to run $*? [N/y] "
+    read -N 1 REPLY
+    echo
+    if test "$REPLY" = "y" -o "$REPLY" = "Y"; then
+        "$@"
+    else
+        echo "Cancelled by user"
+    fi
+}
+
 export PATH=$PATH:~/bin/
 export PATH=$PATH:~/bin/local/
 export PATH=$PATH:~/bin/gitTools/
@@ -36,6 +48,15 @@ gpwd() {
 	git rev-parse --show-toplevel | tr -d '\n'
 }
 
+# To see git log from all branches.  You can specify a file after
+gitChangesAllBranches="git log --all --"  #From https://stackoverflow.com/a/7466798/1611925
+
+# git deploy steps
+alias gitDeployStep1_updateMaster='git checkout master && git pull'
+alias gitDeployStep2_mergeFromToDeploy='confirm "git merge toDeploy && git push && git checkout release && git pull"'
+alias gitDeployStep3_mergeFromMasterAndDeploy="confirm bash -c 'git merge master && git push && rvmDo cap production deploy'"
+echo "gitDeploySteps have been set, might want to try them"
+
 fn='-mutt-clearlyu-medium-r-normal--0-0-100-100-p-0-iso10646-1'
 alias alert="xmessage -fn $fn -nearmouse"
 
@@ -57,6 +78,7 @@ fi
 export SSH_AUTH_SOCK=~/.ssh/ssh_auth_sock;
 
 alias firefox-reboot='untilDone.bash firefox; firefox'
+
 
 PROMPT_COMMAND='echo -en "\033]0; $("hostname")@$("pwd") \a"'
 

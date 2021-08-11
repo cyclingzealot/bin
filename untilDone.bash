@@ -75,7 +75,7 @@ while [[ "$numProcs" -gt 0 ]]; do
 
 
 #set -x
-numProcs=`ps -ef | grep $string | grep -v $exception | grep -v untilDone |  wc -l`
+numProcs=`ps -ef | grep "$string" | grep -v $exception | grep -v untilDone |  wc -l`
 
 if [[ "$numProcs" -gt 0 ]]; then
 	printf . ;
