@@ -11,7 +11,7 @@ set -o nounset
 #(a.k.a set -x) to trace what gets executed
 #set -o xtrace
 
-# in scripts to catch mysqldump fails 
+# in scripts to catch mysqldump fails
 set -o pipefail
 
 # Set magic variables for current file & dir
@@ -56,8 +56,8 @@ if [[ -z "$host" || -z "$path" ]]; then
     exit 1
 fi
 
-set -x 
-scp -v --remove-source-files  $host:$path $target || (scp -v $host:$path $target && ssh $host rm -v $path)
+set -x
+scp -v --remove-source-files  $host:"$path" "$target" || (scp -v $host:"$path" "$target" && ssh $host rm -v "$path")
 set +x
 
 ### END SCIPT ##################################################################
