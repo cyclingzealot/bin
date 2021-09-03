@@ -1,6 +1,19 @@
 " Author shussain@credil.org
 " https://github.com/shussain/vimrc/blob/master/_vimrc-simplified
 
+let &titlestring = expand("%:t")
+if &term == "screen"
+  set t_ts=^[k
+  set t_fs=^[\
+endif
+if &term == "screen" || &term == "xterm"
+  set title
+endif
+set nocp
+
+
+autocmd vimenter * :!mesg n
+
 
 " Simplified vimrc for use when vim is installed but not gvim
 
@@ -65,13 +78,17 @@ set indentkeys-=0#
 
 set wrap
 set linebreak
-set nolist  " list disables linebreak
+"set nolist  " list disables linebreak
+
+set listchars=nbsp:·
+set list
 
 
 set statusline=%F%t[%{strlen(&fenc)?&fenc:'none'},%{&ff}]%h%m%r%y%=%c,%l/%L\ %P
 
 
 set hlsearch
+
 
 :syntax on
 
@@ -81,11 +98,15 @@ au! BufNewFile,BufRead *.bat,*.sys setf dosbatch
 au! BufNewFile,BufRead *.rb,*.rake setf ruby
 au! BufNewFile,BufRead *.py, setf python
 autocmd BufWritePost *.rb  :!ruby -c %
+" autocmd BufWritePost *.erb  :!erb -x -T '-' % | ruby -c
 autocmd BufWritePost *.rake  :!ruby -c %
 autocmd BufWritePost *.py  :!python -m py_compile %
+autocmd BufWritePost *.pl  :!perl -c %
 autocmd BufWritePost *.bash  :!bash -n %
 autocmd BufWritePost *.php  :!php -l %
 autocmd BufWritePost *.txt  :!wc -w %
-autocmd BufWritePost *.js :! uglifyjs % > /dev/null && echo Syntax OK
+autocmd BufWritePost *.js :! node -c % > /dev/null && echo Syntax OK
+autocmd BufWritePost *.json :!python -m json.tool % > /dev/null && echo Syntax OK
 
+autocmd BufWritePost :mks! ~/.vim/sessions/%
 

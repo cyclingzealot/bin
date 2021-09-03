@@ -1,15 +1,17 @@
 #!/usr/bin/env bash
 
-START=$(date +%s.%N)
+arg1=${1:-''}
+
+if [[ $arg1 == '--help' || $arg1 == '-h' ]]; then
+    echo "Script author should have provided documentation"
+    exit 0
+fi
 
 #exit when command fails (use || true when a command can fail)
 set -o errexit
 
 #exit when your script tries to use undeclared variables
 set -o nounset
-
-#(a.k.a set -x) to trace what gets executed
-#set -o xtrace
 
 # in scripts to catch mysqldump fails
 set -o pipefail
@@ -20,24 +22,12 @@ __root="$(cd "$(dirname "${__dir}")" && pwd)"           # Dir of the dir of the 
 __file="${__dir}/$(basename "${BASH_SOURCE[0]}")"       # Full path of the script
 __base="$(basename ${__file})"                          # Name of the script
 ts=`date +'%Y%m%d-%H%M%S'`
+ds=`date +'%Y%m%d'`
+pid=`ps -ef | grep ${__base} | grep -v 'vi ' | head -n1 |  awk ' {print $2;} '`
+formerDir=`pwd`
 
-#Set the config file
-configFile="$HOME/.binJlam/templateConfig"
-
-
-#Capture everything to log
-log=~/log/$__base-${ts}.log
-exec >  >(tee -a $log)
-exec 2> >(tee -a $log >&2)
-touch $log
-chmod 600 $log
-
-
-#Check that the config file exists
-#if [[ ! -f "$configFile" ]] ; then
-#        echo "I need a file at $configFile with ..."
-#        exit 1
-#fi
+# If you require named arguments, see
+# http://stackoverflow.com/questions/192249/how-do-i-parse-command-line-arguments-in-bash
 
 export DISPLAY=:0
 
@@ -47,23 +37,18 @@ echo; echo; echo;
 
 ### BEGIN SCRIPT ###############################################################
 
-host=${1:-}
-path=${2:-}
-target=${3:-.}
+#(a.k.a set -x) to trace what gets executed
+#set -o xtrace
 
-if [[ -z "$host" || -z "$path" ]]; then
-    echo "Usage: $__base host path [target]"
-    exit 1
-fi
+echo "Installing packages libemail-outlook-message-perl libemail-sender-perl..."
+sudo apt-get install libemail-outlook-message-perl libemail-sender-perl
 
-set -x
-scp -v --remove-source-files  $host:"$path" "$target" || (scp -v $host:"$path" "$target" && ssh $host rm -v "$path")
+baseName=`chopSuffix.bash $1`
+echo "Converting email..."
+perl -we 'use Email::Outlook::Message; print Email::Outlook::Message->new(shift)->to_email_mime->as_string' /tmp/Thinktel\ LCA\ footprint.msg  > "$baseName".eml
+
 set +x
 
 ### END SCIPT ##################################################################
 
-END=$(date +%s.%N)
-DIFF=$(echo "$END - $START" | bc)
-echo; echo; echo;
-echo Done.  `date` - $DIFF seconds
-
+cd $formerDir

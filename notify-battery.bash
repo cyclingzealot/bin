@@ -46,7 +46,7 @@ echo Begin `date`  .....
 ### BEGIN SCRIPT ###############################################################
 
 export DISPLAY=:0.0
-batteryPct=`acpi | cut -d ' ' -f 4 | sed -n 's/,$//p'`
+batteryPct=`acpi | cut -d ' ' -f 4 | cut -d% -f1`
 batteryNoPct=${batteryPct%%'%'}
 random=$((  RANDOM % 100  ))
 

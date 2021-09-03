@@ -3,7 +3,8 @@
 arg1=${1:-''}
 
 if [[ $arg1 == '--help' || $arg1 == '-h' ]]; then
-    echo "Just specify the time (inclusive) of the first screenshot you wish to have. Time format HH:MM"
+    echo "Moves old files while preserving directory structure.  Not quite in a working state"
+    echo "Usage: $0 {\$directory \$daysOld} [\$isTest]"
     exit 0
 fi
 
@@ -26,43 +27,44 @@ ds=`date +'%Y%m%d'`
 pid=`ps -ef | grep ${__base} | grep -v 'vi ' | head -n1 |  awk ' {print $2;} '`
 formerDir=`pwd`
 
+# If you require named arguments, see
+# http://stackoverflow.com/questions/192249/how-do-i-parse-command-line-arguments-in-bash
+
+export DISPLAY=:0
+
+echo Begin `date`  .....
+
+echo; echo; echo;
+
 ### BEGIN SCRIPT ###############################################################
 
 #(a.k.a set -x) to trace what gets executed
-#set -o xtrace
+set -o xtrace
 
-since=${1:-'00:00'}
+moveFrom=`pwd`
+targetDir=$1
+daysOld=$2
+isTest=${3:-''}
 
-scDir=$HOME/screenshots/
+scratchFile=~/tmp/dirs.txt
+mkdir -p ~/tmp/
 
-cd $scDir
+find . -type d -print0 > $scratchFile
 
-sinceTS=`date -d "$since" +'%s'`
-nowTS=`date +'%s'`;
+cd $targetDir
 
-minDiff=`echo "($nowTS - $sinceTS)/60 + 2" | bc | cut -d. -f 1`
+xargs -0 mkdir -p < $sratchFile
 
-noGoodCount=`find $scDir -mmin $minDiff -name '*.nogood.*' | wc -l `
-numFilesToOpen=`find $scDir -mmin -$minDiff -name '*.png' | wc -l`
-if [[  "$numFilesToOpen" != "0" ]]  > /dev/null ; then
-    echo
-    echo "Opening $numFilesToOpen files"
-    echo "$noGoodCount files not opened"
-    echo
-    if which eog; then
-        eog `find $scDir -mmin -$minDiff -name '*.png' | sort`
-    elif which xviewer; then
-        xviewer `find $scDir -mmin -$minDiff -name '*.png' | sort`
-    else
-        echo NO VIEWER
-    fi
+cd $moveFrom
+if [ -z "isTest" ]; then
+    find -mtime +$daysOld -exec bash -c "directoryBase=`dirname {}`; mv -vi {} $targetDir/$directoryBase/" \;
 else
-    echo "No screenshots to open"
+    find -mtime +$daysOld -exec bash -c "directoryBase=`dirname {}`; echo mv -vi {} $targetDir/$directoryBase/" \;
 fi
-echo
-echo
 
 
+
+rm $scratchFile
 set +x
 
 ### END SCIPT ##################################################################

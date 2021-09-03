@@ -2,10 +2,14 @@
 
 arg1=${1:-''}
 
-if [[ $arg1 == '--help' || $arg1 == '-h' ]]; then
-    echo "Just specify the time (inclusive) of the first screenshot you wish to have. Time format HH:MM"
+if [[ $arg1 == '--help' || $arg1 == '-h' || -z "$1" ]]; then
+    echo "You need to profile a file name"
+    echo "Usage: $0 \$fileName"
     exit 0
 fi
+
+
+fileName=$1
 
 #exit when command fails (use || true when a command can fail)
 set -o errexit
@@ -26,41 +30,46 @@ ds=`date +'%Y%m%d'`
 pid=`ps -ef | grep ${__base} | grep -v 'vi ' | head -n1 |  awk ' {print $2;} '`
 formerDir=`pwd`
 
+# If you require named arguments, see
+# http://stackoverflow.com/questions/192249/how-do-i-parse-command-line-arguments-in-bash
+
+export DISPLAY=:0
+
+echo Begin `date`  .....
+
+echo; echo; echo;
+
 ### BEGIN SCRIPT ###############################################################
 
 #(a.k.a set -x) to trace what gets executed
 #set -o xtrace
 
-since=${1:-'00:00'}
 
-scDir=$HOME/screenshots/
+fileBaseName=`basename $fileName`
+fileBaseName=`chopSuffix.bash $fileBaseName`
+scratchPath=~/tmp/$fileBaseName
 
-cd $scDir
 
-sinceTS=`date -d "$since" +'%s'`
-nowTS=`date +'%s'`;
-
-minDiff=`echo "($nowTS - $sinceTS)/60 + 2" | bc | cut -d. -f 1`
-
-noGoodCount=`find $scDir -mmin $minDiff -name '*.nogood.*' | wc -l `
-numFilesToOpen=`find $scDir -mmin -$minDiff -name '*.png' | wc -l`
-if [[  "$numFilesToOpen" != "0" ]]  > /dev/null ; then
-    echo
-    echo "Opening $numFilesToOpen files"
-    echo "$noGoodCount files not opened"
-    echo
-    if which eog; then
-        eog `find $scDir -mmin -$minDiff -name '*.png' | sort`
-    elif which xviewer; then
-        xviewer `find $scDir -mmin -$minDiff -name '*.png' | sort`
-    else
-        echo NO VIEWER
-    fi
-else
-    echo "No screenshots to open"
+if [ -f $scratchPath ]; then
+    rm -iv $scratchPath
 fi
-echo
-echo
+
+touch $scratchPath
+chmod 600 $scratchPath
+
+echo Making backup file
+cp -vi $fileName $fileName.bak
+
+gpg -d --ignore-mdc-error $fileName > $scratchPath
+
+echo "Edit file $scratchPath"; sleep 1
+vi $scratchPath
+
+gpg -c $scratchPath
+
+echo "Testing decrypt..."; sleep 1
+gpg -d $scratchPath.gpg && mv -vi $scratchPath.gpg $fileName && rm -vi $scratchPath
+
 
 
 set +x

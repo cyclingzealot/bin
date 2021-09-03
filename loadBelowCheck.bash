@@ -4,7 +4,11 @@ arg1=${1:-''}
 
 if [[ $arg1 == '--help' || $arg1 == '-h' || -z $arg1 ]] ; then
     echo "Must provide load theshold:"
-    echo "$0 \$loadThreshold"
+    echo "$0 -t="
+    echo
+    echo "Optional args:"
+    echo "-r=|--repeat=    Wait until the load is at the right level rather than just do one test"
+    echo "-w=|--waiting=   Look at waiting procs (very beta)"
     exit 2
 fi
 

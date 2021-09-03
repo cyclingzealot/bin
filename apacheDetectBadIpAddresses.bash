@@ -4,8 +4,9 @@ START=$(date +%s.%N)
 
 arg1=${1:-''}
 
-if [[ $arg1 == '--help' || $arg1 == '-h' || -z "$arg1" ]]; then
-    echo "Usage: $0 \filePath caption [height]"
+if [[ $arg1 == '--help' || $arg1 == '-h' ]]; then
+	echo "Gives list of IP addresses getting too many 500"
+    echo "$0 -l=locationOfApacheLog [-t=countThreshold]"
     exit 0
 fi
 
@@ -46,6 +47,23 @@ formerDir=`pwd`
 
 # If you require named arguments, see
 # http://stackoverflow.com/questions/192249/how-do-i-parse-command-line-arguments-in-bash
+
+for i in "$@"
+do
+case $i in
+    -l=*|--log=*)
+    apacheLog="${i#*=}"
+    shift # past argument=value
+    ;;
+    -t=*|--countThreshold=*)
+    thresholdIn="${i#*=}"
+    shift # past argument=value
+    ;;
+    *)
+          # unknown option
+    ;;
+esac
+done
 
 #Set the config file
 configFile="$HOME/.binJlam/templateConfig"
@@ -95,19 +113,24 @@ echo; echo; echo;
 
 ### BEGIN SCRIPT ###############################################################
 
-
-height=${3:-20}
-
 #(a.k.a set -x) to trace what gets executed
-set -o xtrace
+#set -o xtrace
 
-width=$(identify -format %w $1)
-newFile=`chopSuffix.bash $1`
-suffix=`suffix.bash $1`
-convert -background '#0008' -fill white -gravity center \
-              -size ${width}x${height} caption:"$2" \
-                $1 +swap -gravity south -composite \
-                  $newFile-watermark.$suffix
+ls "$apacheLog"
+
+threshold=${thresholdIn:=2}
+
+
+for ipaddress in `grep ' 500 ' $apacheLog | cut -d ' ' -f 1 | sort | uniq `; do
+	count=`grep ' 500 ' $apacheLog | grep -c $ipaddress `
+
+	if [ "$count" -ge "$threshold" ]; then
+		echo $ipaddress
+	fi
+
+done
+
+
 
 
 set +x

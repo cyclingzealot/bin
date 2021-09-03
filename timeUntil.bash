@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 
-arg1=${1:-1000}
+arg1=${1:-100}
 
 if [[ $arg1 == '--help' || $arg1 == '-h' ]]; then
     echo "Script author should have provided documentation"
     exit 0
 fi
 
-thresholdNum=${1:-1000}
+thresholdNum=${1:-100}
 
 #exit when command fails (use || true when a command can fail)
 set -o errexit
@@ -64,27 +64,27 @@ function genUntilString {
         case "$timeUnit" in
         s)
             timeUnit='min'
-            let diffTime=diffTime/60
+            let diffTime="diffTS/60"
             ;;
         min)
             timeUnit='hrs'
-            let diffTime=diffTime/60
+            let diffTime="diffTS/(60*60)"
             ;;
         hrs)
             timeUnit='jours'
-            let diffTime=diffTime/24
+            let diffTime="diffTS/(24*60*60)"
             ;;
         jours)
             timeUnit='semaines'
-            let diffTime=diffTime/7
+            let diffTime="diffTS/(7*24*60*60)"
             ;;
         semaines)
             timeUnit='mois'
-            let diffTime=diffTime*7/365*12
+            let diffTime="diffTS/((365/12)*24*60*60)"
             ;;
         mois)
             timeUnit='années'
-            let diffTime=diffTime/12
+            let diffTime="diffTS/(365*25*60*60)"
             ;;
         esac
     done
@@ -95,17 +95,19 @@ function genUntilString {
 }
 
 IFS=$'\n'
+printCounter=0
+let linesMax=`tput lines`-10
 for line in `grep -v '^#' $configFile | sort`; do
     targetDateTime=`echo $line | cut -d';' -f 1`
     string=`echo $line | cut -d';' -f 2`
 
-    if [[ `date '+%s' -d $targetDateTime` -ge `date '+%s'` ]]; then
+    if [[ `date '+%s' -d $targetDateTime` -ge `date '+%s'` ]] && [[ $printCounter -le $linesMax ]] ; then
         untilString=$(genUntilString $targetDateTime)
         printf "%-15s $string\n" $untilString
+        let printCounter++ || true
     fi
 
 done
-
 set +x
 
 ### END SCIPT ##################################################################

@@ -4,8 +4,11 @@ START=$(date +%s.%N)
 
 arg1=${1:-''}
 
-if [[ $arg1 == '--help' || $arg1 == '-h' || -z "$arg1" ]]; then
-    echo "Usage: $0 \filePath caption [height]"
+if [[ $arg1 == '--help' || $arg1 == '-h' ]]; then
+    echo "Backup each table individually"
+    echo "Usage: $0 \$schema [\$connectionString]"
+    echo "Schema must be desingated and single quoted, lisat surrounded by double quotes"
+    echo  Example: $0 \"\'public\', \'otrs\'\"
     exit 0
 fi
 
@@ -95,19 +98,21 @@ echo; echo; echo;
 
 ### BEGIN SCRIPT ###############################################################
 
-
-height=${3:-20}
+schemaList=$1
+connectionString=${2:-''}
 
 #(a.k.a set -x) to trace what gets executed
-set -o xtrace
 
-width=$(identify -format %w $1)
-newFile=`chopSuffix.bash $1`
-suffix=`suffix.bash $1`
-convert -background '#0008' -fill white -gravity center \
-              -size ${width}x${height} caption:"$2" \
-                $1 +swap -gravity south -composite \
-                  $newFile-watermark.$suffix
+tableList=$(psql clientportal -t -c "SELECT  CONCAT(table_schema, '.', table_name) designation from information_schema.tables where table_schema in ($schemaList) order by designation;")
+
+for tableDesignation in $tableList; do
+    set -x
+    echo `date`.....
+	echo pg_dump --clean --table $tableDesignation
+    echo
+    echo
+    set +x
+done
 
 
 set +x
