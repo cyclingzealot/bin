@@ -107,6 +107,7 @@ autocmd BufWritePost *.php  :!php -l %
 autocmd BufWritePost *.txt  :!wc -w %
 autocmd BufWritePost *.js :! node -c % > /dev/null && echo Syntax OK
 autocmd BufWritePost *.json :!python -m json.tool % > /dev/null && echo Syntax OK
+autocmd BufWritePost *.yml  :!yamllint %
 
 autocmd BufWritePost :mks! ~/.vim/sessions/%
 
