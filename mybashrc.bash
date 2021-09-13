@@ -107,7 +107,13 @@ case "$-" in
 *i*)
     echo -n "Tab name: "
     read tabName
-    if [[ ! -z "$tabName" ]]; then settitle $tabName; fi
+    if [[ ! -z "$tabName" ]]; then
+        if [[ ! -z "$TMUX" ]]; then
+            tmux rename-window "$tabName"
+        else
+            settitle $tabName;
+        fi
+    fi
     ;;
 esac
 
