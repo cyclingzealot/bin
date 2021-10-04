@@ -2,7 +2,7 @@
 
 term=$1
 char=${2:-'='}
-length=${3:-70}
+length=${3:-150}
 
 if [[ "$length" -eq -1 ]]; then
     length=`tput cols `

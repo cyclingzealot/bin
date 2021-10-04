@@ -1,5 +1,6 @@
 #!/bin/bash
-function set-title() {
+
+function set-title {
   if [[ -z "$ORIG" ]]; then
     ORIG=$PS1
   fi
@@ -8,6 +9,6 @@ function set-title() {
 }
 
 echo You must run this preceeded with a dot, if you have not alreadyo
-type set-title
+type settitle
 
-set-title $1
+settitle $1
