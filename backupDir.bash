@@ -80,11 +80,7 @@ else
     cd .
 fi
 
-<<<<<<< HEAD
 targetGZ="$targetDir".$ts.tar.gz
-=======
-targetGZ=$targetDir.$ts.tar.gz
->>>>>>> cbb0b9c294240daadff08e147ffa36325470b6e6
 echo Compressing $targetDir into $parentPath$targetGZ
 echo
 
