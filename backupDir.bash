@@ -73,14 +73,14 @@ targetDir=${1:-}
 parentPath=''
 
 if [[ -z $targetDir ]]; then
-    targetDir=$currentDir
+    targetDir="$currentDir"
     parentPath='../'
     cd ..
 else
     cd .
 fi
 
-targetGZ=$targetDir.$ts.tar.gz
+targetGZ="$targetDir".$ts.tar.gz
 echo Compressing $targetDir into $parentPath$targetGZ
 echo
 
