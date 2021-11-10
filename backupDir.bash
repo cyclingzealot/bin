@@ -68,7 +68,7 @@ echo; echo; echo;
 #(a.k.a set -x) to trace what gets executed
 #set -o xtrace
 
-currentDir=`basename $PWD`
+currentDir=`basename "$PWD"`
 targetDir=${1:-}
 parentPath=''
 
@@ -84,10 +84,10 @@ targetGZ=$targetDir.$ts.tar.gz
 echo Compressing $targetDir into $parentPath$targetGZ
 echo
 
-tar -cO $targetDir | gzip -9v > $targetGZ
+tar -cO "$targetDir" | gzip -9v > "$targetGZ"
 
 echo
-ls -lhtd $targetDir*
+ls -lhtd "$targetDir"*
 echo
 
 cd -
