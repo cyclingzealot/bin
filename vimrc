@@ -80,8 +80,9 @@ set wrap
 set linebreak
 "set nolist  " list disables linebreak
 
-set listchars=nbsp:·
-set list
+" set listchars=tab:\ \ ,nbsp:·
+" set list
+let &listchars = 'tab:  ,nbsp:·'
 
 
 set statusline=%F%t[%{strlen(&fenc)?&fenc:'none'},%{&ff}]%h%m%r%y%=%c,%l/%L\ %P
