@@ -94,13 +94,11 @@ function settitle() {
 alias set-title=settitle
 
 
-set -x
 function railsConsole() {
     TITLE="\[\e]2;console\a\]"
     PS1=${ORIG}${TITLE}
     bash --login -c 'rvm default do rails c'
 }
-set +x
 
 
 case "$-" in
