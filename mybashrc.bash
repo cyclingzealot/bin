@@ -152,6 +152,13 @@ alias firefoxStop=stopFirefox
 alias firefoxContinue=continueFirefox
 
 
+alias dockerReset='docker-compose down; docker rm -f $(docker ps -a -q); docker volume rm $(docker volume ls -q)'
+
+
+#Diables shell suspension: https://unix.stackexchange.com/a/12108/159862
+stty -ixon
+
+
 echo TMOUT set to `echo $TMOUT/'(60*60)' | bc | cut -d. -f 1` hours
 
 

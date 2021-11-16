@@ -1,7 +1,7 @@
 " Author shussain@credil.org
 " https://github.com/shussain/vimrc/blob/master/_vimrc-simplified
 
-let &titlestring = expand("%:t")
+" let &titlestring = expand("%:t")
 if &term == "screen"
   set t_ts=^[k
   set t_fs=^[\
@@ -12,7 +12,7 @@ endif
 set nocp
 
 
-autocmd vimenter * :!mesg n
+" autocmd vimenter * :!mesg n
 
 
 " Simplified vimrc for use when vim is installed but not gvim
@@ -84,6 +84,8 @@ set linebreak
 " set list
 let &listchars = 'tab:  ,nbsp:·'
 
+" Pathogen. This should be last in case you don't have photgen installed
+execute pathogen#infect()
 
 set statusline=%F%t[%{strlen(&fenc)?&fenc:'none'},%{&ff}]%h%m%r%y%=%c,%l/%L\ %P
 
@@ -91,19 +93,23 @@ set statusline=%F%t[%{strlen(&fenc)?&fenc:'none'},%{&ff}]%h%m%r%y%=%c,%l/%L\ %P
 set hlsearch
 
 
-:syntax on
+" syntax on
 
+:filetype off
+let g:rufo_auto_formatting = 1
 
 :filetype on
+autocmd BufWritePost *.bash  :!bash -n %
 au! BufNewFile,BufRead *.bat,*.sys setf dosbatch
 au! BufNewFile,BufRead *.rb,*.rake setf ruby
 au! BufNewFile,BufRead *.py, setf python
-autocmd BufWritePost *.rb  :!ruby -c %
-" autocmd BufWritePost *.erb  :!erb -x -T '-' % | ruby -c
+autocmd BufWritePost *.rake, :!ruby -c %
+autocmd BufWritePost *.rb, :!ruby -c %
+autocmd BufWritePost *.rb  :!which rufo > /dev/null && rufo -x -c %
+autocmd BufWritePost *.erb  :!erb -x -T '-' % | ruby -c
 autocmd BufWritePost *.rake  :!ruby -c %
 autocmd BufWritePost *.py  :!python -m py_compile %
 autocmd BufWritePost *.pl  :!perl -c %
-autocmd BufWritePost *.bash  :!bash -n %
 autocmd BufWritePost *.php  :!php -l %
 autocmd BufWritePost *.txt  :!wc -w %
 autocmd BufWritePost *.js :! node -c % > /dev/null && echo Syntax OK
@@ -111,4 +117,6 @@ autocmd BufWritePost *.json :!python -m json.tool % > /dev/null && echo Syntax O
 autocmd BufWritePost *.yml  :!yamllint %
 
 autocmd BufWritePost :mks! ~/.vim/sessions/%
+
+
 
