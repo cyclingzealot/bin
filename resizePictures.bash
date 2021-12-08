@@ -3,7 +3,7 @@
 arg1=${1:-''}
 
 if [[ $arg1 == '--help' || $arg1 == '-h' ]]; then
-    echo "Resizes pictures to 800 px width.  No args."
+    echo "Resizes pictures to 800 px width.  Suply file list with wild cars (ex: *.jpg)."
     exit 0
 fi
 
