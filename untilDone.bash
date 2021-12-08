@@ -1,6 +1,28 @@
 #!/bin/bash
 
 
+arg1=${1:-''}
+
+
+usageStr=$(cat << END
+Usage: $0 \$stringToSearch | [-t|--time=] [-s|--string=] [-e|--exception=] [-o|--must-run]]
+
+You can either supply no arguments and a string to search OR the following arguments:
+
+    -t|--time=           Seconds to wait between scans
+    -s|--string=         String to search
+    -e|--exception=      Substring Exception to search. Defaults to 'grep'
+    -o|--must-run        Proc must be present to continue
+
+END
+)
+
+if [[ $arg1 == '--help' || $arg1 == '-h' ]]; then
+    echo "$usageStr"
+    exit 0
+fi
+
+
 #exit when command fails (use || true when a command can fail)
 #set -o errexit
 
@@ -25,67 +47,95 @@ numProcs=1
 waitSecs=1
 exception='grep'
 string=''
+continueOnPresence='false'
 
 # Wait for
 # http://stackoverflow.com/questions/192249/how-do-i-parse-command-line-arguments-in-bash#answer-14203146
 
+noArgs='false'
 if [[ $# -eq 1 ]]; then
     string="$1"
+    noArgs='true'
 fi
 
-while [[ $# > 1 ]]
-do
-key="$1"
 
-case $key in
-    -t|--time)
-    waitSecs="$2"
-    shift # past argument
-    ;;
-    -s|--string)
-    string="$2"
-    shift # past argument
-    ;;
-    -n|--numProcs)
-    numProcs="$2"
-    shift # past argument
-    ;;
-    -e|--exception)
-    exception="$exception\|$2"
-    ;;
-    *)
-            # unknown option
-    ;;
-esac
-shift # past argument or value
+for i in "$@"; do
+
+  case $i in
+      -t=*|--time=*)
+      waitSecs="${i#*=}"
+      shift # past argument
+      ;;
+      -s=*|--string=*)
+      string="${i#*=}"
+      shift # past argument
+      ;;
+      -n=*|--numProcs=*)
+      numProcs="${i#*=}"
+      shift # past argument
+      ;;
+      -e=*|--exception=*)
+      exception="${i#*=}"
+      shift
+      ;;
+      -o|--must-run)
+      continueOnPresence='true'
+      shift
+      ;;
+      *)
+      if [[ "$noArgs" == 'false' ]]; then
+        echo "Unknown option $i"
+        echo
+        echo "$usageStr"
+        exit 1
+      fi
+      shift
+      ;;
+  esac
+  shift # past argument or value
 done
-
-string="$1"
-
 
 if [[ -z "$string" ]]; then
     echo Need a non-empty search string
     exit 1
 fi
 
-echo $0 sees:
-ps -ef | grep $string | grep -ve "$exception" | grep -v untilDone
-
-while [[ "$numProcs" -gt 0 ]]; do
-
-
-#set -x
-numProcs=`ps -ef | grep "$string" | grep -v $exception | grep -v untilDone |  wc -l`
-
-if [[ "$numProcs" -gt 0 ]]; then
-	printf . ;
-	sleep $waitSecs;
-	#echo ;
-	#ps -ef | grep $1 ;
-	#echo ;
+if [[ "$continueOnPresence" == 'true' ]]; then
+    echo "Waiting for a process with substring $string to appear"
+else
+    echo $0 sees:
+    ps -ef | grep $string | grep -ve "$exception" | grep -v untilDone
 fi
 
 
+function numProcsMethod {
+    numProcs=`ps -ef | grep "$string" | grep -v $exception | grep -v untilDone |  wc -l`
+    echo "$numProcs"
+}
+
+
+function shouldKeepWaiting {
+    numProcs=$(numProcsMethod)
+
+    keepWaiting='true'
+
+    if [[ "$continueOnPresence" == 'true' ]]; then
+        if [[ "$numProcs" -ge 1 ]]; then
+            keepWaiting='false'
+        fi
+    else
+        if [[ "$numProcs" -eq 0 ]]; then
+            keepWaiting='false'
+        fi
+    fi
+
+    echo $keepWaiting
+}
+
+
+while [[ $(shouldKeepWaiting) == 'true' ]]; do
+    printf . ;
+	sleep $waitSecs;
 done
 
 echo
