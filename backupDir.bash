@@ -2,6 +2,13 @@
 
 START=$(date +%s.%N)
 
+arg1=${1:-''}
+
+if [[ $arg1 == '--help' || $arg1 == '-h' ]]; then
+    echo "Backups the current directory or the specified directory into it's parent directory"
+    exit 0
+fi
+
 #exit when command fails (use || true when a command can fail)
 set -o errexit
 
