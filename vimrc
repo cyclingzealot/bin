@@ -80,8 +80,9 @@ set wrap
 set linebreak
 "set nolist  " list disables linebreak
 
-set listchars=nbsp:·
-set list
+" set listchars=tab:\ \ ,nbsp:·
+" set list
+let &listchars = 'tab:  ,nbsp:·'
 
 " Pathogen. This should be last in case you don't have photgen installed
 execute pathogen#infect()
