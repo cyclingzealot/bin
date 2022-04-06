@@ -8,7 +8,7 @@ if [[ $arg1 == '--help' || $arg1 == '-h' || -z $arg1 ]] ; then
     echo
     echo "Optional args:"
     echo "-r=|--repeat=    Wait until the load is at the right level rather than just do one test"
-    echo "-w=|--waiting=   Look at waiting procs (very beta)"
+    echo "-v |--verbose    Be a bit more verbose"
     exit 2
 fi
 
@@ -34,6 +34,7 @@ formerDir=`pwd`
 # If you require named arguments, see
 # http://stackoverflow.com/questions/192249/how-do-i-parse-command-line-arguments-in-bash
 
+verbose='false'
 lookAtWait="false"
 REPEAT="false"
 for i in "$@"
@@ -41,19 +42,26 @@ do
 case $i in
     -r|--repeat)
     REPEAT="true"
+    echo "Will do continuous loop"
     shift # past argument=value
     ;;
     -t=*|--threshold=*)
     loadTH="${i#*=}"
+    echo "Threshold set to $loadTH"
     shift # past argument=value
     ;;
     -w|--waiting)
     lookAtWait="true"
+    echo "Will look at wait"
+    shift # past argument=value
+    ;;
+    -v|--verbose)
+    verbose="true"
+    echo "Will be verbose"
     shift # past argument=value
     ;;
     *)
-          # unknown option
-    ;;
+    echo "Unknown option $i"
 esac
 done
 
@@ -72,11 +80,13 @@ sleep 1
 
 what=''
 loadavg=''
-if [[ "$lookAtWait" = "true" ]] ; then
+if [[ "$lookAtWait" == "true" ]] ; then
+    echo "Not implemented"
+    exit 1
     loadavg=`top -b  -n 1 | head -n 3 | tail -n 1 | tr -s ' ' | cut -d ' ' -f 10 | cut -d , -f 1 | cut -d. -f 1`
     what='number of waiting processes'
 else
-    loadavg=`uptime | awk '{print $10+0}'`
+    loadavg=`uptime | awk '{print $8+0}'`
     what='load average'
 fi
 
@@ -92,6 +102,9 @@ if [ "$thisloadavg" -ge "$loadTH" ]; then
  echo -n "$thisloadavg... "
  sleep 1
 else
+ if [ "$verbose" == 'true' ]; then
+    echo "load average is $thisloadavg < $loadTH .  Exiting"
+ fi
  exitCode=0
  REPEAT="false"
 fi
