@@ -155,6 +155,9 @@ alias firefoxContinue=continueFirefox
 
 
 alias dockerReset='docker-compose down; docker rm -f $(docker ps -a -q); docker volume rm $(docker volume ls -q)'
+alias dockerLs="docker container ls"
+
+alias htmlToPng=cutycapt
 
 
 #Diables shell suspension: https://unix.stackexchange.com/a/12108/159862
