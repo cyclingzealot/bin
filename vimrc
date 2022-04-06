@@ -95,7 +95,7 @@ set hlsearch
 " syntax on
 
 :filetype off
-let g:rufo_auto_formatting = 1
+"let g:rufo_auto_formatting = 1
 
 :filetype on
 autocmd BufWritePost *.bash  :!bash -n %
@@ -104,12 +104,12 @@ au! BufNewFile,BufRead *.rb,*.rake setf ruby
 au! BufNewFile,BufRead *.py, setf python
 autocmd BufWritePost *.rake, :!ruby -c %
 autocmd BufWritePost *.rb, :!ruby -c %
-autocmd BufWritePost *.rb  :!which rufo > /dev/null && rufo -x -c %
+"autocmd BufWritePost *.rb  :!which rufo > /dev/null && rufo -x -c %
 autocmd BufWritePost *.erb  :!erb -x -T '-' % | ruby -c
 autocmd BufWritePost *.rake  :!ruby -c %
 autocmd BufWritePost *.py  :!python -m py_compile %
 autocmd BufWritePost *.pl  :!perl -c %
-autocmd BufWritePost *.php  :!php -l %
+autocmd BufWritePost *.php,*.module  :!php -l %
 autocmd BufWritePost *.txt  :!wc -w %
 autocmd BufWritePost *.js :! node -c % > /dev/null && echo Syntax OK
 autocmd BufWritePost *.json :!python -m json.tool % > /dev/null && echo Syntax OK
