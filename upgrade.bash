@@ -29,7 +29,7 @@ which rvm && rvm get head
 echo Check to see if apt is running
 untilDone.bash apt-get
 
-waitTH=3
+waitTH=${1:-2}
 sudo -l > /dev/null
 echo Waiting until the load is below $waitTH
 ~/bin/loadBelowCheck.bash -v -r -t=$waitTH
