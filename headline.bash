@@ -9,7 +9,7 @@ if [[ "$length" -eq -1 ]]; then
 fi
 
 if [ "$1" == "-h" ] ;  then
-	echo $0 term length char
+	echo $0 {term} [char length]
 	exit
 fi
 
