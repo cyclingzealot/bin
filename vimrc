@@ -96,7 +96,7 @@ set hlsearch
 " syntax on
 
 :filetype off
-"let g:rufo_auto_formatting = 1
+let g:rufo_auto_formatting = 1
 
 :filetype on
 autocmd BufWritePost *.bash  :!bash -n %
@@ -105,7 +105,7 @@ au! BufNewFile,BufRead *.rb,*.rake setf ruby
 au! BufNewFile,BufRead *.py, setf python
 autocmd BufWritePost *.rake, :!ruby -c %
 autocmd BufWritePost *.rb, :!ruby -c %
-"autocmd BufWritePost *.rb  :!which rufo > /dev/null && rufo -x -c %
+autocmd BufWritePost *.rb  :!which rufo > /dev/null && rufo -x -c %
 autocmd BufWritePost *.erb  :!erb -x -T '-' % | ruby -c
 autocmd BufWritePost *.rake  :!ruby -c %
 autocmd BufWritePost *.py  :!python -m py_compile %
@@ -120,3 +120,5 @@ autocmd BufWritePost :mks! ~/.vim/sessions/%
 
 
 
+set laststatus=2
+set statusline="%t %m %c %l (%p) %L"
