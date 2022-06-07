@@ -65,6 +65,23 @@ case $i in
 esac
 done
 
+configFile="$HOME/.binJlam/$__base"
+
+#Load config file if it exists
+decimalSep='.'
+if [[ -f "$configFile" ]] ; then
+	. $configFile
+	if [ "$verbose" == 'true' ]; then
+		echo "Decimal seperator is $decimalSep"
+	fi
+else
+	if [ "$verbose" == 'true' ]; then
+		echo "No config file at $configFile, assuming dot as decimal seperator"
+	fi
+fi
+
+
+
 
 export DISPLAY=:0
 
@@ -83,16 +100,15 @@ loadavg=''
 if [[ "$lookAtWait" == "true" ]] ; then
     echo "Not implemented"
     exit 1
-    loadavg=`top -b  -n 1 | head -n 3 | tail -n 1 | tr -s ' ' | cut -d ' ' -f 10 | cut -d , -f 1 | cut -d. -f 1`
     what='number of waiting processes'
 else
-    loadavg=`uptime | awk '{print $8+0}'`
+    loadavg=$(cat /proc/loadavg | cut -f 1 -d ' ' | cut -f 1 -d '.' )
     what='load average'
 fi
 
 # bash doesn't understand floating point
 # so convert the number to an interger
-thisloadavg=`echo $loadavg|awk -F \. '{print $1}'`
+thisloadavg=`echo $loadavg|awk -F \${decimalSep} '{print $1}'`
 exitCode=1
 if [ "$thisloadavg" -ge "$loadTH" ]; then
  if (( $cycles == 0 )) ; then
