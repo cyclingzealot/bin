@@ -67,8 +67,6 @@ which dropbox > /dev/null && ((! dropbox running) || dropbox status)
 alias newBranch='git checkout --track '
 alias clipboard='xsel --clipboard'
 
-flagger.bash timeUntil 60 && ~/bin/timeUntil.bash 100
-
 
 # For ssh agent fowrading in bash
 # From https://gist.github.com/martijnvermaat/8070533#gistcomment-1317075
