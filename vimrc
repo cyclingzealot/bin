@@ -105,7 +105,6 @@ au! BufNewFile,BufRead *.rb,*.rake setf ruby
 au! BufNewFile,BufRead *.py, setf python
 autocmd BufWritePost *.rake, :!ruby -c %
 autocmd BufWritePost *.rb, :!ruby -c %
-autocmd BufWritePost *.rb  :!which rufo > /dev/null && rufo -x -c %
 autocmd BufWritePost *.erb  :!erb -x -T '-' % | ruby -c
 autocmd BufWritePost *.rake  :!ruby -c %
 autocmd BufWritePost *.py  :!python -m py_compile %
