@@ -53,7 +53,12 @@ else
     git checkout -b "$arg1"
 fi
 
-tmux new -s "$arg1"
+if tmux list-sessions | grep $arg1 ; then
+    tmux attach -t "$arg1"
+else
+    tmux new -s "$arg1"
+fi
+
 
 set +x
 
