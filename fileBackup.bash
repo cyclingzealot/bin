@@ -31,25 +31,29 @@ formerDir=`pwd`
 target=$arg1
 
 set -x
-fileName=`basename $target`
-
-backupDest=~/backups/$fileName/
-mkdir -p $backupDest
-backupFile=$backupDest/$fileName-${ts}.backup
-touch $backupFile
 
 
 # If you require named arguments, see
 # http://stackoverflow.com/questions/192249/how-do-i-parse-command-line-arguments-in-bash
 
-echo "#Saved on `date`" | tee $backupFile
 
 ### BEGIN SCRIPT ###############################################################
 
-cat $target | tee -a $backupFile
+fileName=`basename $target`
+backupDest=~/backups/$fileName/
+mkdir -p $backupDest
+backupFile=$backupDest/$fileName-${ts}.backup
+touch $backupFile
+
+echo "#Saved on `date`" > $backupFile
+
+cat $target >> $backupFile
 
 echo Backup in $backupFile
 chmod -v 400 $backupFile
+
+
+find $backupDest -name "${fileName}*.backup" -type f -mtime +700 -exec rm -fv {} \;
 
 ### END SCIPT ##################################################################
 
