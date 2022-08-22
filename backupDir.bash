@@ -2,6 +2,13 @@
 
 START=$(date +%s.%N)
 
+arg1=${1:-''}
+
+if [[ $arg1 == '--help' || $arg1 == '-h' ]]; then
+    echo "Backups the current directory or the specified directory into it's parent directory"
+    exit 0
+fi
+
 #exit when command fails (use || true when a command can fail)
 set -o errexit
 
@@ -68,26 +75,26 @@ echo; echo; echo;
 #(a.k.a set -x) to trace what gets executed
 #set -o xtrace
 
-currentDir=`basename $PWD`
+currentDir=`basename "$PWD"`
 targetDir=${1:-}
 parentPath=''
 
 if [[ -z $targetDir ]]; then
-    targetDir=$currentDir
+    targetDir="$currentDir"
     parentPath='../'
     cd ..
 else
     cd .
 fi
 
-targetGZ=$targetDir.$ts.tar.gz
+targetGZ="$targetDir".$ts.tar.gz
 echo Compressing $targetDir into $parentPath$targetGZ
 echo
 
-tar -cO $targetDir | gzip -9v > $targetGZ
+tar -cO "$targetDir" | gzip -9v > "$targetGZ"
 
 echo
-ls -lhtd $targetDir*
+ls -lhtd "$targetDir"*
 echo
 
 cd -

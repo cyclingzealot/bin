@@ -88,7 +88,7 @@ fi
 #http://stackoverflow.com/questions/25514434/bash-script-to-keep-deleting-files-until-directory-size-is-less-than-x#25514993o
 #jlam@credil.org
 
-maxsize=500 #In MBs
+maxsize=1000 #In MBs
 while [ "$(du -shm $dest | awk '{print $1}')" -gt $maxsize ]
 do
   find $dest -maxdepth 1 -type f -name '*.png*' -printf '%T@\t%p\n' | \

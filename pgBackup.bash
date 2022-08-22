@@ -7,7 +7,7 @@ arg1=${1:-''}
 
 if [[ $arg1 == '--help' || $arg1 == '-h' || -z "$arg1" ]]; then
     echo
-    echo "$0 \$dbName [\$backupDir]" 
+    echo "$0 \$dbName [\$backupDir]"
     echo
     echo "Script defaults to ~/backups/\$dbName as your backupDir"
     echo "\$backupDir should be a full path should you choose to specify it and will override defaults"
@@ -102,12 +102,12 @@ echo; echo; echo;
 ### BEGIN SCRIPT ###############################################################
 
 function needScript {
-	echo I ${2:-need} a script called $1 at ~/bin/$1 
+	echo I ${2:-need} a script called $1 at ~/bin/$1
 	echo Download it at https://raw.githubusercontent.com/cyclingzealot/bin/master/$1
 	echo "This should do it:"
-	echo "curl https://raw.githubusercontent.com/cyclingzealot/bin/master/trimFolder.bash > ~/bin/$1" 
+	echo "curl https://raw.githubusercontent.com/cyclingzealot/bin/master/trimFolder.bash > ~/bin/$1"
 	echo "chmod 700 ~/bin/$1"
-	echo 
+	echo
 }
 
 #(a.k.a set -x) to trace what gets executed
@@ -130,24 +130,31 @@ fi
 
 target=$backupSetDir/$dbName.globals.`hostname`.$ts.sql
 
-set -x 
-pg_dumpall -g > $target
+globalsSuccess=false
+
+set -x
+pg_dumpall -g > $target && globalsSuccess=true || true
 set +x
 echo
 
-echo Compressing backup file....
-gzip -9v $target
+if $globalsSuccess; then
+	echo Compressing backup file....
+	gzip -9v $target
 
-echo 
+	echo
 
-echo DONE: Backup of globals.  Your globals backup is at
-ls -lh $target*
+	echo DONE: Backup of globals.  Your globals backup is at
+	ls -lh $target*
 
-echo
+	echo
 
-echo "NOTE: Backups will include --clean --if-exists instructions, which drops database objects before creating them"
+	echo "NOTE: Backups will include --clean --if-exists instructions, which drops database objects before creating them"
 
-sleep 5
+	sleep 5
+else
+    echo "WARNING: globals backup not successful.  On dev databsae, this is not to worry too much about."
+    sleep 5
+fi
 
 
 ### MAIN BACKUP ################################################################
@@ -159,7 +166,7 @@ target=$backupSetDir/$dbName.data.`hostname`.$ts.sql
 touch $target
 
 echo
-set -x 
+set -x
 pg_dump --clean --if-exists $dbName >> $target
 set +x
 echo
@@ -167,7 +174,7 @@ echo
 echo Compressing backup file....
 gzip -9v $target
 
-echo 
+echo
 
 echo "DONE: Backup of data.  Your data backup is at"
 ls -lh $target*

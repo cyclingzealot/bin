@@ -3,7 +3,9 @@
 arg1=${1:-''}
 
 if [[ $arg1 == '--help' || $arg1 == '-h' ]]; then
-    echo "Resizes pictures to 800 px width.  Suply file list with wild cars (ex: *.jpg)."
+    echo "Start tmux session and new branch both named after argument given"
+    echo "Be sure you are checking out from branch name you want"
+    echo "Usage: $0 \$branchAndSessionName"
     exit 0
 fi
 
@@ -40,19 +42,23 @@ echo; echo; echo;
 #(a.k.a set -x) to trace what gets executed
 set -o xtrace
 
-for script in chopSuffix.bash suffix.bash; do
-if ! which $script ; then
-    echo "Script $script required"
+if [ -z "$arg1" ]; then
+    echo "Need tmux session name and branch name"
     exit 1
 fi
-done
 
+if git show-ref --quiet "refs/heads/$arg1"; then
+    git checkout $arg1
+else
+    git checkout -b "$arg1"
+fi
 
-for file in "$@"; do
-    nonSuffix=`chopSuffix.bash $file`
-    suffix=`suffix.bash $file`
-    convert -verbose $file -resize 800x $nonSuffix.800px.$suffix
-done
+if tmux list-sessions | grep $arg1 ; then
+    tmux attach -t "$arg1"
+else
+    tmux new -s "$arg1"
+fi
+
 
 set +x
 

@@ -67,8 +67,6 @@ which dropbox > /dev/null && ((! dropbox running) || dropbox status)
 alias newBranch='git checkout --track '
 alias clipboard='xsel --clipboard'
 
-flagger.bash timeUntil 60 && ~/bin/timeUntil.bash 100
-
 
 # For ssh agent fowrading in bash
 # From https://gist.github.com/martijnvermaat/8070533#gistcomment-1317075
@@ -94,20 +92,24 @@ function settitle() {
 alias set-title=settitle
 
 
-set -x
 function railsConsole() {
     TITLE="\[\e]2;console\a\]"
     PS1=${ORIG}${TITLE}
     bash --login -c 'rvm default do rails c'
 }
-set +x
 
 
 case "$-" in
 *i*)
     echo -n "Tab name: "
     read tabName
-    if [[ ! -z "$tabName" ]]; then settitle $tabName; fi
+    if [[ ! -z "$tabName" ]]; then
+        if [[ ! -z "$TMUX" ]]; then
+            tmux rename-window "$tabName"
+        else
+            settitle $tabName;
+        fi
+    fi
     ;;
 esac
 
@@ -146,6 +148,16 @@ alias stopFirefox='killall -g -STOP firefox'
 alias continueFirefox='killall -g -CONT firefox'
 alias firefoxStop=stopFirefox
 alias firefoxContinue=continueFirefox
+
+
+alias dockerReset='docker-compose down; docker rm -f $(docker ps -a -q); docker volume rm $(docker volume ls -q)'
+alias dockerLs="docker container ls"
+
+alias htmlToPng=cutycapt
+
+
+#Diables shell suspension: https://unix.stackexchange.com/a/12108/159862
+stty -ixon
 
 
 echo TMOUT set to `echo $TMOUT/'(60*60)' | bc | cut -d. -f 1` hours

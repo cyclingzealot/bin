@@ -84,9 +84,9 @@ echo "Created pid file $pidfile"
 
 loopBegin=`date +%s`
 loopElapsed=0
-while [ "$(du -shm $target | awk '{print $1}')" -gt $maxsize -a "$loopElapsed" -lt "$loopThreshold" ]
+while [ "$((du -shm $target || true) | awk '{print $1}')" -gt $maxsize -a "$loopElapsed" -lt "$loopThreshold" ]
 do
-  du -chs $target
+  du -chs $target || true
   nice -n 19 find $target -name "*.$suffix"  -type f -printf '%T@\t%p\n' | \
       sort -nr | tail -n 1 | cut -d $'\t' -f 2-  | xargs -d '\n' -I {} nice -n 19 bash -c 'set -x; if lsof {} | grep {}; then echo "(Truncated by trimFolder.bash)" > {}; else nice -n 19 rm -vf {}; fi; set +x'
 
@@ -96,6 +96,7 @@ do
 done
 
 find $target -type d -empty -exec rmdir {} \; || true
+
 
 
 ### END SCIPT ##################################################################

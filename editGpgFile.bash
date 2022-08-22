@@ -50,6 +50,30 @@ fileBaseName=`chopSuffix.bash $fileBaseName`
 scratchPath=~/tmp/$fileBaseName
 
 
+#=== BEGIN Unique instance ============================================
+#Ensure only one copy is running
+pidfile=$HOME/.${__base}.${fileBaseName}.pid
+if [ -f ${pidfile} ]; then
+   #verify if the process is actually still running under this pid
+   oldpid=`cat ${pidfile}`
+   result=`ps -ef | grep ${oldpid} | grep ${__base} || true`
+
+   if [ -n "${result}" ]; then
+     echo "Script $__base already running for file $fileBaseName! Exiting"
+     echo "Check file $pidfile if this is in error"
+     exit 255
+   fi
+fi
+
+#grab pid of this process and update the pid file with it
+echo ${pid} > ${pidfile}
+
+# Create trap for lock file in case it fails
+trap "rm -f $pidfile" INT QUIT TERM ERR
+#=== END Unique instance ============================================
+
+
+
 if [ -f $scratchPath ]; then
     rm -iv $scratchPath
 fi

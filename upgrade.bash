@@ -29,10 +29,10 @@ which rvm && rvm get head
 echo Check to see if apt is running
 untilDone.bash apt-get
 
-waitTH=6
+waitTH=${1:-2}
 sudo -l > /dev/null
 echo Waiting until the load is below $waitTH
-~/bin/loadBelowCheck.bash -w -r -t=$waitTH
+~/bin/loadBelowCheck.bash -v -r -t=$waitTH
 sudo nice -n 19 apt-get update
 
 
@@ -53,8 +53,8 @@ while [ $numPacks -gt 0 ] && [ -a $continueFlag ] ; do
 		echo ===== To stop =======\> rm $continueFlag
 	    # Ideally, loadBelowCheck should be after sudo
 	    set -x
-		if [ -a $continueFlag ] ; then ~/bin/loadBelowCheck.bash -w -r -t=$waitTH; sudo nice -n 19 apt-get install $pack --only-upgrade --yes  -d; fi
-		if [ -a $continueFlag ] ; then ~/bin/loadBelowCheck.bash -w -r -t=$waitTH; sudo nice -n 19 apt-get install $pack --only-upgrade --yes ;  fi
+		if [ -a $continueFlag ] ; then ~/bin/loadBelowCheck.bash -v -r -t=$waitTH; sudo nice -n 19 apt-get install $pack --only-upgrade --yes  -d; fi
+		if [ -a $continueFlag ] ; then ~/bin/loadBelowCheck.bash -v -r -t=$waitTH; sudo nice -n 19 apt-get install $pack --only-upgrade --yes ;  fi
 		echo; echo; echo
 	done
 
