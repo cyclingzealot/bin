@@ -50,12 +50,12 @@ configFile="$HOME/.binJlam/templateConfig"
 
 
 #Capture everything to log
-mkdir -p ~/log
-log=~/log/$__base-${ts}.log
-exec >  >(tee -a $log)
-exec 2> >(tee -a $log >&2)
-touch $log
-chmod 600 $log
+# mkdir -p ~/log
+# log=~/log/$__base-${ts}.log
+# exec >  >(tee -a $log)
+# exec 2> >(tee -a $log >&2)
+# touch $log
+#chmod 600 $log
 
 
 #Check that the config file exists
@@ -91,7 +91,9 @@ targetGZ="$targetDir".$ts.tar.gz
 echo Compressing $targetDir into $parentPath$targetGZ
 echo
 
-tar -cO "$targetDir" | gzip -9v > "$targetGZ"
+total_size=$(du -s "${targetDir}" | cut -f 1)
+echo Total size is $total_size
+tar -cO "$targetDir" | pv -s "${total_size}"k | gzip -9v > "$targetGZ"
 
 echo
 ls -lhtd "$targetDir"*
