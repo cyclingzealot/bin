@@ -91,9 +91,13 @@ targetGZ="$targetDir".$ts.tar.gz
 echo Compressing $targetDir into $parentPath$targetGZ
 echo
 
-total_size=$(du -s "${targetDir}" | cut -f 1)
-echo Total size is $total_size
-tar -cO "$targetDir" | pv -s "${total_size}"k | gzip -9v > "$targetGZ"
+total_size=$(du -s "${targetDir}" | cut -f 1) || true
+if [[ ! -z "$total_size" ]] ; then
+  echo Total size is $total_size
+  tar -cO "$targetDir" | pv -s "${total_size}"k | gzip -9v > "$targetGZ"
+else
+  tar --ignore-failed-read -cO "$targetDir" | gzip -9v > "$targetGZ"
+fi
 
 echo
 ls -lhtd "$targetDir"*
