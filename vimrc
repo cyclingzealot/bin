@@ -85,7 +85,7 @@ set linebreak
 let &listchars = 'tab:  ,nbsp:·'
 
 " Pathogen. This should be last in case you don't have photgen installed
-execute pathogen#infect()
+" execute pathogen#infect()
 
 set statusline=%F%t[%{strlen(&fenc)?&fenc:'none'},%{&ff}]%h%m%r%y%=%c,%l/%L\ %P
 

@@ -21,7 +21,7 @@ function updateList {
 
 echo Upgrade per-language package managers
 ls /usr/local/bin/composer && sudo /usr/local/bin/composer self-update
-which npm && sudo npm install -g npm
+# which npm && sudo npm install -g npm
 which rvm && rvm get head
 
 
