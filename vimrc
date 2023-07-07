@@ -121,3 +121,5 @@ autocmd BufWritePost :mks! ~/.vim/sessions/%
 
 set laststatus=2
 set statusline="%t %m %c %l (%p) %L"
+
+packloadall
