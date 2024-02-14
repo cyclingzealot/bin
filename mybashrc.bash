@@ -169,3 +169,4 @@ echo umask set to `umask`
 echo
 
 
+shopt -s direxpand
