@@ -1,5 +1,13 @@
 #!/bin/bash
 
+
+arg1=${1:-''}
+
+if [[ $arg1 == '--help' || $arg1 == '-h' ]]; then
+    echo "Usage: $0 [\$loadThreshold]"
+    exit 0
+fi
+
 echo "Getting sudo clearance so you don't have to watch this script output"
 sudo -l > /dev/null
 
