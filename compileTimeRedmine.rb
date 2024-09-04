@@ -62,7 +62,7 @@ else
   raise "Variable inputFile is null"
 end
 
-if not File.exists?(inputFile)
+if not File.exist?(inputFile)
   $stderr.puts "Input file #{inputFile} does not exist"
   exit 1
 else
