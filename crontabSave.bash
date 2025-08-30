@@ -44,7 +44,16 @@ printf "\n\n\n" | tee -a $backupFile
 
 crontab -l | tee -a $backupFile
 
+# Remove really old files
+cd $backupDest
 find $backupDest -mtime +548 -name "$__base-*.backup" -exec rm -v {} \;
+
+# Remove top line in old files that makes them different
+find $backupDest -mtime +90 -type f | xargs --no-run-if-empty sed -i 1d
+
+# Remove duplicates
+cd $backupDest
+fdupes -r -f . | grep -v '^$' | xargs --no-run-if-empty rm -v
 
 ### END SCIPT ##################################################################
 

@@ -87,7 +87,8 @@ let &listchars = 'tab:  ,nbsp:·'
 " Pathogen. This should be last in case you don't have photgen installed
 " execute pathogen#infect()
 
-set statusline=%F%t[%{strlen(&fenc)?&fenc:'none'},%{&ff}]%h%m%r%y%=%c,%l/%L\ %P
+set laststatus=2
+set statusline=%t[%{strlen(&fenc)?&fenc:'none'},%{&ff}]%h%m%r%y%=[%o]\ %c,%l/%L\ %P
 
 
 set hlsearch
@@ -119,7 +120,5 @@ autocmd BufWritePost :mks! ~/.vim/sessions/%
 
 
 
-set laststatus=2
-set statusline="%t %m %c %l (%p) %L"
 
 packloadall

@@ -109,7 +109,7 @@ CSV.foreach(inputFile, headers: true) { |row|
     descriptionByDate[date] = { maxHours: hours, description: comment }
   end
 
-  weekNumber = date.strftime(weekNumberParam).to_i
+  weekNumber = date.strftime(weekNumberParam).to_i + 1
 
   hoursByDate[date] += hours
   workingHoursByWeek[weekNumber] += hours
@@ -148,7 +148,8 @@ hoursByDate.sort_by { |date, hours| date }.each { |date, hours|
 puts if allInfo
 puts "=== Hours per week =====================" if allInfo
 workingHoursByWeek.each { |weekNum, hours|
-  dateStr = Date.parse(sprintf("%dW%02d", Date.today.year, weekNum)).strftime("%Y-%m-%d")
+  dateStr = sprintf("%dW%02d", Date.today.year, weekNum)
+  dateStr = Date.parse(dateStr).strftime("%Y-%m-%d")
   hoursStr = hours.round(2)
   print "#{dateStr}\t\t#{hoursStr}"
   puts ((hours > hourPerWeekLimit) ? " <--- WARNING: more than #{hourPerWeekLimit} hours" : "")

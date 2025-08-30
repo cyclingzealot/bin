@@ -148,12 +148,15 @@ alias stopFirefox='killall -g -STOP firefox'
 alias continueFirefox='killall -g -CONT firefox'
 alias firefoxStop=stopFirefox
 alias firefoxContinue=continueFirefox
+alias tls='tmux list-sessions'
 
 
 alias dockerReset='docker-compose down; docker rm -f $(docker ps -a -q); docker volume rm $(docker volume ls -q)'
 alias dockerLs="docker container ls"
 
 alias htmlToPng=cutycapt
+
+alias figlet-clock='watch "date | figlet"'
 
 
 #Diables shell suspension: https://unix.stackexchange.com/a/12108/159862
@@ -170,3 +173,5 @@ echo
 
 
 shopt -s direxpand
+
+alias quit-session='mate-session-save --force-logout'
