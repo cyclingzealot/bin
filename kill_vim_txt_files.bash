@@ -6,7 +6,8 @@ arg1=${1:-''}
 
 if [[ $arg1 == '--help' || $arg1 == '-h' ]]; then
     echo "Script to kill vim/vi processes editing .txt files in a specified folder"
-	echo "Usage: ./kill-vim-txt.sh /path/to/folder"
+    echo "Usage: ./kill-vim-txt.sh /path/to/folder [hours_threshold]"
+    echo "  hours_threshold: Only kill processes for files modified more than this many hours ago (default: 2)"
     exit 0
 fi
 
@@ -103,11 +104,13 @@ echo; echo; echo;
 # Check if folder argument is provided
 if [ $# -eq 0 ]; then
     echo "Error: No folder specified." >&2
-    echo "Usage: $0 /path/to/folder" >&2
+    echo "Usage: $0 /path/to/folder [hours_threshold]" >&2
     exit 1
 fi
 
 FOLDER="$1"
+# Default threshold in hours (can be overridden by second argument)
+HOURS_THRESHOLD=${2:-2}
 
 # Check if the specified folder exists
 if [ ! -d "$FOLDER" ]; then
@@ -118,7 +121,7 @@ fi
 # Convert to absolute path to avoid issues with relative paths
 FOLDER=$(readlink -f "$FOLDER")
 
-echo "Looking for vim/vi processes editing .txt files in: $FOLDER"
+echo "Looking for vim/vi processes editing .txt files in: $FOLDER (modified more than $HOURS_THRESHOLD hours ago)"
 
 # Find all .txt files in the specified folder
 txt_files=$(find "$FOLDER" -maxdepth 1 -name "*.txt" -type f)
@@ -133,6 +136,16 @@ pids_to_kill=()
 
 # Look for vim/vi processes editing these .txt files
 while IFS= read -r txt_file; do
+    # Check if file was modified more than HOURS_THRESHOLD hours ago
+    file_age_hours=$(( ( $(date +%s) - $(stat -c %Y "$txt_file") ) / 3600 ))
+
+    if [ $file_age_hours -lt $HOURS_THRESHOLD ]; then
+        echo "Skipping $(basename "$txt_file") - modified only $file_age_hours hours ago (threshold: $HOURS_THRESHOLD hours)"
+        continue
+    fi
+
+    echo "File $(basename "$txt_file") was modified $file_age_hours hours ago (threshold: $HOURS_THRESHOLD hours)"
+
     # Use ps and grep to find vim/vi processes with this file
     # Look for both vim and vi processes
     vim_pids=$(ps aux | grep -E '(vim|vi)\s' | grep -F "$(basename "$txt_file")" | grep -v grep | awk '{print $2}' || true)
