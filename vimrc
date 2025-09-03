@@ -1,7 +1,8 @@
-" Author shussain@credil.org
+" Configuration Vim sécurisée pour partage GitHub
+" Basée sur shussain@credil.org + ajouts modernes
 " https://github.com/shussain/vimrc/blob/master/_vimrc-simplified
 
-" let &titlestring = expand("%:t")
+" === CONFIGURATION DE BASE ===
 if &term == "screen"
   set t_ts=^[k
   set t_fs=^[\
@@ -11,95 +12,125 @@ if &term == "screen" || &term == "xterm"
 endif
 set nocp
 
-
-" autocmd vimenter * :!mesg n
-
-
-" Simplified vimrc for use when vim is installed but not gvim
-
-" Show line number
 set number
 set encoding=utf-8
-
 set showmode
 set showcmd
-
-" Ignore cases for searching
 set ignorecase
 set smartcase
 
-" Spelling changes. fix common typos and mistakes I make
+" Spelling changes
 abbreviate teh the
 abbreviate eg e.g.
 
-" set spell spelllang=en_ca
+" Correcteur orthographique (français et anglais)
+set spell spelllang=fr,en
 
-" No backup thanks to source control but might change this later
 set nobackup
 
-" Configs for making Python development easy
-"set syntax=on
+" === CONFIGURATION INDENTATION ===
 set smarttab autowrite
-set tabstop=4 shiftwidth=4 expandtab
+autocmd FileType ruby,javascript,json,yaml,html,css set tabstop=2 shiftwidth=2 expandtab
+autocmd FileType python,php set tabstop=4 shiftwidth=4 expandtab
 set nowrap
 
-"set the global map leader variable so that:
+" === GESTIONNAIRE DE PLUGINS ===
+" SÉCURISÉ: Installation manuelle requise
+" Pour installer vim-plug, exécuter manuellement:
+" curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+"     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+
+" Vérifier que vim-plug est installé avant de l'utiliser
+if filereadable(expand('~/.vim/autoload/plug.vim'))
+  call plug#begin('~/.vim/plugged')
+
+  " LSP et autocomplétion
+  Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
+  " Navigation rapide
+  Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+  Plug 'junegunn/fzf.vim'
+
+  " Support Ruby
+  Plug 'vim-ruby/vim-ruby'
+  Plug 'tpope/vim-rails'
+
+  " Formatage
+  Plug 'prettier/vim-prettier', {
+    \ 'do': 'yarn install',
+    \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'html'] }
+
+  " Interface utilisateur
+  Plug 'vim-airline/vim-airline'
+  Plug 'vim-airline/vim-airline-themes'
+
+  call plug#end()
+else
+  echo "vim-plug non installé. Voir instructions dans le .vimrc"
+endif
+
+" === RACCOURCIS ===
 if ! has("patch547")
    :let mapleader = ","
 endif
 
-" Make it easy to update/reload _vimrc
-:nmap <Leader>s :source $HOME/_vimrc<CR>
-:nmap <Leader>v :e $HOME/_vimrc<CR>
-
-" Have the tabbed editing work with internet browser type functionality
-" You just use comma instead of CTRL
+" Configuration et navigation
+:nmap <Leader>s :source $HOME/.vimrc<CR>
+:nmap <Leader>v :e $HOME/.vimrc<CR>
 :nmap <Leader>t <Esc>:tabnew<CR>
 :nmap <Leader>w <Esc>:tabclose<CR>
 :nmap <Leader><Tab> gt<CR>
-
-" Run ctags
 :nmap <Leader>] <Esc>:!ctags -R .<CR>
-
-" Get lines inserted
 :nmap <Leader>- <Esc>a-----<Esc>
-
-" Do word wrapping
 :nmap <Leader>e <Esc>:set wrap linebreak<CR>
 
-" Remove trailing white spaces
+" Navigation rapide (si fzf installé)
+if exists(':Files')
+  nnoremap <Leader>p :Files<CR>
+endif
+if exists(':Ag')
+  nnoremap <Leader>f :Ag<CR>
+endif
+
+" === CONFIGURATION COC (si installé) ===
+if exists('g:did_coc_loaded')
+  inoremap <silent><expr> <TAB>
+        \ pumvisible() ? "\<C-n>" :
+        \ <SID>check_back_space() ? "\<TAB>" :
+        \ coc#refresh()
+  inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+  function! s:check_back_space() abort
+    let col = col('.') - 1
+    return !col || getline('.')[col - 1]  =~# '\s'
+  endfunction
+
+  nmap <silent> gd <Plug>(coc-definition)
+  nmap <silent> gy <Plug>(coc-type-definition)
+  nmap <silent> gi <Plug>(coc-implementation)
+  nmap <silent> gr <Plug>(coc-references)
+endif
+
+" === VALIDATIONS ET FORMATAGE ===
 autocmd BufWritePre * :%s/\s\+$//e
 
-" Set c indenting
-" No smart indent, see http://vim.wikia.com/wiki/Restoring_indent_after_typing_hash
 set cindent
 set cinkeys-=0#
 set indentkeys-=0#
-
 set wrap
 set linebreak
-"set nolist  " list disables linebreak
-
-" set listchars=tab:\ \ ,nbsp:·
-" set list
-let &listchars = 'tab:  ,nbsp:·'
-
-" Pathogen. This should be last in case you don't have photgen installed
-" execute pathogen#infect()
-
+let &listchars = 'tab:  ,nbsp:Â·'
 set laststatus=2
 set statusline=%t[%{strlen(&fenc)?&fenc:'none'},%{&ff}]%h%m%r%y%=[%o]\ %c,%l/%L\ %P
-
-
 set hlsearch
-
-
-" syntax on
 
 :filetype off
 let g:rufo_auto_formatting = 1
-
+let g:prettier#autoformat = 1
+let g:prettier#autoformat_require_pragma = 0
 :filetype on
+
+" === AUTO-VALIDATIONS ===
 autocmd BufWritePost *.bash  :!bash -n %
 au! BufNewFile,BufRead *.bat,*.sys setf dosbatch
 au! BufNewFile,BufRead *.rb,*.rake setf ruby
@@ -115,10 +146,6 @@ autocmd BufWritePost *.txt  :!wc -w %
 autocmd BufWritePost *.js :! node -c % > /dev/null && echo Syntax OK
 autocmd BufWritePost *.json :!python -m json.tool % > /dev/null && echo Syntax OK
 autocmd BufWritePost *.yml  :!yamllint %
-
 autocmd BufWritePost :mks! ~/.vim/sessions/%
-
-
-
 
 packloadall
