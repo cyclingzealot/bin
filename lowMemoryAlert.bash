@@ -4,12 +4,9 @@ START=$(date +%s.%N)
 
 arg1=${1:-''}
 
-# Check interval (2 seconds)
-CHECK_INTERVAL=2
-
 if [[ $arg1 == '--help' || $arg1 == '-h' ]]; then
     echo "Low Memory Monitor - Displays xmessage alert when free memory drops below 2 GB"
-    echo "Runs continuously for 1 hour, checking every ${CHECK_INTERVAL} seconds"
+    echo "Runs continuously for 1 hour, checking every 2 seconds"
     echo "Usage: $0"
     exit 0
 fi
@@ -109,52 +106,75 @@ THRESHOLD_MB=2048
 # Duration to run (1 hour = 3600 seconds)
 RUN_DURATION=3600
 
+# Check interval (2 seconds)
+CHECK_INTERVAL=2
+
 # Calculate end time
 SCRIPT_START=$(date +%s)
 END_TIME=$((SCRIPT_START + RUN_DURATION))
 
 echo "Starting memory monitor. Will run until $(date -d @${END_TIME})"
 echo "Threshold: ${THRESHOLD_MB} MB"
+echo "Thrashing threshold: ${THRASHING_THRESHOLD} MB"
 echo "Check interval: ${CHECK_INTERVAL} seconds"
+echo "Alert cooldown: ${ALERT_COOLDOWN}s (normal) -> ${ALERT_COOLDOWN_FREAKOUT}s (freakout)"
 
 # Track if we've already shown an alert
 ALERT_SHOWN=0
-ALERT_COOLDOWN=300  # Don't show another alert for 5 minutes
+ALERT_COOLDOWN=300  # Normal cooldown: 5 minutes when just below threshold
+ALERT_COOLDOWN_FREAKOUT=5  # Freakout cooldown: 5 seconds when critically low
+THRASHING_THRESHOLD=400  # Memory level in MB where we start freaking out
 LAST_ALERT_TIME=0
 
 while true; do
     CURRENT_TIME=$(date +%s)
-
+    
     # Check if we've exceeded our run duration
     if [ $CURRENT_TIME -ge $END_TIME ]; then
         echo "Reached 1 hour runtime limit. Exiting to allow fresh start."
         break
     fi
-
+    
     # Get available memory in MB
     AVAILABLE_MB=$(free -m | awk '/^Mem:/ {print $7}')
-
+    
     echo "$(date): Available memory: ${AVAILABLE_MB} MB"
-
+    
     # Check if available memory is below threshold
     if [ "$AVAILABLE_MB" -lt "$THRESHOLD_MB" ]; then
+        # Calculate dynamic cooldown based on how close to thrashing threshold
+        if [ "$AVAILABLE_MB" -le "$THRASHING_THRESHOLD" ]; then
+            # At or below thrashing threshold - use minimum cooldown
+            CURRENT_COOLDOWN=$ALERT_COOLDOWN_FREAKOUT
+        else
+            # Between thrashing threshold and normal threshold - interpolate
+            # ratio = (current - thrashing) / (threshold - thrashing)
+            # cooldown = freakout + (normal - freakout) * ratio
+            RANGE=$((THRESHOLD_MB - THRASHING_THRESHOLD))
+            DISTANCE=$((AVAILABLE_MB - THRASHING_THRESHOLD))
+            COOLDOWN_RANGE=$((ALERT_COOLDOWN - ALERT_COOLDOWN_FREAKOUT))
+            CURRENT_COOLDOWN=$(( ALERT_COOLDOWN_FREAKOUT + (COOLDOWN_RANGE * DISTANCE / RANGE) ))
+        fi
+        
         TIME_SINCE_LAST_ALERT=$((CURRENT_TIME - LAST_ALERT_TIME))
-
+        
+        echo "Dynamic cooldown period: ${CURRENT_COOLDOWN} seconds (based on ${AVAILABLE_MB} MB available)"
+        
         # Only show alert if cooldown period has passed
-        if [ $TIME_SINCE_LAST_ALERT -ge $ALERT_COOLDOWN ]; then
+        if [ $TIME_SINCE_LAST_ALERT -ge $CURRENT_COOLDOWN ]; then
             echo "WARNING: Low memory detected! Showing alert."
-
+            
             # Display warning message
             xmessage -center -timeout 30 \
                 "WARNING: Low Memory!\n\nAvailable Memory: ${AVAILABLE_MB} MB\nThreshold: ${THRESHOLD_MB} MB\n\nPlease close some applications." &
-
+            
             LAST_ALERT_TIME=$CURRENT_TIME
             ALERT_SHOWN=1
         else
-            echo "Alert cooldown active. ${TIME_SINCE_LAST_ALERT}/${ALERT_COOLDOWN} seconds"
+            echo "Alert cooldown active. ${TIME_SINCE_LAST_ALERT}/${CURRENT_COOLDOWN} seconds"
         fi
     fi
-
+    
     # Sleep for check interval
     sleep $CHECK_INTERVAL
 done
