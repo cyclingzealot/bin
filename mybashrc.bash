@@ -158,6 +158,8 @@ alias htmlToPng=cutycapt
 
 alias figlet-clock='watch "date | figlet"'
 
+alias youngestFiles="find . -type f -printf '%T@ %TY-%Tm-%Td %p\n' | sort -n | tail -n 50"
+
 
 #Diables shell suspension: https://unix.stackexchange.com/a/12108/159862
 stty -ixon
