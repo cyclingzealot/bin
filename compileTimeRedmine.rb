@@ -76,7 +76,55 @@ workingHoursByDate = Hash.new(0)
 workingHoursByWeek = Hash.new(0)
 descriptionByDate = Hash.new({ maxHours: 0, description: "" })
 
-CSV.foreach(inputFile, headers: true) { |row|
+def detect_encoding(file_path)
+  # Try reading a line with different encodings
+  encodings_to_try = [
+    'bom|utf-8',
+    'utf-8',
+    'ISO-8859-1:UTF-8',
+    'Windows-1252:UTF-8'
+  ]
+
+  encodings_to_try.each do |enc|
+    begin
+      File.open(file_path, 'r', encoding: enc) do |f|
+        # Force read and encode to test if it works
+        line = f.readline
+        line.encode('UTF-8', invalid: :replace, undef: :replace, replace: '')
+      end
+      return enc
+    rescue Encoding::InvalidByteSequenceError, Encoding::UndefinedConversionError, ArgumentError
+      next
+    end
+  end
+
+  # Last resort fallback
+  'ISO-8859-1:UTF-8'
+end
+
+def detect_separator(file_path, encoding)
+  File.open(file_path, 'r', encoding: encoding) do |f|
+    first_line = f.readline
+    # Force encoding conversion to handle any remaining issues
+    first_line = first_line.encode('UTF-8', invalid: :replace, undef: :replace, replace: '')
+    [',', ';', '|', "\t"].max_by { |delim| first_line.count(delim) }
+  end
+end
+
+# Then use them before CSV.foreach:
+encoding = detect_encoding(inputFile)
+puts "Detected encoding: #{encoding}"
+
+separator = detect_separator(inputFile, encoding)
+puts "Detected separator: #{separator.inspect}"
+puts
+
+
+# Read the entire file with encoding handling, then parse with CSV
+file_content = File.read(inputFile, encoding: encoding)
+  .encode('UTF-8', invalid: :replace, undef: :replace, replace: '')
+
+CSV.parse(file_content, headers: true, col_sep: separator) { |row|
   headers = row.to_h.keys
   lang = if headers.include?("Heures")
       :fr
