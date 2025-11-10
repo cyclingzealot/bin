@@ -49,9 +49,9 @@ done
 
 
 for file in "$@"; do
-    nonSuffix=`chopSuffix.bash $file`
+    nonSuffix=`chopSuffix.bash "$file"`
     suffix=`suffix.bash $file`
-    convert -verbose $file -resize 800x $nonSuffix.800px.$suffix
+    convert -verbose "${file}" -resize 800x "${nonSuffix// /_}.800px.$suffix"
 done
 
 set +x
